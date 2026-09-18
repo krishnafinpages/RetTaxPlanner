@@ -86,14 +86,18 @@
 
                 <div>
                     <label class="block font-medium text-gray-700">Financial Assets ($)</label>
-                    <div class="grid grid-cols-2 gap-2 mt-1">
+                    <div class="grid grid-cols-3 gap-2 mt-1">
                         <div>
-                            <span class="text-xs text-gray-500">Traditional IRA/401(k)</span>
+                            <span class="text-xs text-gray-500">Traditional IRA</span>
                             <input type="number" id="tradIra" value="500000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <span class="text-xs text-gray-500">Taxable/Cash/CDs</span>
-                            <input type="number" id="taxableAssets" value="300000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <span class="text-xs text-gray-500">Brokerage</span>
+                            <input type="number" id="brokerageAssets" value="200000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-500">Savings</span>
+                            <input type="number" id="savingsAssets" value="100000" step="5000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                     </div>
                 </div>
@@ -107,7 +111,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-gray-500">401(k) Contribution</span>
-                            <input type="number" id="contrib" value="10000" step="1000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="number" id="contrib" value="15000" step="1000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 mt-2">
@@ -259,13 +263,15 @@
                                     <th class="p-2 border-b text-indigo-700">Pension/Other</th>
                                     <th class="p-2 border-b bg-green-100 font-semibold text-green-900">Total SS</th>
                                     <th class="p-2 border-b bg-blue-50 text-blue-800">ROTH Conv.</th>
-                                    <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Taxable</th>
+                                    <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Brokerage</th>
+                                    <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Savings</th>
                                     <th class="p-2 border-b bg-purple-100 font-bold text-purple-900">W/D Trad (Inc. RMD)</th>
                                     <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Roth</th>
                                     <th class="p-2 border-b bg-amber-100 font-bold text-amber-900">Total W/D</th>
                                     <th class="p-2 border-b">Trad. IRA</th>
                                     <th class="p-2 border-b">Roth IRA</th>
-                                    <th class="p-2 border-b">Taxable</th>
+                                    <th class="p-2 border-b">Brokerage</th>
+                                    <th class="p-2 border-b">Savings</th>
                                     <th class="p-2 border-b font-bold text-gray-900">Total Assets</th>
                                 </tr>
                             </thead>
@@ -392,6 +398,7 @@
         let activeChartTab = 'assets';
         let chartInstance = null;
         let lastCalculatedRows = [];
+        const STORAGE_KEY = 'retirement_tax_params_v1';
 
         // Editable Engine Configuration Object
         let taxParams = {
@@ -410,6 +417,25 @@
         };
 
         const defaultTaxParams = JSON.parse(JSON.stringify(taxParams));
+
+        function saveTaxParamsToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(taxParams));
+            } catch (e) {
+                console.error('Failed to save tax parameters to local storage:', e);
+            }
+        }
+
+        function loadTaxParamsFromStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    taxParams = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error('Failed to load tax parameters from local storage:', e);
+            }
+        }
 
         function populateTaxModalFields() {
             document.getElementById('p_stdSingle').value = taxParams.stdDeductions.Single.base;
@@ -538,7 +564,8 @@
             const ageDiff = isMfj ? (currentAge - spouseCurrentAge) : 0;
 
             let tradIra = parseFloat(document.getElementById('tradIra').value) || 0;
-            let taxableAssets = parseFloat(document.getElementById('taxableAssets').value) || 0;
+            let brokerageAssets = parseFloat(document.getElementById('brokerageAssets').value) || 0;
+            let savingsAssets = parseFloat(document.getElementById('savingsAssets').value) || 0;
             let rothIra = 0;
 
             const salary = parseFloat(document.getElementById('salary').value) || 0;
@@ -632,7 +659,8 @@
 
                 tradIra *= (1 + activeReturn);
                 rothIra *= (1 + activeReturn);
-                taxableAssets *= (1 + activeReturn);
+                brokerageAssets *= (1 + activeReturn);
+                savingsAssets *= (1 + inflationRate); // Savings grows conservatively with inflation
 
                 if (age < retireAge) {
                     tradIra += contrib;
@@ -655,7 +683,8 @@
                 }
 
                 // 2. SIMULTANEOUS TAX & WITHDRAWAL SOLVER
-                let wdTaxable = 0;
+                let wdBrokerage = 0;
+                let wdSavings = 0;
                 let wdRoth = 0;
                 let wdTrad = 0;
                 let convAmount = 0;
@@ -690,9 +719,17 @@
                     const magi = totalTaxable + stdDeduction;
                     irmaaInfo = getIrmaaTier(magi, inflationFactor, filingStatus);
 
-                    // Pay tax from taxable account pre-retirement
-                    wdTaxable = Math.min(taxableAssets, estimatedTax);
-                    taxableAssets -= wdTaxable;
+                    // Pay tax from brokerage/savings pre-retirement
+                    let remainingTax = estimatedTax;
+                    wdBrokerage = Math.min(brokerageAssets, remainingTax);
+                    brokerageAssets -= wdBrokerage;
+                    remainingTax -= wdBrokerage;
+
+                    if (remainingTax > 0) {
+                        wdSavings = Math.min(savingsAssets, remainingTax);
+                        savingsAssets -= wdSavings;
+                    }
+
                     tradIra -= (wdTrad + convAmount);
                     rothIra += convAmount;
                 } else {
@@ -732,25 +769,35 @@
                         trialIrmaa = getIrmaaTier(magi, inflationFactor, filingStatus);
 
                         let netNeeded = currentSpending + trialTax + trialIrmaa.Surcharge - totalSS - currentOtherIncome;
-                        
                         let remainingNeeded = Math.max(0, netNeeded - mandatoryRmd);
 
-                        if (taxableAssets >= remainingNeeded) {
-                            wdTaxable = remainingNeeded;
+                        // Order of withdrawals: Brokerage -> Savings -> Trad IRA -> Roth IRA
+                        if (brokerageAssets >= remainingNeeded) {
+                            wdBrokerage = remainingNeeded;
+                            wdSavings = 0;
                             addTradWD = 0;
                             wdRoth = 0;
                         } else {
-                            wdTaxable = taxableAssets;
-                            let gapAfterTaxable = remainingNeeded - taxableAssets;
+                            wdBrokerage = brokerageAssets;
+                            let gapAfterBrokerage = remainingNeeded - wdBrokerage;
 
-                            let availTrad = Math.max(0, tradIra - mandatoryRmd - convAmount);
-                            if (availTrad >= gapAfterTaxable) {
-                                addTradWD = gapAfterTaxable;
+                            if (savingsAssets >= gapAfterBrokerage) {
+                                wdSavings = gapAfterBrokerage;
+                                addTradWD = 0;
                                 wdRoth = 0;
                             } else {
-                                addTradWD = availTrad;
-                                let gapAfterTrad = gapAfterTaxable - availTrad;
-                                wdRoth = Math.min(rothIra, gapAfterTrad);
+                                wdSavings = savingsAssets;
+                                let gapAfterSavings = gapAfterBrokerage - wdSavings;
+
+                                let availTrad = Math.max(0, tradIra - mandatoryRmd - convAmount);
+                                if (availTrad >= gapAfterSavings) {
+                                    addTradWD = gapAfterSavings;
+                                    wdRoth = 0;
+                                } else {
+                                    addTradWD = availTrad;
+                                    let gapAfterTrad = gapAfterSavings - availTrad;
+                                    wdRoth = Math.min(rothIra, gapAfterTrad);
+                                }
                             }
                         }
                     }
@@ -759,12 +806,13 @@
                     estimatedTax = trialTax;
                     irmaaInfo = trialIrmaa;
 
-                    taxableAssets = Math.max(0, taxableAssets - wdTaxable);
-                    
+                    brokerageAssets = Math.max(0, brokerageAssets - wdBrokerage);
+                    savingsAssets = Math.max(0, savingsAssets - wdSavings);
+
                     let netNeededFinal = currentSpending + estimatedTax + irmaaInfo.Surcharge - totalSS - currentOtherIncome;
-                    if (wdTrad > netNeededFinal && taxableAssets >= 0) {
+                    if (wdTrad > netNeededFinal && brokerageAssets >= 0) {
                         let surplus = wdTrad - Math.max(0, netNeededFinal);
-                        taxableAssets += surplus;
+                        brokerageAssets += surplus;
                     }
 
                     tradIra = Math.max(0, tradIra - wdTrad - convAmount);
@@ -774,13 +822,13 @@
                 if (irmaaInfo.tier !== 'Standard') irmaaCount++;
                 cumulativeTaxPaid += estimatedTax;
 
-                const totalWd = convAmount + wdTaxable + wdRoth + wdTrad;
+                const totalWd = convAmount + wdBrokerage + wdSavings + wdRoth + wdTrad;
 
                 if (tradIra <= 100 && tradDepletedAge === null) {
                     tradDepletedAge = age;
                 }
 
-                const totalAssets = tradIra + rothIra + taxableAssets;
+                const totalAssets = tradIra + rothIra + brokerageAssets + savingsAssets;
                 const grossIncome = (isRetired ? totalSS + currentOtherIncome + wdTrad + convAmount : salary);
                 const effectiveTaxRate = grossIncome > 0 ? (estimatedTax / grossIncome) * 100 : 0;
 
@@ -794,13 +842,15 @@
                     effectiveTaxRate,
                     irmaaTier: irmaaInfo.tier,
                     taxBreakdown,
-                    wdTaxable,
+                    wdBrokerage,
+                    wdSavings,
                     wdTrad,
                     wdRoth,
                     totalWd,
                     tradIra,
                     rothIra,
-                    taxableAssets,
+                    brokerageAssets,
+                    savingsAssets,
                     totalAssets,
                     grossIncome
                 });
@@ -866,13 +916,15 @@
                     <td class="p-2 text-indigo-700 font-medium">${r.otherIncome > 0 ? formatCurrency(r.otherIncome) : '—'}</td>
                     <td class="p-2 bg-green-100/50 font-bold text-green-900">${r.totalSS > 0 ? formatCurrency(r.totalSS) : '—'}</td>
                     <td class="p-2 text-blue-600 bg-blue-50/50">${r.convAmount > 0 ? formatCurrency(r.convAmount) : '—'}</td>
-                    <td class="p-2 bg-amber-50/50">${r.wdTaxable > 0 ? formatCurrency(r.wdTaxable) : '—'}</td>
+                    <td class="p-2 bg-amber-50/50">${r.wdBrokerage > 0 ? formatCurrency(r.wdBrokerage) : '—'}</td>
+                    <td class="p-2 bg-amber-50/50">${r.wdSavings > 0 ? formatCurrency(r.wdSavings) : '—'}</td>
                     <td class="p-2 text-purple-800 font-bold bg-purple-50/50">${r.wdTrad > 0 ? formatCurrency(r.wdTrad) : '—'}</td>
                     <td class="p-2 bg-amber-50/50">${r.wdRoth > 0 ? formatCurrency(r.wdRoth) : '—'}</td>
                     <td class="p-2 bg-amber-100/50 font-bold text-amber-900">${r.totalWd > 0 ? formatCurrency(r.totalWd) : '—'}</td>
                     <td class="p-2">${formatCurrency(r.tradIra)}</td>
                     <td class="p-2 text-emerald-600 font-medium">${formatCurrency(r.rothIra)}</td>
-                    <td class="p-2">${formatCurrency(r.taxableAssets)}</td>
+                    <td class="p-2">${formatCurrency(r.brokerageAssets)}</td>
+                    <td class="p-2">${formatCurrency(r.savingsAssets)}</td>
                     <td class="p-2 font-bold text-gray-900">${formatCurrency(r.totalAssets)}</td>
                 `;
                 tbody.appendChild(tr);
@@ -913,10 +965,18 @@
                                 tension: 0.1
                             },
                             {
-                                label: 'Taxable / Cash',
-                                data: rows.map(r => Math.round(r.taxableAssets)),
+                                label: 'Brokerage Account',
+                                data: rows.map(r => Math.round(r.brokerageAssets)),
                                 borderColor: '#f59e0b',
                                 backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                                fill: true,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Savings Account',
+                                data: rows.map(r => Math.round(r.savingsAssets)),
+                                borderColor: '#6366f1',
+                                backgroundColor: 'rgba(99, 102, 241, 0.1)',
                                 fill: true,
                                 tension: 0.1
                             }
@@ -989,8 +1049,8 @@
                 ...(isMfj ? ["Spouse Age"] : []),
                 "Estimated Tax ($)", "Effective Tax Rate (%)", "IRMAA Tier",
                 "Pension/Other ($)", "Total SS ($)", "Roth Conversion ($)",
-                "WD Taxable ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad IRA Balance ($)",
-                "Roth IRA Balance ($)", "Taxable Balance ($)", "Total Portfolio Assets ($)"
+                "WD Brokerage ($)", "WD Savings ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad IRA Balance ($)",
+                "Roth IRA Balance ($)", "Brokerage Balance ($)", "Savings Balance ($)", "Total Portfolio Assets ($)"
             ];
 
             const csvRows = [headers.join(',')];
@@ -1005,13 +1065,15 @@
                     Math.round(r.otherIncome),
                     Math.round(r.totalSS),
                     Math.round(r.convAmount),
-                    Math.round(r.wdTaxable),
+                    Math.round(r.wdBrokerage),
+                    Math.round(r.wdSavings),
                     Math.round(r.wdTrad),
                     Math.round(r.wdRoth),
                     Math.round(r.totalWd),
                     Math.round(r.tradIra),
                     Math.round(r.rothIra),
-                    Math.round(r.taxableAssets),
+                    Math.round(r.brokerageAssets),
+                    Math.round(r.savingsAssets),
                     Math.round(r.totalAssets)
                 ];
                 csvRows.push(row.join(','));
@@ -1043,12 +1105,14 @@
 
         document.getElementById('saveTaxModalBtn').addEventListener('click', () => {
             readTaxModalFields();
+            saveTaxParamsToStorage();
             taxModal.classList.add('hidden');
             calculateProjection();
         });
 
         document.getElementById('resetTaxDefaultsBtn').addEventListener('click', () => {
             taxParams = JSON.parse(JSON.stringify(defaultTaxParams));
+            localStorage.removeItem(STORAGE_KEY);
             populateTaxModalFields();
             calculateProjection();
         });
@@ -1077,7 +1141,7 @@
         const inputIds = [
             'currentAge', 'birthYear', 'maxRetireAge', 'retireAge', 
             'spouseCurrentAge', 'spouseBirthYear', 'spouseRetireAge',
-            'tradIra', 'taxableAssets', 'salary', 'contrib', 'otherIncome', 
+            'tradIra', 'brokerageAssets', 'savingsAssets', 'salary', 'contrib', 'otherIncome', 
             'otherIncomeStartAge', 'spending', 'primarySsMonthly', 'primarySsAge', 
             'spouseSsMonthly', 'spouseSsAge', 'returnRate', 'inflationRate', 
             'shockReturn', 'shockYears', 'conversionStrategy'
@@ -1087,6 +1151,7 @@
             document.getElementById(id).addEventListener('input', calculateProjection);
         });
 
+        loadTaxParamsFromStorage();
         toggleSpouseVisibility();
         calculateProjection();
     </script>
