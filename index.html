@@ -86,10 +86,14 @@
 
                 <div>
                     <label class="block font-medium text-gray-700">Financial Assets ($)</label>
-                    <div class="grid grid-cols-3 gap-2 mt-1">
+                    <div class="grid grid-cols-2 gap-2 mt-1">
                         <div>
-                            <span class="text-xs text-gray-500">Traditional IRA</span>
+                            <span class="text-xs text-gray-500">Trad 401K/ IRA + HSA</span>
                             <input type="number" id="tradIra" value="500000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-500">Roth IRA/401K</span>
+                            <input type="number" id="rothAssets" value="100000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
                             <span class="text-xs text-gray-500">Brokerage</span>
@@ -182,9 +186,9 @@
                 <div class="pt-2 border-t">
                     <label class="block font-medium text-gray-700 mb-1">Roth Conversion Strategy</label>
                     <select id="conversionStrategy" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        <option value="none" selected>No Roth Conversions</option>
                         <option value="max12">Fill 12% Bracket Cap</option>
                         <option value="max22">Fill 22% Bracket Cap</option>
-                        <option value="none">No Roth Conversions</option>
                     </select>
                 </div>
             </div>
@@ -268,8 +272,8 @@
                                     <th class="p-2 border-b bg-purple-100 font-bold text-purple-900">W/D Trad (Inc. RMD)</th>
                                     <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Roth</th>
                                     <th class="p-2 border-b bg-amber-100 font-bold text-amber-900">Total W/D</th>
-                                    <th class="p-2 border-b">Trad. IRA</th>
-                                    <th class="p-2 border-b">Roth IRA</th>
+                                    <th class="p-2 border-b">Trad 401K/ IRA + HSA</th>
+                                    <th class="p-2 border-b">Roth IRA/401K</th>
                                     <th class="p-2 border-b">Brokerage</th>
                                     <th class="p-2 border-b">Savings</th>
                                     <th class="p-2 border-b font-bold text-gray-900">Total Assets</th>
@@ -564,9 +568,9 @@
             const ageDiff = isMfj ? (currentAge - spouseCurrentAge) : 0;
 
             let tradIra = parseFloat(document.getElementById('tradIra').value) || 0;
+            let rothIra = parseFloat(document.getElementById('rothAssets').value) || 0;
             let brokerageAssets = parseFloat(document.getElementById('brokerageAssets').value) || 0;
             let savingsAssets = parseFloat(document.getElementById('savingsAssets').value) || 0;
-            let rothIra = 0;
 
             const salary = parseFloat(document.getElementById('salary').value) || 0;
             const contrib = parseFloat(document.getElementById('contrib').value) || 0;
@@ -949,7 +953,7 @@
                         labels: labels,
                         datasets: [
                             {
-                                label: 'Roth IRA',
+                                label: 'Roth IRA/401K',
                                 data: rows.map(r => Math.round(r.rothIra)),
                                 borderColor: '#10b981',
                                 backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -957,7 +961,7 @@
                                 tension: 0.1
                             },
                             {
-                                label: 'Traditional IRA',
+                                label: 'Trad 401K/ IRA + HSA',
                                 data: rows.map(r => Math.round(r.tradIra)),
                                 borderColor: '#3b82f6',
                                 backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -1049,8 +1053,8 @@
                 ...(isMfj ? ["Spouse Age"] : []),
                 "Estimated Tax ($)", "Effective Tax Rate (%)", "IRMAA Tier",
                 "Pension/Other ($)", "Total SS ($)", "Roth Conversion ($)",
-                "WD Brokerage ($)", "WD Savings ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad IRA Balance ($)",
-                "Roth IRA Balance ($)", "Brokerage Balance ($)", "Savings Balance ($)", "Total Portfolio Assets ($)"
+                "WD Brokerage ($)", "WD Savings ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad 401K/ IRA + HSA Balance ($)",
+                "Roth IRA/401K Balance ($)", "Brokerage Balance ($)", "Savings Balance ($)", "Total Portfolio Assets ($)"
             ];
 
             const csvRows = [headers.join(',')];
@@ -1141,7 +1145,7 @@
         const inputIds = [
             'currentAge', 'birthYear', 'maxRetireAge', 'retireAge', 
             'spouseCurrentAge', 'spouseBirthYear', 'spouseRetireAge',
-            'tradIra', 'brokerageAssets', 'savingsAssets', 'salary', 'contrib', 'otherIncome', 
+            'tradIra', 'rothAssets', 'brokerageAssets', 'savingsAssets', 'salary', 'contrib', 'otherIncome', 
             'otherIncomeStartAge', 'spending', 'primarySsMonthly', 'primarySsAge', 
             'spouseSsMonthly', 'spouseSsAge', 'returnRate', 'inflationRate', 
             'shockReturn', 'shockYears', 'conversionStrategy'
