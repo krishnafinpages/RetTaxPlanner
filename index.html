@@ -189,6 +189,7 @@
                         <option value="none" selected>No Roth Conversions</option>
                         <option value="max12">Fill 12% Bracket Cap</option>
                         <option value="max22">Fill 22% Bracket Cap</option>
+                        <option value="max24">Fill 24% Bracket Cap</option>
                     </select>
                 </div>
             </div>
@@ -327,7 +328,7 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2 bg-slate-50 p-3 rounded-lg border">
                             <span class="font-semibold text-gray-700 block text-xs">Single Filer Brackets</span>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-4 gap-2">
                                 <div>
                                     <span class="text-[10px] text-gray-500">10% Cap</span>
                                     <input type="number" id="p_single10" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
@@ -340,11 +341,15 @@
                                     <span class="text-[10px] text-gray-500">22% Cap</span>
                                     <input type="number" id="p_single22" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
                                 </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-500">24% Cap</span>
+                                    <input type="number" id="p_single24" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
                             </div>
                         </div>
                         <div class="space-y-2 bg-slate-50 p-3 rounded-lg border">
                             <span class="font-semibold text-gray-700 block text-xs">Married Filing Jointly (MFJ) Brackets</span>
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-4 gap-2">
                                 <div>
                                     <span class="text-[10px] text-gray-500">10% Cap</span>
                                     <input type="number" id="p_mfj10" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
@@ -356,6 +361,10 @@
                                 <div>
                                     <span class="text-[10px] text-gray-500">22% Cap</span>
                                     <input type="number" id="p_mfj22" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-500">24% Cap</span>
+                                    <input type="number" id="p_mfj24" class="w-full border rounded p-1 focus:ring-2 focus:ring-indigo-500 outline-none">
                                 </div>
                             </div>
                         </div>
@@ -411,8 +420,8 @@
                 MFJ: { base: 32200, add65: 1300 }
             },
             brackets: {
-                Single: { b10: 11600, b12: 50400, b22: 105525 },
-                MFJ: { b10: 23200, b12: 100800, b22: 211050 }
+                Single: { b10: 11600, b12: 50400, b22: 105525, b24: 201050 },
+                MFJ: { b10: 23200, b12: 100800, b22: 211050, b24: 402100 }
             },
             irmaa: {
                 Single: { t1: 106000, t2: 133000, t3: 166000, t4: 199000, t5: 500000 },
@@ -450,10 +459,12 @@
             document.getElementById('p_single10').value = taxParams.brackets.Single.b10;
             document.getElementById('p_single12').value = taxParams.brackets.Single.b12;
             document.getElementById('p_single22').value = taxParams.brackets.Single.b22;
+            document.getElementById('p_single24').value = taxParams.brackets.Single.b24 || 201050;
 
             document.getElementById('p_mfj10').value = taxParams.brackets.MFJ.b10;
             document.getElementById('p_mfj12').value = taxParams.brackets.MFJ.b12;
             document.getElementById('p_mfj22').value = taxParams.brackets.MFJ.b22;
+            document.getElementById('p_mfj24').value = taxParams.brackets.MFJ.b24 || 402100;
 
             document.getElementById('p_sIrmaa1').value = taxParams.irmaa.Single.t1;
             document.getElementById('p_sIrmaa2').value = taxParams.irmaa.Single.t2;
@@ -475,10 +486,12 @@
             taxParams.brackets.Single.b10 = parseFloat(document.getElementById('p_single10').value) || 0;
             taxParams.brackets.Single.b12 = parseFloat(document.getElementById('p_single12').value) || 0;
             taxParams.brackets.Single.b22 = parseFloat(document.getElementById('p_single22').value) || 0;
+            taxParams.brackets.Single.b24 = parseFloat(document.getElementById('p_single24').value) || 0;
 
             taxParams.brackets.MFJ.b10 = parseFloat(document.getElementById('p_mfj10').value) || 0;
             taxParams.brackets.MFJ.b12 = parseFloat(document.getElementById('p_mfj12').value) || 0;
             taxParams.brackets.MFJ.b22 = parseFloat(document.getElementById('p_mfj22').value) || 0;
+            taxParams.brackets.MFJ.b24 = parseFloat(document.getElementById('p_mfj24').value) || 0;
 
             taxParams.irmaa.Single.t1 = parseFloat(document.getElementById('p_sIrmaa1').value) || 0;
             taxParams.irmaa.Single.t2 = parseFloat(document.getElementById('p_sIrmaa2').value) || 0;
@@ -607,6 +620,7 @@
                 const b10 = bracketRule.b10 * inflationFactor;
                 const b12 = bracketRule.b12 * inflationFactor;
                 const b22 = bracketRule.b22 * inflationFactor;
+                const b24 = (bracketRule.b24 || (isMfj ? 402100 : 201050)) * inflationFactor;
 
                 let tax10 = 0, tax12 = 0, tax22 = 0, tax24Plus = 0;
 
@@ -619,11 +633,16 @@
                     tax10 = b10 * 0.10;
                     tax12 = (b12 - b10) * 0.12;
                     tax22 = (taxableIncome - b12) * 0.22;
-                } else {
+                } else if (taxableIncome <= b24) {
                     tax10 = b10 * 0.10;
                     tax12 = (b12 - b10) * 0.12;
                     tax22 = (b22 - b12) * 0.22;
                     tax24Plus = (taxableIncome - b22) * 0.24;
+                } else {
+                    tax10 = b10 * 0.10;
+                    tax12 = (b12 - b10) * 0.12;
+                    tax22 = (b22 - b12) * 0.22;
+                    tax24Plus = ((b24 - b22) * 0.24) + ((taxableIncome - b24) * 0.32);
                 }
 
                 return { totalTax: tax10 + tax12 + tax22 + tax24Plus, tax10, tax12, tax22, tax24Plus };
@@ -705,9 +724,11 @@
                     let targetCeiling = 0;
                     const b12 = bracketRule.b12 * inflationFactor;
                     const b22 = bracketRule.b22 * inflationFactor;
+                    const b24 = (bracketRule.b24 || (isMfj ? 402100 : 201050)) * inflationFactor;
 
                     if (strategy === 'max12') targetCeiling = b12;
                     else if (strategy === 'max22') targetCeiling = b22;
+                    else if (strategy === 'max24') targetCeiling = b24;
 
                     let availTradForConv = Math.max(0, tradIra - mandatoryRmd);
                     if (strategy !== 'none' && availTradForConv > 0) {
@@ -744,9 +765,11 @@
                     let targetCeiling = 0;
                     const b12 = bracketRule.b12 * inflationFactor;
                     const b22 = bracketRule.b22 * inflationFactor;
+                    const b24 = (bracketRule.b24 || (isMfj ? 402100 : 201050)) * inflationFactor;
 
                     if (strategy === 'max12') targetCeiling = b12;
                     else if (strategy === 'max22') targetCeiling = b22;
+                    else if (strategy === 'max24') targetCeiling = b24;
 
                     let addTradWD = 0;
                     let trialTax = 0;
