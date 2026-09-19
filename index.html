@@ -14,7 +14,7 @@
         <header class="mb-6 border-b pb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Strategic Retirement & Withdrawal Projection Model</h1>
-                <p class="text-gray-600 text-sm mt-1">Combined Single and MFJ filing model with SECURE 2.0 mandatory RMD rules, Medicare IRMAA tracking, and sequence of returns stress testing.</p>
+                <p class="text-gray-600 text-sm mt-1">Combined Single and MFJ filing model with SECURE 2.0 mandatory RMD rules, Medicare IRMAA tracking, sequence of returns stress testing, and uninvested cash reserves.</p>
             </div>
             <div class="flex items-center gap-2 self-start md:self-auto">
                 <button id="openTaxModalBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm shadow-sm transition flex items-center gap-2">
@@ -100,7 +100,7 @@
                             <input type="number" id="brokerageAssets" value="200000" step="10000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                         <div>
-                            <span class="text-xs text-gray-500">Savings</span>
+                            <span class="text-xs text-gray-500">Cash Savings (0% Growth)</span>
                             <input type="number" id="savingsAssets" value="100000" step="5000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                         </div>
                         <div>
                             <span class="text-xs text-gray-500">401(k) Contribution</span>
-                            <input type="number" id="contrib" value="15000" step="1000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                            <input type="number" id="contrib" value="10000" step="1000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 mt-2">
@@ -130,7 +130,7 @@
                     </div>
                     <div class="mt-2">
                         <span class="text-xs text-gray-500">Target Spending (Today's $)</span>
-                        <input type="number" id="spending" value="55000" step="5000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="number" id="spending" value="60000" step="5000" class="w-full border rounded p-1.5 focus:ring-2 focus:ring-blue-500 outline-none">
                     </div>
                 </div>
 
@@ -269,14 +269,14 @@
                                     <th class="p-2 border-b bg-green-100 font-semibold text-green-900">Total SS</th>
                                     <th class="p-2 border-b bg-blue-50 text-blue-800">ROTH Conv.</th>
                                     <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Brokerage</th>
-                                    <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Savings</th>
+                                    <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Cash Savings</th>
                                     <th class="p-2 border-b bg-purple-100 font-bold text-purple-900">W/D Trad (Inc. RMD)</th>
                                     <th class="p-2 border-b bg-amber-50 text-amber-800">W/D Roth</th>
                                     <th class="p-2 border-b bg-amber-100 font-bold text-amber-900">Total W/D</th>
                                     <th class="p-2 border-b">Trad 401K/ IRA + HSA</th>
                                     <th class="p-2 border-b">Roth IRA/401K</th>
                                     <th class="p-2 border-b">Brokerage</th>
-                                    <th class="p-2 border-b">Savings</th>
+                                    <th class="p-2 border-b">Cash Savings</th>
                                     <th class="p-2 border-b font-bold text-gray-900">Total Assets</th>
                                 </tr>
                             </thead>
@@ -683,7 +683,7 @@
                 tradIra *= (1 + activeReturn);
                 rothIra *= (1 + activeReturn);
                 brokerageAssets *= (1 + activeReturn);
-                savingsAssets *= (1 + inflationRate); // Savings grows conservatively with inflation
+                // Uninvested cash savings has 0% growth
 
                 if (age < retireAge) {
                     tradIra += contrib;
@@ -733,7 +733,22 @@
                     let availTradForConv = Math.max(0, tradIra - mandatoryRmd);
                     if (strategy !== 'none' && availTradForConv > 0) {
                         let maxCap = Math.max(0, targetCeiling - preConvTaxable);
-                        convAmount = Math.min(availTradForConv, maxCap);
+                        // Limit conversion to available non-retirement cash reserves so tax isn't paid from conversion itself
+                        let maxTaxCoverableByCash = brokerageAssets + savingsAssets;
+                        let targetConv = Math.min(availTradForConv, maxCap);
+                        
+                        let low = 0, high = targetConv, bestConv = 0;
+                        for (let k = 0; k < 20; k++) {
+                            let mid = (low + high) / 2;
+                            let testTax = calculateTaxBreakdown(preConvTaxable + mid, inflationFactor).totalTax;
+                            if (testTax <= maxTaxCoverableByCash) {
+                                bestConv = mid;
+                                low = mid;
+                            } else {
+                                high = mid;
+                            }
+                        }
+                        convAmount = bestConv;
                     }
 
                     wdTrad = mandatoryRmd;
@@ -783,7 +798,27 @@
                         let remainingTrad = Math.max(0, tradIra - totalTradIncome);
                         if (strategy !== 'none' && remainingTrad > 0) {
                             let cap = Math.max(0, targetCeiling - taxableInc);
-                            convAmount = Math.min(remainingTrad, cap);
+                            let targetConv = Math.min(remainingTrad, cap);
+                            
+                            // Check available cash (brokerage + savings) after spending
+                            let estBaseTax = calculateTaxBreakdown(taxableInc, inflationFactor).totalTax;
+                            let estIrmaa = getIrmaaTier(taxableInc + stdDeduction, inflationFactor, filingStatus).Surcharge;
+                            let netNeededForLiving = Math.max(0, currentSpending + estBaseTax + estIrmaa - totalSS - currentOtherIncome);
+                            let availCash = Math.max(0, (brokerageAssets + savingsAssets) - netNeededForLiving);
+
+                            let low = 0, high = targetConv, bestConv = 0;
+                            for (let k = 0; k < 20; k++) {
+                                let mid = (low + high) / 2;
+                                let testTax = calculateTaxBreakdown(taxableInc + mid, inflationFactor).totalTax;
+                                let addedTax = Math.max(0, testTax - estBaseTax);
+                                if (addedTax <= availCash) {
+                                    bestConv = mid;
+                                    low = mid;
+                                } else {
+                                    high = mid;
+                                }
+                            }
+                            convAmount = bestConv;
                         } else {
                             convAmount = 0;
                         }
@@ -856,7 +891,7 @@
                 }
 
                 const totalAssets = tradIra + rothIra + brokerageAssets + savingsAssets;
-                const grossIncome = (isRetired ? totalSS + currentOtherIncome + wdTrad + convAmount : salary);
+                const grossIncome = (isRetired ? totalSS + currentOtherIncome + wdTrad + convAmount : salary + convAmount);
                 const effectiveTaxRate = grossIncome > 0 ? (estimatedTax / grossIncome) * 100 : 0;
 
                 rows.push({
@@ -1000,7 +1035,7 @@
                                 tension: 0.1
                             },
                             {
-                                label: 'Savings Account',
+                                label: 'Cash Savings',
                                 data: rows.map(r => Math.round(r.savingsAssets)),
                                 borderColor: '#6366f1',
                                 backgroundColor: 'rgba(99, 102, 241, 0.1)',
@@ -1076,8 +1111,8 @@
                 ...(isMfj ? ["Spouse Age"] : []),
                 "Estimated Tax ($)", "Effective Tax Rate (%)", "IRMAA Tier",
                 "Pension/Other ($)", "Total SS ($)", "Roth Conversion ($)",
-                "WD Brokerage ($)", "WD Savings ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad 401K/ IRA + HSA Balance ($)",
-                "Roth IRA/401K Balance ($)", "Brokerage Balance ($)", "Savings Balance ($)", "Total Portfolio Assets ($)"
+                "WD Brokerage ($)", "WD Cash Savings ($)", "WD Trad (Inc. RMD) ($)", "WD Roth ($)", "Total WD ($)", "Trad 401K/ IRA + HSA Balance ($)",
+                "Roth IRA/401K Balance ($)", "Brokerage Balance ($)", "Cash Savings Balance ($)", "Total Portfolio Assets ($)"
             ];
 
             const csvRows = [headers.join(',')];
