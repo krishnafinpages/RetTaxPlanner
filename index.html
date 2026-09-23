@@ -26,7 +26,6 @@
         background: #64748b; /* Medium-dark scroll thumb (slate-500) */
     }
 </style>
-    </style>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased h-screen flex flex-col overflow-hidden">
 
@@ -44,7 +43,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                         </svg>
                         <span class="block text-xs text-amber-300 italic">
-                            Designed for estimation purposes only. Contact  krishna.fincoach@gmail.com for creating a personalized plan.
+                            Designed for estimation purposes only. Contact krishna.fincoach@gmail.com for creating a personalized plan.
                         </span>
                     </div>
                 </div>
@@ -981,6 +980,8 @@
             let totalLifetimeIrmaa = 0;
             let totalDeficitYears = 0;
 
+            let retirementYearIndex = -1; // Tracks index for post-retirement inflation indexing
+
             for (let yr = 1; yr <= horizonYears; yr++) {
                 const currP1Age = p1Age + yr - 1;
                 const currP2Age = filingStatus === 'MFJ' ? (p2Age + yr - 1) : 0;
@@ -994,6 +995,14 @@
                     if (!p1Alive && p2Alive) {
                         effectiveFilingStatus = 'Single';
                     }
+                }
+
+                const p1Retired = currP1Age >= p1RetireAge;
+                const isWorking = !p1Retired && p1Alive;
+
+                // Track retirement year index once reached
+                if (!isWorking && retirementYearIndex === -1) {
+                    retirementYearIndex = yr;
                 }
 
                 // Inflation factor for tax brackets & deductions if enabled
@@ -1034,9 +1043,6 @@
                     tierName: t.tierName
                 }));
 
-                const p1Retired = currP1Age >= p1RetireAge;
-                const isWorking = !p1Retired && p1Alive;
-
                 const currSalary = isWorking ? currentSalary * Math.pow(1 + salaryGrowth, yr - 1) : 0;
                 const yrContribCash = isWorking ? contribCash : 0;
                 const yrContribBrokerage = isWorking ? contribBrokerage : 0;
@@ -1044,7 +1050,12 @@
                 const yrContribRoth = isWorking ? contribRoth : 0;
                 const totalSavingsAdd = yrContribCash + yrContribBrokerage + yrContribTrad + yrContribRoth;
 
-                const currSpendingGoal = (p1Alive || p2Alive) ? baseSpendingGoal * Math.pow(1 + inflation, yr - 1) : 0;
+                // Spend goal is active from retirement year onwards with post-retirement inflation adjustment
+                let currSpendingGoal = 0;
+                if (!isWorking && (p1Alive || p2Alive)) {
+                    const yearsInRetirement = yr - retirementYearIndex;
+                    currSpendingGoal = baseSpendingGoal * Math.pow(1 + inflation, Math.max(0, yearsInRetirement));
+                }
 
                 let p1SSIncome = 0;
                 let p2SSIncome = 0;
@@ -1313,12 +1324,15 @@
             document.getElementById('kpi-lifetime-irmaa').textContent = fmtCurr(totalIrmaa);
 
             const solvencyEl = document.getElementById('kpi-solvency-status');
-            if (deficitYears > 0 || endingAssets <= 0) {
-                solvencyEl.textContent = `Deficit (${deficitYears} yrs)`;
-                solvencyEl.className = "text-base lg:text-lg font-black text-rose-600";
-            } else {
+            if (deficitYears === 0 && endingAssets > 0) {
                 solvencyEl.textContent = "Fully Funded";
                 solvencyEl.className = "text-base lg:text-lg font-black text-emerald-600";
+            } else if (deficitYears > 0) {
+                solvencyEl.textContent = `${deficitYears} Yr(s) Deficit`;
+                solvencyEl.className = "text-base lg:text-lg font-black text-rose-600";
+            } else {
+                solvencyEl.textContent = "Depleted";
+                solvencyEl.className = "text-base lg:text-lg font-black text-amber-600";
             }
         }
 
@@ -1328,33 +1342,33 @@
 
             results.forEach(r => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition duration-75";
+                tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-left font-semibold text-slate-900">${r.year}</td>
-                    <td class="py-2.5 px-3 text-left text-slate-600">${r.p1Age}${r.p2Age > 0 ? '/' + r.p2Age : ''}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.salary)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.totalSavingsAdd)}</td>
-                    <td class="py-2.5 px-3 text-slate-900 font-medium">${fmtCurr(r.spendGoal)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.p1SSIncome)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.p2SSIncome)}</td>
-                    <td class="py-2.5 px-3 text-slate-700 font-medium">${fmtCurr(r.ssIncome)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.pensionIncome)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.rmdAmount)}</td>
-                    <td class="py-2.5 px-3 text-indigo-600 font-medium">${fmtCurr(r.rothConvAmount)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdCash)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdbrokerage)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdTrad)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdRoth)}</td>
-                    <td class="py-2.5 px-3 bg-slate-100 font-bold text-slate-900">${fmtCurr(r.agi)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.taxableIncome)}</td>
-                    <td class="py-2.5 px-3 text-rose-600 font-medium">${fmtCurr(r.fedTax)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${r.irmaaTier}</td>
-                    <td class="py-2.5 px-3 text-amber-600 font-medium">${fmtCurr(r.irmaaCost)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balCash)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balBrokerage)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balTrad)}</td>
-                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balRoth)}</td>
-                    <td class="py-2.5 px-3 bg-indigo-50/60 font-black text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
+                    <td class="py-2 px-3 text-left font-bold text-slate-900">${r.year}</td>
+                    <td class="py-2 px-3 text-left text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.salary)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.totalSavingsAdd)}</td>
+                    <td class="py-2 px-3 text-indigo-700 font-semibold">${fmtCurr(r.spendGoal)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.p1SSIncome)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.p2SSIncome)}</td>
+                    <td class="py-2 px-3 font-semibold text-slate-800">${fmtCurr(r.ssIncome)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.pensionIncome)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.rmdAmount)}</td>
+                    <td class="py-2 px-3 text-emerald-600 font-semibold">${fmtCurr(r.rothConvAmount)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdCash)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdbrokerage)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdTrad)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdRoth)}</td>
+                    <td class="py-2 px-3 bg-slate-100 font-bold text-slate-900">${fmtCurr(r.agi)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.taxableIncome)}</td>
+                    <td class="py-2 px-3 text-rose-600 font-semibold">${fmtCurr(r.fedTax)}</td>
+                    <td class="py-2 px-3 text-slate-600">${r.irmaaTier}</td>
+                    <td class="py-2 px-3 text-amber-600">${fmtCurr(r.irmaaCost)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balCash)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balBrokerage)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balTrad)}</td>
+                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balRoth)}</td>
+                    <td class="py-2 px-3 bg-indigo-50/50 font-black text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1362,21 +1376,21 @@
 
         function renderChart(results) {
             const ctx = document.getElementById('mainChart').getContext('2d');
-            const labels = results.map(r => `Yr ${r.year} (P1: ${r.p1Age})`);
+            const labels = results.map(r => `Yr ${r.year} (Age ${r.p1Age})`);
 
-            let datasetConfig = [];
+            let datasets = [];
+
             if (activeChartMode === 'assets') {
-                datasetConfig = [
-                    { label: 'Cash', data: results.map(r => r.balCash), backgroundColor: '#3b82f6', stack: 'stack0' },
-                    { label: 'Taxable Brokerage', data: results.map(r => r.balBrokerage), backgroundColor: '#6366f1', stack: 'stack0' },
-                    { label: 'Tax-Deferred (Trad)', data: results.map(r => r.balTrad), backgroundColor: '#f59e0b', stack: 'stack0' },
-                    { label: 'Tax-Exempt (Roth)', data: results.map(r => r.balRoth), backgroundColor: '#10b981', stack: 'stack0' }
+                datasets = [
+                    { label: 'Cash Savings', data: results.map(r => r.balCash), backgroundColor: '#64748b', stack: 'assets' },
+                    { label: 'Taxable Brokerage', data: results.map(r => r.balBrokerage), backgroundColor: '#0ea5e9', stack: 'assets' },
+                    { label: 'Tax-Deferred (Trad)', data: results.map(r => r.balTrad), backgroundColor: '#6366f1', stack: 'assets' },
+                    { label: 'Tax-Exempt (Roth)', data: results.map(r => r.balRoth), backgroundColor: '#10b981', stack: 'assets' }
                 ];
             } else {
-                datasetConfig = [
-                    { label: 'Federal Income Tax', data: results.map(r => r.fedTax), backgroundColor: '#e11d48', stack: 'stack1' },
-                    { label: 'IRMAA Surcharge', data: results.map(r => r.irmaaCost), backgroundColor: '#f97316', stack: 'stack1' },
-                    { label: 'Roth Conversion', data: results.map(r => r.rothConvAmount), backgroundColor: '#10b981', stack: 'stack1' }
+                datasets = [
+                    { label: 'Federal Income Tax', data: results.map(r => r.fedTax), backgroundColor: '#f43f5e' },
+                    { label: 'IRMAA Surcharge', data: results.map(r => r.irmaaCost), backgroundColor: '#f59e0b' }
                 ];
             }
 
@@ -1385,119 +1399,98 @@
             }
 
             chartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: datasetConfig
-                },
+                type: activeChartMode === 'assets' ? 'bar' : 'line',
+                data: { labels, datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            stacked: true,
-                            grid: { display: false },
-                            ticks: { font: { size: 10 } }
-                        },
-                        y: {
-                            stacked: true,
-                            ticks: {
-                                font: { size: 10 },
-                                callback: (val) => '$' + (val >= 1000 ? (val/1000).toFixed(0) + 'k' : val)
-                            }
-                        }
+                        x: { stacked: activeChartMode === 'assets', grid: { display: false } },
+                        y: { stacked: activeChartMode === 'assets', ticks: { callback: (val) => '$' + (val >= 1000 ? (val/1000).toFixed(0) + 'k' : val) } }
                     },
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { font: { size: 11 }, boxWidth: 12 }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: (context) => `${context.dataset.label}: ${fmtCurr(context.parsed.y)}`
-                            }
-                        }
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
                     }
                 }
             });
         }
 
-        // Event Listeners & Initialization
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            // Panel collapse toggle
-            document.getElementById('btn-toggle-panel').addEventListener('click', toggleSidePanel);
-
-            // Filing status change
-            document.getElementById('inp-filing-status').addEventListener('change', () => {
-                handleFilingStatusChange();
-                runSimulation();
+            // Inputs binding
+            const inputElements = document.querySelectorAll('aside input, aside select');
+            inputElements.forEach(el => {
+                el.addEventListener('input', runSimulation);
+                el.addEventListener('change', runSimulation);
             });
 
-            // Roth strategy toggle for fixed amount
+            document.getElementById('inp-filing-status').addEventListener('change', handleFilingStatusChange);
+
+            // Roth Strategy selector handler
             document.getElementById('inp-roth-strategy').addEventListener('change', (e) => {
-                const container = document.getElementById('fixed-roth-container');
+                const fixedContainer = document.getElementById('fixed-roth-container');
                 if (e.target.value === 'fixed_amount') {
-                    container.classList.remove('hidden');
+                    fixedContainer.classList.remove('hidden');
                 } else {
-                    container.classList.add('hidden');
+                    fixedContainer.classList.add('hidden');
                 }
                 runSimulation();
             });
 
-            // Spending Estimator Modal
-            const spendModal = document.getElementById('modal-spend-calc');
-            document.getElementById('btn-open-spend-calc').addEventListener('click', () => {
-                recalculateSpendingEstimate();
-                spendModal.classList.remove('hidden');
-            });
-            document.getElementById('btn-close-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
-            document.getElementById('btn-cancel-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
-            document.getElementById('btn-apply-spend-goal').addEventListener('click', () => {
-                const annualGoal = recalculateSpendingEstimate();
-                document.getElementById('inp-spending-goal').value = annualGoal;
-                spendModal.classList.add('hidden');
+            // Panel Collapse toggle
+            document.getElementById('btn-toggle-panel').addEventListener('click', toggleSidePanel);
+
+            // Excel Export
+            document.getElementById('btn-export-excel').addEventListener('click', exportToExcel);
+
+            // Chart Mode toggles
+            document.getElementById('btn-chart-assets').addEventListener('click', () => {
+                activeChartMode = 'assets';
+                document.getElementById('btn-chart-assets').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
+                document.getElementById('btn-chart-tax').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
                 runSimulation();
             });
 
-            // Recalculate monthly expenses dynamically in modal
-            ['calc-exp-housing', 'calc-exp-utilities', 'calc-exp-food', 'calc-exp-health', 'calc-exp-travel', 'calc-exp-misc'].forEach(id => {
-                document.getElementById(id).addEventListener('input', recalculateSpendingEstimate);
+            document.getElementById('btn-chart-tax').addEventListener('click', () => {
+                activeChartMode = 'tax';
+                document.getElementById('btn-chart-tax').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
+                document.getElementById('btn-chart-assets').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                runSimulation();
+            });
+
+            // Spend Calculator Modal
+            const spendModal = document.getElementById('modal-spend-calc');
+            document.getElementById('btn-open-spend-calc').addEventListener('click', () => {
+                spendModal.classList.remove('hidden');
+                recalculateSpendingEstimate();
+            });
+            document.getElementById('btn-close-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
+            document.getElementById('btn-cancel-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
+
+            const calcInputs = document.querySelectorAll('#modal-spend-calc input');
+            calcInputs.forEach(inp => {
+                inp.addEventListener('input', recalculateSpendingEstimate);
+            });
+
+            document.getElementById('btn-apply-spend-goal').addEventListener('click', () => {
+                const h = parseFloat(document.getElementById('calc-exp-housing').value) || 0;
+                const u = parseFloat(document.getElementById('calc-exp-utilities').value) || 0;
+                const f = parseFloat(document.getElementById('calc-exp-food').value) || 0;
+                const hc = parseFloat(document.getElementById('calc-exp-health').value) || 0;
+                const t = parseFloat(document.getElementById('calc-exp-travel').value) || 0;
+                const m = parseFloat(document.getElementById('calc-exp-misc').value) || 0;
+                const annualTotal = (h + u + f + hc + t + m) * 12;
+
+                document.getElementById('inp-spending-goal').value = annualTotal;
+                spendModal.classList.add('hidden');
+                runSimulation();
             });
 
             // Tax Parameters Modal
             const taxModal = document.getElementById('modal-tax-params');
             document.getElementById('btn-edit-tax-params').addEventListener('click', () => taxModal.classList.remove('hidden'));
             document.getElementById('btn-close-modal').addEventListener('click', () => taxModal.classList.add('hidden'));
-            //document.getElementById('btn-edit-tax-params').addEventListener('click', () => taxModal.classList.remove('hidden'));
-            document.getElementById('btn-edit-tax-params').addEventListener('click', () => {
-    taxModal.classList.remove('hidden');
-    taxModal.querySelectorAll('input, textarea').forEach(el => el.readOnly = true);
-});
             document.getElementById('btn-save-tax-params').addEventListener('click', saveTaxParamsFromModal);
-
-            // Chart view toggles
-            document.getElementById('btn-chart-assets').addEventListener('click', (e) => {
-                activeChartMode = 'assets';
-                e.target.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
-                document.getElementById('btn-chart-tax').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
-                renderChart(simulationResults);
-            });
-            document.getElementById('btn-chart-tax').addEventListener('click', (e) => {
-                activeChartMode = 'tax';
-                e.target.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
-                document.getElementById('btn-chart-assets').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
-                renderChart(simulationResults);
-            });
-
-            // Excel export button
-            document.getElementById('btn-export-excel').addEventListener('click', exportToExcel);
-
-            // Real-time listener for all inputs to update simulation automatically
-            const allInputs = document.querySelectorAll('aside input, aside select');
-            allInputs.forEach(input => {
-                input.addEventListener('input', runSimulation);
-                input.addEventListener('change', runSimulation);
-            });
 
             // Initial run
             handleFilingStatusChange();
