@@ -23,7 +23,7 @@
         border-radius: 4px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #64748b; /* Medium-dark scroll thumb (slate-500) */
+        background: #475569; /* Darker slate-600 on hover */
     }
 </style>
 </head>
@@ -43,7 +43,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                         </svg>
                         <span class="block text-xs text-amber-300 italic">
-                            Designed for estimation purposes only. Contact krishna.fincoach@gmail.com for creating a personalized plan.
+                            Designed for estimation purposes only. Contact krishna.fincoach@gmail.com for creating a personalized plan[cite: 13].
                         </span>
                     </div>
                 </div>
@@ -73,8 +73,7 @@
                 </h2>
                 <div class="flex items-center space-x-2">
                     <span class="text-[10px] text-slate-400 italic panel-content-text">SECURE 2.0 Ready</span>
-                    <!-- Collapse Toggle Button -->
-                    <button id="btn-toggle-panel" title="Toggle Panel" class="p-1 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition duration-150 focus:outline-none">
+                    <button id="btn-toggle-panel" title="Toggle Panel" class="p-1.5 bg-indigo-400 hover:bg-indigo-300 text-slate-950 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm flex items-center justify-center">
                         <svg id="icon-collapse" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                         </svg>
@@ -147,7 +146,7 @@
                             <input type="number" id="inp-bal-trad" value="500000" step="10000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         </div>
                         <div>
-                            <label class="block font-semibold text-slate-300 mb-1">Tax-Exempt (Roth) ($)</label>
+                            <label class="block font-semibold text-slate-300 mb-1">Tax-Exempt (Roth/ IUL) ($)</label>
                             <input type="number" id="inp-bal-roth" value="100000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
                         </div>
                     </div>
@@ -269,6 +268,12 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Tax Bracket Inflation Checkbox -->
+                    <div class="flex items-center space-x-2 pt-2 bg-slate-800/60 p-2 rounded-lg border border-slate-800">
+                        <input type="checkbox" id="inp-use-inflation-brackets" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 h-4 w-4" checked>
+                        <label for="inp-use-inflation-brackets" class="font-semibold text-indigo-300 text-xs leading-snug">Inflate Tax Brackets & Deductions (COLA)</label>
+                    </div>
                 </div>
 
                 <!-- Group 5: Tax Strategies & Stress Testing -->
@@ -295,12 +300,6 @@
                     <div class="flex items-center space-x-2 pt-1">
                         <input type="checkbox" id="inp-allow-work-conversions" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 h-4 w-4" checked>
                         <label for="inp-allow-work-conversions" class="font-semibold text-slate-300 text-xs">Convert during pre-retirement working years (using Cash for tax)</label>
-                    </div>
-
-                    <!-- New Checkbox for Tax Bracket Inflation -->
-                    <div class="flex items-center space-x-2 pt-1 bg-slate-800/60 p-2 rounded-lg border border-slate-800">
-                        <input type="checkbox" id="inp-use-inflation-brackets" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-slate-900 h-4 w-4" checked>
-                        <label for="inp-use-inflation-brackets" class="font-semibold text-indigo-300 text-xs leading-snug">Inflate Tax Brackets & Deductions (COLA)</label>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2 pt-1">
@@ -372,15 +371,16 @@
                 </div>
             </section>
 
-            <!-- Chart -->
+            <!-- Chart Section with 3rd Tab Added -->
             <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
                     <div>
                         <h2 class="text-sm font-bold text-slate-900">Portfolio & Tax Projection</h2>
                     </div>
-                    <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                    <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200 space-x-1">
                         <button id="btn-chart-assets" class="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition">Assets Trajectory</button>
                         <button id="btn-chart-tax" class="px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition">Tax Exposure</button>
+                        <button id="btn-chart-cashflow" class="px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition">Cash Flow Sources</button>
                     </div>
                 </div>
                 
@@ -389,7 +389,7 @@
                 </div>
             </section>
 
-            <!-- Table -->
+            <!-- Table (Explicitly wrapped for smooth horizontal scrolling with scrollbars) -->
             <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="border-b border-slate-200 bg-slate-50/50 px-4 py-3 flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -401,40 +401,42 @@
                     <span class="text-[10px] text-slate-500 italic">Scroll table right for complete metrics</span>
                 </div>
 
-                <div class="overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-right text-xs border-collapse">
-                        <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0">
-                            <tr>
-                                <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
-                                <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[70px]">Ages</th>
-                                <th class="py-2.5 px-3 min-w-[90px]">Salary</th>
-                                <th class="py-2.5 px-3 min-w-[90px]">Savings Add</th>
-                                <th class="py-2.5 px-3 min-w-[90px]">Spend Goal</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">P1 SS</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">P2 SS</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">Total SS</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">Pension Inc</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">RMD Amt</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">Roth Conv</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">Cash W/D</th>
-                                <th class="py-2.5 px-3 min-w-[95px]">Brokerage W/D</th>
-                                <th class="py-2.5 px-3 min-w-[95px]">Trad IRA W/D</th>
-                                <th class="py-2.5 px-3 min-w-[95px]">Roth W/D</th>
-                                <th class="py-2.5 px-3 bg-slate-200/60 font-black min-w-[95px]">Total AGI</th>
-                                <th class="py-2.5 px-3 min-w-[95px]">Taxable Inc</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">Fed Tax</th>
-                                <th class="py-2.5 px-3 min-w-[75px]">IRMAA</th>
-                                <th class="py-2.5 px-3 min-w-[85px]">IRMAA ($)</th>
-                                <th class="py-2.5 px-3 min-w-[95px]">End Cash</th>
-                                <th class="py-2.5 px-3 min-w-[100px]">End Brokerage</th>
-                                <th class="py-2.5 px-3 min-w-[100px]">End Trad IRA</th>
-                                <th class="py-2.5 px-3 min-w-[100px]">End Roth</th>
-                                <th class="py-2.5 px-3 bg-indigo-50 text-indigo-900 font-black min-w-[110px]">Total Assets</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ledger-tbody" class="divide-y divide-slate-100 text-slate-700">
-                        </tbody>
-                    </table>
+                <div class="overflow-x-auto custom-scrollbar w-full">
+                    <div class="min-w-max">
+                        <table class="w-full text-right text-xs border-collapse">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0">
+                                <tr>
+                                    <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
+                                    <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[70px]">Ages</th>
+                                    <th class="py-2.5 px-3 min-w-[90px]">Salary</th>
+                                    <th class="py-2.5 px-3 min-w-[90px]">Savings Add</th>
+                                    <th class="py-2.5 px-3 min-w-[90px]">Spend Goal</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">P1 SS</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">P2 SS</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">Total SS</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">Pension Inc</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">RMD Amt</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">Roth Conv</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">Cash W/D</th>
+                                    <th class="py-2.5 px-3 min-w-[95px]">Brokerage W/D</th>
+                                    <th class="py-2.5 px-3 min-w-[95px]">Trad IRA W/D</th>
+                                    <th class="py-2.5 px-3 min-w-[95px]">Roth W/D</th>
+                                    <th class="py-2.5 px-3 bg-slate-200/60 font-black min-w-[95px]">Total AGI</th>
+                                    <th class="py-2.5 px-3 min-w-[95px]">Taxable Inc</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">Fed Tax</th>
+                                    <th class="py-2.5 px-3 min-w-[75px]">IRMAA</th>
+                                    <th class="py-2.5 px-3 min-w-[85px]">IRMAA ($)</th>
+                                    <th class="py-2.5 px-3 min-w-[95px]">End Cash</th>
+                                    <th class="py-2.5 px-3 min-w-[100px]">End Brokerage</th>
+                                    <th class="py-2.5 px-3 min-w-[100px]">End Trad IRA</th>
+                                    <th class="py-2.5 px-3 min-w-[100px]">End Roth</th>
+                                    <th class="py-2.5 px-3 bg-indigo-50 text-indigo-900 font-black min-w-[110px]">Total Assets</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledger-tbody" class="divide-y divide-slate-100 text-slate-700">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -644,7 +646,6 @@
                 <button id="btn-save-tax-params" class="px-4 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition shadow-sm">Close</button>
             </div>
         </div>
-        
     </div>
 
     <!-- Application Engine Logic -->
@@ -702,7 +703,7 @@
 
         let activeTaxParams = JSON.parse(JSON.stringify(DEFAULT_TAX_PARAMS));
         let simulationResults = [];
-        let activeChartMode = 'assets';
+        let activeChartMode = 'assets'; // 'assets', 'tax', or 'cashflow'
         let chartInstance = null;
         let isPanelCollapsed = false;
 
@@ -766,7 +767,6 @@
                 return;
             }
 
-            // 1. Inputs sheet data
             const inputData = [
                 ["Parameter", "Value"],
                 ["Filing Status", document.getElementById('inp-filing-status').value],
@@ -798,15 +798,14 @@
                 ["Pension / Annuity Annual ($)", document.getElementById('inp-pension-amt').value],
                 ["Pension Start Age", document.getElementById('inp-pension-start-age').value],
                 ["Pension COLA (%)", document.getElementById('inp-pension-cola').value],
+                ["Inflate Tax Brackets & Deductions", document.getElementById('inp-use-inflation-brackets').checked ? "Yes" : "No"],
                 ["Roth Conversion Strategy", document.getElementById('inp-roth-strategy').value],
                 ["Fixed Roth Conversion Amount ($)", document.getElementById('inp-roth-fixed-amt').value],
                 ["Allow Pre-Retirement Conversions", document.getElementById('inp-allow-work-conversions').checked ? "Yes" : "No"],
-                ["Inflate Tax Brackets & Deductions", document.getElementById('inp-use-inflation-brackets').checked ? "Yes" : "No"],
                 ["Shock Year", document.getElementById('inp-shock-year').value],
                 ["Shock Drop (%)", document.getElementById('inp-shock-pct').value]
             ];
 
-            // 2. Ledger sheet data
             const ledgerHeaders = [
                 "Year", "P1 Age", "P2 Age", "Salary", "Savings Add", "Spend Goal",
                 "P1 SS", "P2 SS", "Total SS", "Pension Income", "RMD Amount", "Roth Conversion",
@@ -816,37 +815,14 @@
             ];
 
             const ledgerRows = simulationResults.map(r => [
-                r.year,
-                r.p1Age,
-                r.p2Age,
-                r.salary,
-                r.totalSavingsAdd,
-                r.spendGoal,
-                r.p1SSIncome,
-                r.p2SSIncome,
-                r.ssIncome,
-                r.pensionIncome,
-                r.rmdAmount,
-                r.rothConvAmount,
-                r.wdCash,
-                r.wdbrokerage,
-                r.wdTrad,
-                r.wdRoth,
-                r.agi,
-                r.taxableIncome,
-                r.fedTax,
-                r.irmaaTier,
-                r.irmaaCost,
-                r.balCash,
-                r.balBrokerage,
-                r.balTrad,
-                r.balRoth,
-                r.endTotalAssets
+                r.year, r.p1Age, r.p2Age, r.salary, r.totalSavingsAdd, r.spendGoal,
+                r.p1SSIncome, r.p2SSIncome, r.ssIncome, r.pensionIncome, r.rmdAmount, r.rothConvAmount,
+                r.wdCash, r.wdbrokerage, r.wdTrad, r.wdRoth, r.agi, r.taxableIncome, r.fedTax,
+                r.irmaaTier, r.irmaaCost, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets
             ]);
 
             const ledgerData = [ledgerHeaders, ...ledgerRows];
 
-            // 3. Create workbook and worksheets
             const wb = XLSX.utils.book_new();
             const wsInputs = XLSX.utils.aoa_to_sheet(inputData);
             const wsLedger = XLSX.utils.aoa_to_sheet(ledgerData);
@@ -854,7 +830,6 @@
             XLSX.utils.book_append_sheet(wb, wsInputs, "Inputs");
             XLSX.utils.book_append_sheet(wb, wsLedger, "Cash Flow Ledger");
 
-            // 4. Trigger download
             XLSX.writeFile(wb, `retirement_projection_${new Date().toISOString().slice(0,10)}.xlsx`);
         }
 
@@ -870,7 +845,6 @@
 
         function calculateTaxableSocialSecurity(nonSSIncome, ssIncome, filingStatus, ssThreshMFJ, ssThreshSingle) {
             if (ssIncome <= 0) return 0;
-
             const limits = filingStatus === 'MFJ' ? ssThreshMFJ : ssThreshSingle;
             const provisionalIncome = nonSSIncome + (0.5 * ssIncome);
 
@@ -979,8 +953,7 @@
             let totalLifetimeTax = 0;
             let totalLifetimeIrmaa = 0;
             let totalDeficitYears = 0;
-
-            let retirementYearIndex = -1; // Tracks index for post-retirement inflation indexing
+            let retirementYearIndex = -1;
 
             for (let yr = 1; yr <= horizonYears; yr++) {
                 const currP1Age = p1Age + yr - 1;
@@ -989,26 +962,20 @@
                 const p1Alive = currP1Age <= p1TargetAge;
                 const p2Alive = filingStatus === 'MFJ' ? (currP2Age <= p2TargetAge) : false;
 
-                // Determine effective filing status for the year
                 let effectiveFilingStatus = filingStatus;
-                if (filingStatus === 'MFJ') {
-                    if (!p1Alive && p2Alive) {
-                        effectiveFilingStatus = 'Single';
-                    }
+                if (filingStatus === 'MFJ' && !p1Alive && p2Alive) {
+                    effectiveFilingStatus = 'Single';
                 }
 
                 const p1Retired = currP1Age >= p1RetireAge;
                 const isWorking = !p1Retired && p1Alive;
 
-                // Track retirement year index once reached
                 if (!isWorking && retirementYearIndex === -1) {
                     retirementYearIndex = yr;
                 }
 
-                // Inflation factor for tax brackets & deductions if enabled
                 const bracketInflationFactor = useInflationBrackets ? Math.pow(1 + inflation, yr - 1) : 1;
 
-                // Scaled Tax Parameters for this year
                 const curStdDedMFJ = activeTaxParams.stdDeduction.MFJ * bracketInflationFactor;
                 const curStdDedSingle = activeTaxParams.stdDeduction.Single * bracketInflationFactor;
                 const curAdd65MFJ = activeTaxParams.stdDeduction.add65MFJ * bracketInflationFactor;
@@ -1050,7 +1017,6 @@
                 const yrContribRoth = isWorking ? contribRoth : 0;
                 const totalSavingsAdd = yrContribCash + yrContribBrokerage + yrContribTrad + yrContribRoth;
 
-                // Spend goal is active from retirement year onwards with post-retirement inflation adjustment
                 let currSpendingGoal = 0;
                 if (!isWorking && (p1Alive || p2Alive)) {
                     const yearsInRetirement = yr - retirementYearIndex;
@@ -1254,54 +1220,47 @@
                 const appliedPostRetGrowth = returnPost;
 
                 let endCash = Math.max(0, (balCash + (isWorking ? yrContribCash : 0) - wdCash) * (1 + appliedCashGrowth));
-                let endBrokerage = Math.max(0, (balBrokerage + (isWorking ? yrContribBrokerage : 0) - wdbrokerage) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
+                let endBrokerage = Math.max(0, (balBrokerage + (isWorking ? yrContribBrokerage : 0) - wdbrokerage) * (1 + appliedPreRetGrowth));
+                let endTrad = Math.max(0, (balTrad + (isWorking ? yrContribTrad : 0) - totalTradWithdrawal - wdTrad) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
+                let endRoth = Math.max(0, (balRoth + (isWorking ? yrContribRoth : 0) + rothConvAmount - wdRoth) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
 
-                let preMarketTrad = balTrad + (isWorking ? yrContribTrad : 0) - totalTradWithdrawal - wdTrad;
-                if (shockYear > 0 && yr === shockYear) {
-                    preMarketTrad *= (1 - shockPct);
-                }
-                let endTrad = Math.max(0, preMarketTrad * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
-
-                let preMarketRoth = balRoth + (isWorking ? yrContribRoth : 0) + rothConvAmount - wdRoth;
-                if (shockYear > 0 && yr === shockYear) {
-                    preMarketRoth *= (1 - shockPct);
-                }
-                let endRoth = Math.max(0, preMarketRoth * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
-
-                if (shockYear > 0 && yr === shockYear) {
-                    endCash *= (1 - shockPct);
+                if (yr === shockYear) {
                     endBrokerage *= (1 - shockPct);
+                    endTrad *= (1 - shockPct);
+                    endRoth *= (1 - shockPct);
                 }
 
                 const endTotalAssets = endCash + endBrokerage + endTrad + endRoth;
 
                 simulationResults.push({
                     year: yr,
+                    calendarYear: currentCalYear + yr - 1,
                     p1Age: currP1Age,
                     p2Age: currP2Age,
-                    salary: isWorking ? currSalary : 0,
-                    totalSavingsAdd,
+                    isWorking: isWorking,
+                    salary: currSalary,
+                    totalSavingsAdd: totalSavingsAdd,
                     spendGoal: currSpendingGoal,
-                    p1SSIncome,
-                    p2SSIncome,
-                    ssIncome,
-                    pensionIncome,
+                    p1SSIncome: p1SSIncome,
+                    p2SSIncome: p2SSIncome,
+                    ssIncome: ssIncome,
+                    pensionIncome: pensionIncome,
                     rmdAmount: totalRMD,
-                    rothConvAmount,
-                    wdCash,
-                    wdbrokerage,
-                    wdTrad,
-                    wdRoth,
-                    agi,
-                    taxableIncome,
-                    fedTax,
-                    irmaaTier,
-                    irmaaCost,
+                    rothConvAmount: rothConvAmount,
+                    wdCash: wdCash,
+                    wdbrokerage: wdbrokerage,
+                    wdTrad: wdTrad,
+                    wdRoth: wdRoth,
+                    agi: agi,
+                    taxableIncome: taxableIncome,
+                    fedTax: fedTax,
+                    irmaaTier: irmaaTier,
+                    irmaaCost: irmaaCost,
                     balCash: endCash,
                     balBrokerage: endBrokerage,
                     balTrad: endTrad,
                     balRoth: endRoth,
-                    endTotalAssets
+                    endTotalAssets: endTotalAssets
                 });
 
                 balCash = endCash;
@@ -1311,188 +1270,214 @@
             }
 
             updateDashboardKPIs(totalLifetimeTax, totalLifetimeIrmaa, totalDeficitYears, simulationResults);
-            renderLedgerTable(simulationResults);
-            renderChart(simulationResults);
+            populateLedgerTable(simulationResults);
+            renderMainChart();
         }
 
         function updateDashboardKPIs(totalTax, totalIrmaa, deficitYears, results) {
-            const lastRow = results[results.length - 1];
-            const endingAssets = lastRow ? lastRow.endTotalAssets : 0;
+            if (!results || results.length === 0) return;
+            const finalAssets = results[results.length - 1].endTotalAssets;
 
-            document.getElementById('kpi-ending-assets').textContent = fmtCurr(endingAssets);
+            document.getElementById('kpi-ending-assets').textContent = fmtCurr(finalAssets);
             document.getElementById('kpi-lifetime-tax').textContent = fmtCurr(totalTax);
             document.getElementById('kpi-lifetime-irmaa').textContent = fmtCurr(totalIrmaa);
 
             const solvencyEl = document.getElementById('kpi-solvency-status');
-            if (deficitYears === 0 && endingAssets > 0) {
-                solvencyEl.textContent = "Fully Funded";
-                solvencyEl.className = "text-base lg:text-lg font-black text-emerald-600";
-            } else if (deficitYears > 0) {
-                solvencyEl.textContent = `${deficitYears} Yr(s) Deficit`;
+            if (deficitYears > 0) {
+                solvencyEl.textContent = `Deficit (${deficitYears} yrs)`;
                 solvencyEl.className = "text-base lg:text-lg font-black text-rose-600";
             } else {
-                solvencyEl.textContent = "Depleted";
-                solvencyEl.className = "text-base lg:text-lg font-black text-amber-600";
+                solvencyEl.textContent = "Fully Funded";
+                solvencyEl.className = "text-base lg:text-lg font-black text-emerald-600";
             }
         }
 
-        function renderLedgerTable(results) {
+        function populateLedgerTable(results) {
             const tbody = document.getElementById('ledger-tbody');
             tbody.innerHTML = '';
 
-            results.forEach(r => {
+            for (let r of results) {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 transition";
+                tr.className = "hover:bg-slate-50 transition duration-100";
                 tr.innerHTML = `
-                    <td class="py-2 px-3 text-left font-bold text-slate-900">${r.year}</td>
-                    <td class="py-2 px-3 text-left text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.salary)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.totalSavingsAdd)}</td>
-                    <td class="py-2 px-3 text-indigo-700 font-semibold">${fmtCurr(r.spendGoal)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.p1SSIncome)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.p2SSIncome)}</td>
-                    <td class="py-2 px-3 font-semibold text-slate-800">${fmtCurr(r.ssIncome)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.pensionIncome)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.rmdAmount)}</td>
-                    <td class="py-2 px-3 text-emerald-600 font-semibold">${fmtCurr(r.rothConvAmount)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdCash)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdbrokerage)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdTrad)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.wdRoth)}</td>
-                    <td class="py-2 px-3 bg-slate-100 font-bold text-slate-900">${fmtCurr(r.agi)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.taxableIncome)}</td>
-                    <td class="py-2 px-3 text-rose-600 font-semibold">${fmtCurr(r.fedTax)}</td>
-                    <td class="py-2 px-3 text-slate-600">${r.irmaaTier}</td>
-                    <td class="py-2 px-3 text-amber-600">${fmtCurr(r.irmaaCost)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balCash)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balBrokerage)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balTrad)}</td>
-                    <td class="py-2 px-3 text-slate-600">${fmtCurr(r.balRoth)}</td>
-                    <td class="py-2 px-3 bg-indigo-50/50 font-black text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
+                    <td class="py-2.5 px-3 text-left font-semibold text-slate-900">${r.year}</td>
+                    <td class="py-2.5 px-3 text-left text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.salary)}</td>
+                    <td class="py-2.5 px-3 text-emerald-600 font-medium">${fmtCurr(r.totalSavingsAdd)}</td>
+                    <td class="py-2.5 px-3 text-slate-900 font-semibold">${fmtCurr(r.spendGoal)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.p1SSIncome)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.p2SSIncome)}</td>
+                    <td class="py-2.5 px-3 text-slate-800 font-medium">${fmtCurr(r.ssIncome)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.pensionIncome)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.rmdAmount)}</td>
+                    <td class="py-2.5 px-3 text-indigo-600 font-medium">${fmtCurr(r.rothConvAmount)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdCash)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdbrokerage)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdTrad)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.wdRoth)}</td>
+                    <td class="py-2.5 px-3 bg-slate-100 font-bold text-slate-900">${fmtCurr(r.agi)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.taxableIncome)}</td>
+                    <td class="py-2.5 px-3 text-rose-600 font-medium">${fmtCurr(r.fedTax)}</td>
+                    <td class="py-2.5 px-3 text-amber-600 font-medium">${r.irmaaTier}</td>
+                    <td class="py-2.5 px-3 text-amber-700">${fmtCurr(r.irmaaCost)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balCash)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balBrokerage)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balTrad)}</td>
+                    <td class="py-2.5 px-3 text-slate-600">${fmtCurr(r.balRoth)}</td>
+                    <td class="py-2.5 px-3 bg-indigo-50/60 font-black text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
                 `;
                 tbody.appendChild(tr);
-            });
+            }
         }
 
-        function renderChart(results) {
+        function renderMainChart() {
             const ctx = document.getElementById('mainChart').getContext('2d');
-            const labels = results.map(r => `Yr ${r.year} (Age ${r.p1Age})`);
-
-            let datasets = [];
-
-            if (activeChartMode === 'assets') {
-                datasets = [
-                    { label: 'Cash Savings', data: results.map(r => r.balCash), backgroundColor: '#64748b', stack: 'assets' },
-                    { label: 'Taxable Brokerage', data: results.map(r => r.balBrokerage), backgroundColor: '#0ea5e9', stack: 'assets' },
-                    { label: 'Tax-Deferred (Trad)', data: results.map(r => r.balTrad), backgroundColor: '#6366f1', stack: 'assets' },
-                    { label: 'Tax-Exempt (Roth)', data: results.map(r => r.balRoth), backgroundColor: '#10b981', stack: 'assets' }
-                ];
-            } else {
-                datasets = [
-                    { label: 'Federal Income Tax', data: results.map(r => r.fedTax), backgroundColor: '#f43f5e' },
-                    { label: 'IRMAA Surcharge', data: results.map(r => r.irmaaCost), backgroundColor: '#f59e0b' }
-                ];
-            }
-
             if (chartInstance) {
                 chartInstance.destroy();
             }
 
+            const labels = simulationResults.map(r => `Yr ${r.year} (Age ${r.p1Age})`);
+
+            let datasets = [];
+            let chartType = 'line';
+            let stacked = false;
+
+            if (activeChartMode === 'assets') {
+                chartType = 'line';
+                stacked = true;
+                datasets = [
+                    { label: 'Cash', data: simulationResults.map(r => r.balCash), backgroundColor: 'rgba(59, 130, 246, 0.2)', borderColor: '#3b82f6', fill: true, tension: 0.1 },
+                    { label: 'Brokerage', data: simulationResults.map(r => r.balBrokerage), backgroundColor: 'rgba(16, 185, 129, 0.2)', borderColor: '#10b981', fill: true, tension: 0.1 },
+                    { label: 'Tax-Deferred', data: simulationResults.map(r => r.balTrad), backgroundColor: 'rgba(99, 102, 241, 0.2)', borderColor: '#6366f1', fill: true, tension: 0.1 },
+                    { label: 'Tax-Exempt / Roth', data: simulationResults.map(r => r.balRoth), backgroundColor: 'rgba(245, 158, 11, 0.2)', borderColor: '#f59e0b', fill: true, tension: 0.1 }
+                ];
+            } else if (activeChartMode === 'tax') {
+                chartType = 'bar';
+                stacked = false;
+                datasets = [
+                    { label: 'Federal Tax ($)', data: simulationResults.map(r => r.fedTax), backgroundColor: '#f43f5e' },
+                    { label: 'AGI ($)', data: simulationResults.map(r => r.agi), backgroundColor: '#6366f1' }
+                ];
+            } else if (activeChartMode === 'cashflow') {
+                // 3rd Chart: Annual Cash Flow Sources & Uses
+                chartType = 'bar';
+                stacked = true;
+                datasets = [
+                    { label: 'Social Security', data: simulationResults.map(r => r.ssIncome), backgroundColor: '#3b82f6' },
+                    { label: 'Pension Income', data: simulationResults.map(r => r.pensionIncome), backgroundColor: '#8b5cf6' },
+                    { label: 'Cash / Brokerage W/D', data: simulationResults.map(r => r.wdCash + r.wdbrokerage), backgroundColor: '#10b981' },
+                    { label: 'Traditional IRA W/D', data: simulationResults.map(r => r.wdTrad + r.rmdAmount), backgroundColor: '#6366f1' },
+                    { label: 'Roth / Savings W/D', data: simulationResults.map(r => r.wdRoth), backgroundColor: '#f59e0b' }
+                ];
+            }
+
             chartInstance = new Chart(ctx, {
-                type: activeChartMode === 'assets' ? 'bar' : 'line',
-                data: { labels, datasets },
+                type: chartType,
+                data: { labels: labels, datasets: datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { stacked: activeChartMode === 'assets', grid: { display: false } },
-                        y: { stacked: activeChartMode === 'assets', ticks: { callback: (val) => '$' + (val >= 1000 ? (val/1000).toFixed(0) + 'k' : val) } }
+                        x: { stacked: stacked, grid: { display: false } },
+                        y: { stacked: stacked, ticks: { callback: function(value) { return '$' + (value >= 1000 ? (value/1000).toFixed(0) + 'k' : value); } } }
                     },
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) label += fmtCurr(context.parsed.y);
+                                    return label;
+                                }
+                            }
+                        }
                     }
                 }
             });
         }
 
-        // Event Listeners
+        // Event Listeners & Initialization
         document.addEventListener('DOMContentLoaded', () => {
-            // Inputs binding
-            const inputElements = document.querySelectorAll('aside input, aside select');
-            inputElements.forEach(el => {
-                el.addEventListener('input', runSimulation);
-                el.addEventListener('change', runSimulation);
-            });
-
-            document.getElementById('inp-filing-status').addEventListener('change', handleFilingStatusChange);
-
-            // Roth Strategy selector handler
-            document.getElementById('inp-roth-strategy').addEventListener('change', (e) => {
-                const fixedContainer = document.getElementById('fixed-roth-container');
-                if (e.target.value === 'fixed_amount') {
-                    fixedContainer.classList.remove('hidden');
-                } else {
-                    fixedContainer.classList.add('hidden');
-                }
-                runSimulation();
-            });
-
-            // Panel Collapse toggle
             document.getElementById('btn-toggle-panel').addEventListener('click', toggleSidePanel);
+            document.getElementById('inp-filing-status').addEventListener('change', () => {
+                handleFilingStatusChange();
+                runSimulation();
+            });
 
-            // Excel Export
-            document.getElementById('btn-export-excel').addEventListener('click', exportToExcel);
+            // Inputs auto-simulation binding
+            const allInputs = document.querySelectorAll('aside input, aside select');
+            allInputs.forEach(inp => {
+                inp.addEventListener('input', runSimulation);
+                inp.addEventListener('change', runSimulation);
+            });
 
-            // Chart Mode toggles
-            document.getElementById('btn-chart-assets').addEventListener('click', () => {
+            // Chart Mode Buttons (Assets, Tax, and new Cash Flow Sources tab)
+            const btnAssets = document.getElementById('btn-chart-assets');
+            const btnTax = document.getElementById('btn-chart-tax');
+            const btnCashflow = document.getElementById('btn-chart-cashflow');
+
+            btnAssets.addEventListener('click', () => {
                 activeChartMode = 'assets';
-                document.getElementById('btn-chart-assets').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
-                document.getElementById('btn-chart-tax').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
-                runSimulation();
+                btnAssets.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
+                btnTax.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                btnCashflow.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                renderMainChart();
             });
 
-            document.getElementById('btn-chart-tax').addEventListener('click', () => {
+            btnTax.addEventListener('click', () => {
                 activeChartMode = 'tax';
-                document.getElementById('btn-chart-tax').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
-                document.getElementById('btn-chart-assets').className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
-                runSimulation();
+                btnTax.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
+                btnAssets.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                btnCashflow.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                renderMainChart();
             });
 
-            // Spend Calculator Modal
+            btnCashflow.addEventListener('click', () => {
+                activeChartMode = 'cashflow';
+                btnCashflow.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md bg-white text-slate-800 shadow-sm transition";
+                btnAssets.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                btnTax.className = "px-2.5 py-1 text-[11px] font-semibold rounded-md text-slate-600 hover:text-slate-900 transition";
+                renderMainChart();
+            });
+
+            // Modal Handlers
             const spendModal = document.getElementById('modal-spend-calc');
             document.getElementById('btn-open-spend-calc').addEventListener('click', () => {
-                spendModal.classList.remove('hidden');
                 recalculateSpendingEstimate();
+                spendModal.classList.remove('hidden');
             });
             document.getElementById('btn-close-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
             document.getElementById('btn-cancel-spend-modal').addEventListener('click', () => spendModal.classList.add('hidden'));
-
-            const calcInputs = document.querySelectorAll('#modal-spend-calc input');
-            calcInputs.forEach(inp => {
-                inp.addEventListener('input', recalculateSpendingEstimate);
-            });
-
             document.getElementById('btn-apply-spend-goal').addEventListener('click', () => {
-                const h = parseFloat(document.getElementById('calc-exp-housing').value) || 0;
-                const u = parseFloat(document.getElementById('calc-exp-utilities').value) || 0;
-                const f = parseFloat(document.getElementById('calc-exp-food').value) || 0;
-                const hc = parseFloat(document.getElementById('calc-exp-health').value) || 0;
-                const t = parseFloat(document.getElementById('calc-exp-travel').value) || 0;
-                const m = parseFloat(document.getElementById('calc-exp-misc').value) || 0;
-                const annualTotal = (h + u + f + hc + t + m) * 12;
-
-                document.getElementById('inp-spending-goal').value = annualTotal;
+                const annualGoal = recalculateSpendingEstimate();
+                document.getElementById('inp-spending-goal').value = annualGoal;
                 spendModal.classList.add('hidden');
                 runSimulation();
             });
 
-            // Tax Parameters Modal
-            const taxModal = document.getElementById('modal-tax-params');
-            document.getElementById('btn-edit-tax-params').addEventListener('click', () => taxModal.classList.remove('hidden'));
-            document.getElementById('btn-close-modal').addEventListener('click', () => taxModal.classList.add('hidden'));
+            const spendInputs = spendModal.querySelectorAll('input');
+            spendInputs.forEach(i => i.addEventListener('input', recalculateSpendingEstimate));
+
+            const taxParamsModal = document.getElementById('modal-tax-params');
+            document.getElementById('btn-edit-tax-params').addEventListener('click', () => taxParamsModal.classList.remove('hidden'));
+            document.getElementById('btn-close-modal').addEventListener('click', () => taxParamsModal.classList.add('hidden'));
             document.getElementById('btn-save-tax-params').addEventListener('click', saveTaxParamsFromModal);
 
-            // Initial run
+            document.getElementById('btn-export-excel').addEventListener('click', exportToExcel);
+
+            // Roth Strategy Toggle for Fixed Amount
+            document.getElementById('inp-roth-strategy').addEventListener('change', (e) => {
+                const fixedCont = document.getElementById('fixed-roth-container');
+                if (e.target.value === 'fixed_amount') {
+                    fixedCont.classList.remove('hidden');
+                } else {
+                    fixedCont.classList.add('hidden');
+                }
+            });
+
+            // Initial Run
             handleFilingStatusChange();
             runSimulation();
         });
