@@ -121,7 +121,8 @@
                         <span class="font-bold text-slate-100 whitespace-nowrap panel-content-text">Inputs & Parameters</span>
                     </h2>
                     <div class="flex items-center space-x-2">
-                        <span class="text-[10px] text-slate-400 italic panel-content-text">SECURE 2.0</span>
+                        <button type="button" id="btn-open-scenarios" class="panel-content-text text-[11px] font-semibold px-2 py-1 rounded-lg border border-slate-600 text-indigo-300 hover:bg-slate-800 transition">Scenarios</button>
+                        <button type="button" id="btn-reset-inputs" class="panel-content-text text-[11px] font-semibold px-2 py-1 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition">Reset</button>
                         <button id="btn-toggle-panel" title="Toggle Panel" class="p-1.5 bg-indigo-400 hover:bg-indigo-300 text-slate-950 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm flex items-center justify-center">
                             <svg id="icon-collapse" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -151,13 +152,7 @@
             </div>
 
             <div id="panel-content-body" class="p-3 space-y-2 text-xs relative">
-                <div class="flex items-center justify-between">
-                    <div class="inline-flex rounded-lg overflow-hidden border border-slate-700">
-                        <button type="button" id="btn-mode-simple" class="px-2.5 py-1 text-[11px] font-semibold bg-slate-800 text-slate-300">Simple</button>
-                        <button type="button" id="btn-mode-detailed" class="px-2.5 py-1 text-[11px] font-semibold bg-indigo-600 text-white">Detailed</button>
-                    </div>
-                    <div class="flex items-center gap-3"><button type="button" id="btn-open-scenarios" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300">Scenarios</button><button type="button" id="btn-reset-inputs" class="text-[11px] font-semibold text-indigo-400 hover:text-indigo-300">Reset</button></div>
-                </div>
+                
                 <div id="input-warnings" class="hidden text-[11px] text-amber-300 bg-amber-950/40 border border-amber-800/60 rounded-lg px-2.5 py-1.5 space-y-0.5"></div>
 
                 
@@ -238,18 +233,10 @@
                             <label class="flex items-center gap-1.5 text-slate-300"><input type="radio" name="inp-dollar-basis" value="retirement" class="h-3.5 w-3.5" checked><span>Retirement $</span></label>
                             <label class="flex items-center gap-1.5 text-slate-300"><input type="radio" name="inp-dollar-basis" value="today" class="h-3.5 w-3.5"><span>Today's $</span></label>
                         </div>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <div class="flex justify-between items-center mb-1">
-                                    <label class="block font-semibold text-slate-300">Ret. Spend Goal ($/yr)</label>
-                                    <button id="btn-open-spend-calc" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-0.5 rounded-lg text-[10px] font-medium transition duration-150 flex items-center space-x-1 shadow-sm">
-                                        <svg class="w-3 h-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        <span>Calc</span>
-                                    </button>
-                                </div>
-                                <input type="number" id="inp-spending-goal" value="90000" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            </div>
-                            
+                        <div class="flex items-center gap-2">
+                            <label class="font-semibold text-slate-300 whitespace-nowrap text-[11px]">Ret. Spend Goal ($/yr)</label>
+                            <input type="number" id="inp-spending-goal" value="90000" step="1000" class="flex-1 min-w-0 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <button id="btn-open-spend-calc" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded-lg text-[10px] font-medium transition duration-150 flex items-center space-x-1 shadow-sm flex-none"><svg class="w-3 h-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>Calc</span></button>
                         </div>
 
                         <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
@@ -410,7 +397,7 @@
                         <h3 class="text-sm font-black tracking-wide uppercase text-indigo-100">Executive Summary Report</h3>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span class="text-[10px] bg-indigo-800/80 text-indigo-200 px-2.5 py-1 rounded-full font-medium">Live Overview</span>
+                        <button type="button" id="btn-open-sensitivity" class="text-[10px] font-bold px-2.5 py-1 rounded-full border border-indigo-400 text-indigo-100 hover:bg-indigo-800/80 transition">Sensitivity</button>
                         <button type="button" id="btn-open-report" class="text-[10px] font-bold px-2.5 py-1 rounded-full border border-indigo-400 text-indigo-100 hover:bg-indigo-800/80 transition">Detailed Report</button>
                         <button type="button" id="btn-export-pdf" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white transition">Export PDF</button>
                     </div>
@@ -429,6 +416,7 @@
                         <p id="summary-rec-desc" class="font-medium text-indigo-100">Maintain current accumulation discipline and review Roth conversion brackets annually.</p>
                     </div>
                 </div>
+                <div id="summary-law-note" class="border-t border-indigo-800/80 pt-2.5 text-[11px] leading-relaxed text-indigo-200"><span class="font-bold text-indigo-100">Tax law as of <span id="tax-law-asof"></span></span> (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</div>
                 <div id="summary-state-tax-note" class="border-t border-indigo-800/80 pt-2.5 text-[11px] leading-relaxed text-indigo-200">
                     <span class="font-bold text-indigo-100">Note on state taxes:</span> This report covers federal income tax only. State income taxes are not included and may add to your total tax depending on where you live, since states differ in whether and how they tax Social Security, pensions, and IRA/401(k) withdrawals. To estimate your state's impact, see
                     <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">Tax Foundation: 2026 state tax changes</a>
@@ -678,6 +666,20 @@
         </div>
     </div>
     <div id="print-root"></div>
+
+    <div id="modal-sensitivity" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full mx-4 overflow-hidden max-h-[92vh] flex flex-col">
+            <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center border-b border-indigo-900 flex-none">
+                <h3 class="text-base font-bold">Sensitivity Analysis</h3>
+                <button id="btn-close-sensitivity" class="text-slate-400 hover:text-white transition" aria-label="Close"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            <div class="px-6 py-2 text-[11px] text-slate-500 bg-slate-50 border-b border-slate-200 flex-none">Each row changes one assumption from your current inputs and leaves everything else as is. It updates live as you edit inputs. Ending assets are in future (nominal) dollars.</div>
+            <div class="p-6 overflow-y-auto text-slate-700">
+                <div class="h-72 mb-4"><canvas id="sens-chart"></canvas></div>
+                <div id="sens-body"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="modal-tax-params" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full mx-4 overflow-hidden max-h-[90vh] flex flex-col">
@@ -1677,6 +1679,7 @@
         }
 
         // ---- Detailed report + PDF export ----
+        const TAX_LAW_AS_OF = 'September 2026';   // update when the tax parameters are refreshed
         let lastRunOut = null;
         const rEsc = (t) => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
         const rK = (v) => (v === 0 || v === undefined || v === null) ? '-' : Math.round(v / 1000).toLocaleString('en-US');
@@ -1737,7 +1740,7 @@
 
             return `<div class="rpt">
 <h1>Retirement Cash Flow &amp; Tax Projection</h1>
-<div class="sub">Detailed report &middot; ${name} &middot; Prepared ${today} &middot; ${mfj ? 'Married filing jointly' : 'Single filer'}</div>
+<div class="sub">Detailed report &middot; ${name} &middot; Prepared ${today} &middot; ${mfj ? 'Married filing jointly' : 'Single filer'} &middot; Tax law as of ${TAX_LAW_AS_OF}</div>
 
 <h2>1. Executive summary</h2>
 <div class="kpis">
@@ -1772,7 +1775,10 @@ ${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(
 ${imgA ? `<img src="${imgA}" alt="Balances by account">` : '<p class="note">Charts are not available in this view.</p>'}
 ${imgT ? `<img src="${imgT}" alt="Annual tax and IRMAA">` : ''}
 
-<h2>5. Tax law used (2026)</h2>
+<h2>5. Sensitivity analysis</h2>
+${sensReportHTML()}
+
+<h2>6. Tax law used (2026 tax year, as of ${TAX_LAW_AS_OF})</h2>
 <div class="two"><div>
 ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${fmtCurr(P.stdDeduction.Single)}`], ['Age 65+ add-on: MFJ (each) / Single', `${fmtCurr(P.stdDeduction.add65MFJ)} / ${fmtCurr(P.stdDeduction.add65Single)}`], ['Senior deduction (through ' + P.seniorDed.endYear + ')', `${fmtCurr(P.seniorDed.amount)} per person, phases out above ${fmtCurr(P.seniorDed.phaseStart.MFJ)} / ${fmtCurr(P.seniorDed.phaseStart.Single)} MAGI`], ['0% capital gains up to: MFJ / Single', `${fmtCurr(P.cgThresholds.MFJ.z)} / ${fmtCurr(P.cgThresholds.Single.z)}`]])}
 </div><div>
@@ -1780,17 +1786,18 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 </div></div>
 <table style="margin-top:8px"><thead><tr><th>IRMAA tier</th><th>MFJ MAGI</th><th>Single MAGI</th><th>Annual surcharge per person</th></tr></thead><tbody>${irmaaRows}</tbody></table>
 
-<h2>6. Notes and limitations</h2>
+<h2>7. Notes and limitations</h2>
 <ul class="note">
 <li>This report covers federal income tax only. State income taxes are not included and may add to total taxes depending on where you live.</li>
-<li>Returns and inflation are constant assumptions; actual results will vary, and sequence-of-returns risk is not modeled.</li>
-<li>Tax rules reflect current 2026 law, including the temporary senior deduction through 2028. Future law changes are not anticipated.</li>
+<li>Returns and inflation are constant assumptions in the base projection; actual results will vary. The sensitivity section shows how results change under other assumptions, including a market drop at retirement, but it is not a probability forecast.</li>
+<li>Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</li>
+<li>Tax rules reflect law as of ${TAX_LAW_AS_OF} for the 2026 tax year (IRS Rev. Proc. 2025-32 and the 2025 tax act). The $6,000 senior deduction applies only to tax years 2025 through 2028 and ends after 2028; the projection stops applying it from 2029. Other future law changes are not anticipated.</li>
 <li>Simplifications: interest and dividends (when enabled) are taxed at ordinary rates; IRMAA uses income from two years earlier (current-year income as a proxy for the first two years); a deceased spouse is assumed to have claimed Social Security at the claim age; early-withdrawal penalties, the Roth 5-year rule, ACA subsidies and itemized deductions are not modeled.</li>
 <li>This is an educational projection, not tax, legal or investment advice. Consult a qualified professional before acting.</li>
 </ul>
 
 <div class="rpt-wide rpt-break">
-<h2>7. Appendix: year-by-year projection ($ thousands)</h2>
+<h2>8. Appendix: year-by-year projection ($ thousands)</h2>
 <table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>P1</th><th>P2</th><th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
 <p class="note">Income = salary + Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
 </div>
@@ -1815,6 +1822,82 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             });
         }
 
+        // ---- Sensitivity analysis ----
+        let sensChart = null;
+        const SS_CLAIM_FACTOR = { 62: 0.70, 63: 0.75, 64: 0.80, 65: 0.8667, 66: 0.9333, 67: 1, 68: 1.08, 69: 1.16, 70: 1.24 };
+        function sensitivityCases(base) {
+            const cases = [];
+            const add = (group, label, mut) => cases.push({ group, label, inp: Object.assign({}, base, mut) });
+            [-0.02, -0.01, 0.01, 0.02].forEach(d => add('Investment returns (pre- and post-retirement)', `${d > 0 ? '+' : ''}${(d * 100).toFixed(0)} pt per year`, { returnPre: Math.max(0, base.returnPre + d), returnPost: Math.max(0, base.returnPost + d) }));
+            [-0.01, 0.01, 0.02].forEach(d => { const v = Math.max(0, base.inflation + d); if (v !== base.inflation) add('Inflation', `${(v * 100).toFixed(1)}% (${d > 0 ? '+' : ''}${(d * 100).toFixed(0)} pt)`, { inflation: v }); });
+            [-0.10, 0.10, 0.20].forEach(d => add('Retirement spending', `${d > 0 ? '+' : ''}${(d * 100).toFixed(0)}% (${fmtCurr(base.baseSpendingGoal * (1 + d))}/yr)`, { baseSpendingGoal: base.baseSpendingGoal * (1 + d) }));
+            const f0 = SS_CLAIM_FACTOR[base.p1SSAge], f2 = SS_CLAIM_FACTOR[base.p2SSAge];
+            if (f0) [62, 65, 67, 70].filter(a => a !== base.p1SSAge).forEach(a => add('Social Security claim age (both spouses; benefit scaled from full retirement age 67)', `Claim at ${a}`,
+                { p1SSAge: a, p1SSAmt: base.p1SSAmt * SS_CLAIM_FACTOR[a] / f0, p2SSAge: a, p2SSAmt: base.p2SSAmt * SS_CLAIM_FACTOR[a] / (f2 || f0) }));
+            [-2, 2, 5].forEach(d => { const a = base.p1RetireAge + d; if (a >= base.p1Age && a < base.p1TargetAge) add('P1 retirement age', `Retire at ${a} (${d > 0 ? '+' : ''}${d} yrs)`, { p1RetireAge: a }); });
+            const retYear = Math.max(1, base.p1RetireAge - base.p1Age + 1);
+            [0.20, 0.30, 0.40].forEach(p => add('Market drop in first retirement year', `-${(p * 100).toFixed(0)}% in year ${retYear}`, { shockYear: retYear, shockPct: p }));
+            [['none', 'None'], ['fill_12', 'Fill 12% bracket'], ['fill_22', 'Fill 22% bracket'], ['optimal', 'Optimal']].filter(([k]) => k !== base.rothStrategy).forEach(([k, l]) => add('Roth conversion strategy', l, { rothStrategy: k }));
+            return cases;
+        }
+        function sensMetrics(inp) {
+            const out = runProjection(inp), m = scenarioMetrics(out);
+            const dep = out.results.find(r => r.endTotalAssets < 1 && r.spendGoal > 0);
+            m.status = dep ? `Runs out at P1 age ${dep.p1Age}` : 'Funded';
+            m.funded = !dep;
+            return m;
+        }
+        function sensitivityData() {
+            const base = readInputs(), b = sensMetrics(base);
+            return { b, cases: sensitivityCases(base).map(c => Object.assign(c, { m: sensMetrics(c.inp) })) };
+        }
+        function sensChartImage(b, cases) {
+            if (typeof Chart === 'undefined') return '';
+            try {
+                const top = cases.map(c => ({ l: `${c.group.split(' (')[0]}: ${c.label}`, d: c.m.endAssets - b.endAssets })).sort((x, y) => Math.abs(y.d) - Math.abs(x.d)).slice(0, 12);
+                const cv = document.createElement('canvas'); cv.width = 900; cv.height = 380;
+                const ch = new Chart(cv, { type: 'bar', data: { labels: top.map(t => t.l), datasets: [{ data: top.map(t => t.d), backgroundColor: top.map(t => t.d >= 0 ? '#10b981' : '#f43f5e') }] },
+                    options: { animation: false, responsive: false, devicePixelRatio: 2, indexAxis: 'y', plugins: { legend: { display: false }, title: { display: true, text: 'Biggest effects on ending assets (change vs. current inputs)' } }, scales: { x: { ticks: { callback: v => (v < 0 ? '-' : '') + '$' + Math.abs(v / 1e6).toFixed(1) + 'M' } } } } });
+                const url = cv.toDataURL('image/png'); ch.destroy(); return url || '';
+            } catch (e) { return ''; }
+        }
+        function sensReportHTML() {
+            const { b, cases } = sensitivityData();
+            const col = (d, g) => Math.abs(d) < 0.5 ? '#94a3b8' : (d * g > 0 ? '#059669' : '#e11d48');
+            const dl = (d, g) => `<td style="color:${col(d, g)}">${Math.abs(d) < 0.5 ? '-' : (d > 0 ? '+' : '-') + fmtCurr(Math.abs(d))}</td>`;
+            const img = sensChartImage(b, cases);
+            let h = `<p class="note">Each row changes one assumption from the current inputs and leaves everything else unchanged. Current inputs: ending assets ${fmtCurr(b.endAssets)} (future dollars), lifetime federal tax ${fmtCurr(b.tax)}, ${b.status.toLowerCase()}.</p>` + (img ? `<img src="${img}" alt="Sensitivity chart">` : '');
+            [...new Set(cases.map(c => c.group))].forEach(g => {
+                h += `<table><thead><tr><th>${g}</th><th>Ending assets</th><th>vs. current</th><th>Lifetime tax</th><th>vs. current</th><th>Plan status</th></tr></thead><tbody>`
+                    + cases.filter(c => c.group === g).map(c => `<tr><td>${c.label}</td><td>${fmtCurr(c.m.endAssets)}</td>${dl(c.m.endAssets - b.endAssets, 1)}<td>${fmtCurr(c.m.tax)}</td>${dl(c.m.tax - b.tax, -1)}<td${c.m.funded ? '' : ' style="color:#e11d48;font-weight:700"'}>${c.m.status}</td></tr>`).join('')
+                    + '</tbody></table>';
+            });
+            return h;
+        }
+
+        function renderSensitivity() {
+            const modal = document.getElementById('modal-sensitivity');
+            if (!modal || modal.classList.contains('hidden')) return;
+            const { b, cases } = sensitivityData();
+            const dCell = (d, goodSign) => { const z = Math.abs(d) < 0.5; const col = z ? 'text-slate-400' : (d * goodSign > 0 ? 'text-emerald-600' : 'text-rose-600'); return `<td class="py-1 text-right ${col}">${z ? '-' : (d > 0 ? '+' : '-') + fmtCurr(Math.abs(d))}</td>`; };
+            const groups = [...new Set(cases.map(c => c.group))];
+            let html = `<div class="text-xs bg-slate-50 border border-slate-200 rounded-lg p-3 mb-3"><span class="font-semibold text-slate-800">Current inputs:</span> ending assets ${fmtCurr(b.endAssets)} (future dollars) &middot; lifetime federal tax ${fmtCurr(b.tax)} &middot; ${b.status}</div>`;
+            groups.forEach(g => {
+                html += `<div class="mb-4"><div class="text-xs font-bold text-indigo-900 mb-1">${g}</div><table class="w-full text-xs"><thead><tr class="text-left text-slate-500 border-b border-slate-200"><th class="py-1 font-semibold">Case</th><th class="py-1 font-semibold text-right">Ending assets</th><th class="py-1 font-semibold text-right">vs. current</th><th class="py-1 font-semibold text-right">Lifetime tax</th><th class="py-1 font-semibold text-right">vs. current</th><th class="py-1 font-semibold text-right">Plan status</th></tr></thead><tbody>`;
+                cases.filter(c => c.group === g).forEach(c => {
+                    html += `<tr class="border-b border-slate-100"><td class="py-1">${c.label}</td><td class="py-1 text-right">${fmtCurr(c.m.endAssets)}</td>${dCell(c.m.endAssets - b.endAssets, 1)}<td class="py-1 text-right">${fmtCurr(c.m.tax)}</td>${dCell(c.m.tax - b.tax, -1)}<td class="py-1 text-right ${c.m.funded ? 'text-slate-600' : 'text-rose-600 font-semibold'}">${c.m.status}</td></tr>`;
+                });
+                html += '</tbody></table></div>';
+            });
+            document.getElementById('sens-body').innerHTML = html;
+            if (typeof Chart !== 'undefined') {
+                const top = cases.map(c => ({ l: `${c.group.split(' (')[0]}: ${c.label}`, d: c.m.endAssets - b.endAssets })).sort((x, y) => Math.abs(y.d) - Math.abs(x.d)).slice(0, 12);
+                if (sensChart) sensChart.destroy();
+                sensChart = new Chart(document.getElementById('sens-chart'), { type: 'bar', data: { labels: top.map(t => t.l), datasets: [{ data: top.map(t => t.d), backgroundColor: top.map(t => t.d >= 0 ? '#10b981' : '#f43f5e') }] },
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Biggest effects on ending assets (change vs. current)' } }, scales: { x: { ticks: { callback: v => (v < 0 ? '-' : '') + '$' + Math.abs(v / 1e6).toFixed(1) + 'M' } } } } });
+            }
+        }
+
         function runSimulation() {
             updateSectionBadges();
             const out = runProjection(readInputs());
@@ -1825,6 +1908,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             renderChart();
             updateSummaryReportText(out.totalDeficitYears, out.totalLifetimeTax);
             refreshComparison();
+            renderSensitivity();
         }
 
         function updateSummaryReportText(deficitYears, lifetimeTax) {
@@ -2138,13 +2222,9 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
                 handleFilingStatusChange();
                 document.getElementById('inp-roth-strategy').dispatchEvent(new Event('change'));
             });
-            const setMode = (simple) => {
-                document.getElementById('section-assumptions').classList.toggle('hidden', simple);
-                document.getElementById('btn-mode-simple').className = 'px-2.5 py-1 text-[11px] font-semibold ' + (simple ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-300');
-                document.getElementById('btn-mode-detailed').className = 'px-2.5 py-1 text-[11px] font-semibold ' + (simple ? 'bg-slate-800 text-slate-300' : 'bg-indigo-600 text-white');
-            };
-            document.getElementById('btn-mode-simple').addEventListener('click', () => setMode(true));
-            document.getElementById('btn-mode-detailed').addEventListener('click', () => setMode(false));
+            document.getElementById('btn-open-sensitivity').addEventListener('click', () => { document.getElementById('modal-sensitivity').classList.remove('hidden'); renderSensitivity(); });
+            document.getElementById('btn-close-sensitivity').addEventListener('click', () => document.getElementById('modal-sensitivity').classList.add('hidden'));
+            document.getElementById('tax-law-asof').textContent = TAX_LAW_AS_OF;
             document.getElementById('btn-open-report').addEventListener('click', openReport);
             document.getElementById('btn-close-report').addEventListener('click', () => document.getElementById('modal-report').classList.add('hidden'));
             document.getElementById('btn-report-print').addEventListener('click', printReport);
