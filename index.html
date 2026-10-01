@@ -11,6 +11,20 @@
     <!-- SheetJS (xlsx) CDN for Excel Export -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
+        /* ---- Design tokens: buttons, numerals, focus ---- */
+        .ui-btn { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 8px; font-size: 12px; font-weight: 600; line-height: 1; white-space: nowrap; cursor: pointer; transition: background-color .15s, border-color .15s; }
+        .ui-btn-sm { height: 24px; padding: 0 10px; font-size: 11px; }
+        .ui-btn-primary { background: #4f46e5; color: #fff; border: 1px solid #4f46e5; }
+        .ui-btn-primary:hover { background: #4338ca; border-color: #4338ca; }
+        .ui-btn-primary-dark { background: #6366f1; color: #fff; border: 1px solid #6366f1; }
+        .ui-btn-primary-dark:hover { background: #818cf8; border-color: #818cf8; }
+        .ui-btn-outline { background: #fff; color: #334155; border: 1px solid #cbd5e1; }
+        .ui-btn-outline:hover { background: #f8fafc; }
+        .ui-btn-outline-dark { background: transparent; color: #e2e8f0; border: 1px solid #64748b; }
+        .ui-btn-outline-dark:hover { background: rgba(148, 163, 184, .18); }
+        #ledger-tbody td, [id^="kpi-"], .rpt td, .rpt .kpi b { font-variant-numeric: tabular-nums; }
+        :focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; }
+
         /* ---- Detailed report ---- */
         #print-root { display: none; }
         .rpt { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #0f172a; font-size: 11px; line-height: 1.45; }
@@ -27,7 +41,7 @@
         .rpt .kv td:last-child { font-weight: 600; }
         .rpt .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         .rpt .grid-year { font-size: var(--fs, 8.5px); table-layout: fixed; width: 100%; }
-        .rpt .grid-year th, .rpt .grid-year td { height: var(--rowh, 15px); padding: 0 4px; line-height: 1.15; vertical-align: middle; }
+        .rpt .grid-year th, .rpt .grid-year td { height: var(--rowh, 15px); padding: 0 3px; line-height: 1.15; vertical-align: middle; }
         .rpt .grid-year th:first-child, .rpt .grid-year td:first-child { width: 4%; }
         .rpt .note, .rpt .note li { font-size: 9.5px; color: #475569; }
         .rpt img { width: 100%; margin: 4px 0; }
@@ -95,12 +109,12 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button id="btn-export-excel" class="bg-amber-600 hover:bg-amber-500 text-white border border-emerald-600 px-3 py-1 rounded-lg text-xs font-medium transition duration-150 flex items-center space-x-1.5 shadow-sm">
+                <button id="btn-export-excel" class="ui-btn ui-btn-primary-dark">
                     <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     <span>Export Excel</span>
                 </button>
-                <button id="btn-edit-tax-params" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1 rounded-lg text-xs font-medium transition duration-150 flex items-center space-x-1.5 shadow-sm">
-                    <svg class="w-4 h-4 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <button id="btn-edit-tax-params" class="ui-btn ui-btn-outline-dark">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Tax Parameters</span>
                 </button>
             </div>
@@ -121,8 +135,8 @@
                         <span class="font-bold text-slate-100 whitespace-nowrap panel-content-text">Inputs & Parameters</span>
                     </h2>
                     <div class="flex items-center space-x-2">
-                        <button type="button" id="btn-open-scenarios" class="panel-content-text text-[11px] font-semibold px-2 py-1 rounded-lg border border-slate-600 text-indigo-300 hover:bg-slate-800 transition">Scenarios</button>
-                        <button type="button" id="btn-reset-inputs" class="panel-content-text text-[11px] font-semibold px-2 py-1 rounded-lg border border-slate-600 text-slate-300 hover:bg-slate-800 transition">Reset</button>
+                        <button type="button" id="btn-open-scenarios" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Scenarios</button>
+                        <button type="button" id="btn-reset-inputs" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Reset</button>
                         <button id="btn-toggle-panel" title="Toggle Panel" class="p-1.5 bg-indigo-400 hover:bg-indigo-300 text-slate-950 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm flex items-center justify-center">
                             <svg id="icon-collapse" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -133,20 +147,20 @@
 
                 <!-- Quick-Jump & Expand/Collapse Utility Bar Integrated inside Header Block -->
                 <div class="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 space-y-1.5 panel-content-text">
-                    <div class="flex justify-between items-center text-[10px]">
+                    <div class="flex justify-between items-center text-[11px]">
                         <span class="font-bold uppercase tracking-wider text-slate-400">Quick-Jump</span>
-                        <div class="space-x-1.5 text-[10px]">
+                        <div class="space-x-1.5 text-[11px]">
                             <button type="button" id="btn-expand-all" class="text-indigo-400 hover:text-indigo-300 font-semibold transition">Expand All</button>
                             <span class="text-slate-600">|</span>
                             <button type="button" id="btn-collapse-all" class="text-indigo-400 hover:text-indigo-300 font-semibold transition">Collapse All</button>
                         </div>
                     </div>
                     <div class="grid grid-cols-5 gap-1 text-center">
-                        <button type="button" data-target="section-profile" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded text-[10px] font-bold transition shadow-sm">1. You</button>
-                        <button type="button" data-target="section-balances" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded text-[10px] font-bold transition shadow-sm">2. Money</button>
-                        <button type="button" data-target="section-spending" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded text-[10px] font-bold transition shadow-sm">3. Income</button>
-                        <button type="button" data-target="section-strategy" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded text-[10px] font-bold transition shadow-sm">4. Roth</button>
-                        <button type="button" data-target="section-assumptions" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded text-[10px] font-bold transition shadow-sm">5. Assump.</button>
+                        <button type="button" data-target="section-profile" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded-lg text-[11px] font-bold transition shadow-sm">1. You</button>
+                        <button type="button" data-target="section-balances" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded-lg text-[11px] font-bold transition shadow-sm">2. Money</button>
+                        <button type="button" data-target="section-spending" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded-lg text-[11px] font-bold transition shadow-sm">3. Income</button>
+                        <button type="button" data-target="section-strategy" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded-lg text-[11px] font-bold transition shadow-sm">4. Roth</button>
+                        <button type="button" data-target="section-assumptions" class="jump-btn bg-slate-700/80 hover:bg-indigo-600 text-slate-200 hover:text-white py-1 rounded-lg text-[11px] font-bold transition shadow-sm">5. Assump.</button>
                     </div>
                 </div>
             </div>
@@ -164,7 +178,7 @@
                             <span class="text-[11px] uppercase tracking-wider">1. You &amp; Your Timeline</span>
                         </span>
                         <div class="flex items-center space-x-2">
-                            <span id="badge-profile" class="text-[10px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">MFJ • 58/55</span>
+                            <span id="badge-profile" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">MFJ • 58/55</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </summary>
@@ -179,9 +193,9 @@
 
                         <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
                             <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">P1</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">P2</span>
-                            <label class="text-slate-300 font-semibold">Age now</label><input type="number" id="inp-p1-age" value="58" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-age" value="55" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Retire at</label><input type="number" id="inp-p1-retire-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-retire-age" value="60" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Plan to age</label><input type="number" id="inp-p1-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold">Age now</label><input type="number" id="inp-p1-age" value="58" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-age" value="55" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold">Retire at</label><input type="number" id="inp-p1-retire-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-retire-age" value="60" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold">Plan to age</label><input type="number" id="inp-p1-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                         </div>
                     </div>
                 </details>
@@ -194,21 +208,21 @@
                             <span class="text-[11px] uppercase tracking-wider">2. Money You Have &amp; Add</span>
                         </span>
                         <div class="flex items-center space-x-2">
-                            <span id="badge-balances" class="text-[10px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">$810k Total</span>
+                            <span id="badge-balances" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">$810k Total</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
                         <div class="grid gap-x-2 gap-y-1.5 items-center" style="grid-template-columns: max-content minmax(0,1fr) minmax(0,1fr);">
                             <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">Balance ($)</span><span class="work-only text-center text-slate-400 font-semibold text-[11px]" title="Contributions until P1 retires">Add/yr ($)</span>
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Cash</label><input type="number" id="inp-bal-cash" value="60000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-cash" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Brokerage</label><input type="number" id="inp-bal-brokerage" value="150000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-brokerage" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="401k, IRA, HSA">Tax-Def (401k/IRA/HSA)</label><input type="number" id="inp-bal-trad" value="500000" step="10000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-trad" value="10000" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Roth, IUL">Tax-exempt (ROTH)</label><input type="number" id="inp-bal-roth" value="100000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-roth" value="0" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Cash</label><input type="number" id="inp-bal-cash" value="60000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-cash" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Brokerage</label><input type="number" id="inp-bal-brokerage" value="150000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-brokerage" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="401k, IRA, HSA">Tax-Def (401k/IRA/HSA)</label><input type="number" id="inp-bal-trad" value="500000" step="10000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-trad" value="10000" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Roth, IUL">Tax-exempt (ROTH)</label><input type="number" id="inp-bal-roth" value="100000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-roth" value="0" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                         </div>
                         <div class="work-only flex items-center gap-2 border-t border-dashed border-slate-800 pt-2">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                 </details>
@@ -223,7 +237,7 @@
                             <span class="text-[11px] uppercase tracking-wider">3. Retirement Spending &amp; Income</span>
                         </span>
                         <div class="flex items-center space-x-2">
-                            <span id="badge-spending" class="text-[10px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">$90k Spend</span>
+                            <span id="badge-spending" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">$90k Spend</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </summary>
@@ -236,22 +250,22 @@
                         <div class="flex items-center gap-2">
                             <label class="font-semibold text-slate-300 whitespace-nowrap text-[11px]">Ret. Spend Goal ($/yr)</label>
                             <input type="number" id="inp-spending-goal" value="90000" step="1000" class="flex-1 min-w-0 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <button id="btn-open-spend-calc" type="button" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded-lg text-[10px] font-medium transition duration-150 flex items-center space-x-1 shadow-sm flex-none"><svg class="w-3 h-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>Calc</span></button>
+                            <button id="btn-open-spend-calc" type="button" class="ui-btn ui-btn-sm ui-btn-primary-dark flex-none"><svg class="w-3 h-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>Calc</span></button>
                         </div>
 
                         <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
                             <span class="text-[11px] text-slate-400 font-semibold">Social Security</span><span class="text-center text-slate-400 font-semibold text-[11px]">P1</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">P2</span>
-                            <label class="text-slate-300 font-semibold">Benefit ($/yr)</label><input type="number" id="inp-p1-ss-amt" value="43000" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-amt" value="21500" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Claim age</label><input type="number" id="inp-p1-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold">Benefit ($/yr)</label><input type="number" id="inp-p1-ss-amt" value="43000" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-amt" value="21500" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <label class="text-slate-300 font-semibold">Claim age</label><input type="number" id="inp-p1-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                         </div>
 
                         <div class="border-t border-dashed border-slate-800 pt-2 space-y-2">
                             <span class="block font-semibold text-slate-200 text-[11px]">Pension / annuity / other income</span>
-                            <div class="grid grid-cols-2 gap-2"><div><label class="block text-slate-400 text-[10px] mb-0.5">Annual ($)</label><input type="number" id="inp-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div></div>
+                            <div class="grid grid-cols-2 gap-2"><div><label class="block text-slate-400 text-[11px] mb-0.5">Annual ($)</label><input type="number" id="inp-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div></div>
                             <div id="pension-detail" class="grid grid-cols-3 gap-2 hidden">
-                                <div><label class="block text-slate-400 text-[10px] mb-0.5">Start age (P1)</label><input type="number" id="inp-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
-                                <div><label class="block text-slate-400 text-[10px] mb-0.5">COLA (%)</label><input type="number" id="inp-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
-                                <div id="pension-survivor-wrap"><label class="block text-slate-400 text-[10px] mb-0.5" title="Share of the pension P2 keeps after P1 dies">Survivor %</label><input type="number" id="inp-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                                <div><label class="block text-slate-400 text-[11px] mb-0.5">Start age (P1)</label><input type="number" id="inp-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                                <div><label class="block text-slate-400 text-[11px] mb-0.5">COLA (%)</label><input type="number" id="inp-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                                <div id="pension-survivor-wrap"><label class="block text-slate-400 text-[11px] mb-0.5" title="Share of the pension P2 keeps after P1 dies">Survivor %</label><input type="number" id="inp-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
                             </div>
                         </div>
 
@@ -268,7 +282,7 @@
                             <span class="text-[11px] uppercase tracking-wider">4. Roth Conversion Strategy</span>
                         </span>
                         <div class="flex items-center space-x-2">
-                            <span id="badge-strategy" class="text-[10px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">None / -25%</span>
+                            <span id="badge-strategy" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">None / -25%</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </summary>
@@ -291,7 +305,7 @@
                         </div>
 
                         <div id="work-conv-wrap" class="flex items-center space-x-2 pt-1">
-                            <input type="checkbox" id="inp-allow-work-conversions" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
+                            <input type="checkbox" id="inp-allow-work-conversions" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
                             <label for="inp-allow-work-conversions" class="font-semibold text-slate-300 text-xs">Convert while working (tax paid from cash)</label>
                         </div>
 
@@ -309,7 +323,7 @@
                     <summary class="flex justify-between items-center px-3.5 py-2.5 cursor-pointer bg-slate-800/60 hover:bg-slate-800 text-indigo-400 font-bold select-none transition">
                         <span class="flex items-center space-x-2"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg><span class="text-[11px] uppercase tracking-wider">5. Assumptions &amp; Tax Settings</span></span>
                         <div class="flex items-center space-x-2">
-                            <span id="badge-assumptions" class="text-[10px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">Defaults</span>
+                            <span id="badge-assumptions" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">Defaults</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </div>
                     </summary>
@@ -330,17 +344,17 @@
                             </div></div>
                         <span class="block font-semibold text-slate-200 text-[11px] pt-1">Taxes</span>
                         <div class="flex items-center space-x-2 pt-1">
-                            <input type="checkbox" id="inp-use-inflation-brackets" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
+                            <input type="checkbox" id="inp-use-inflation-brackets" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
                             <label for="inp-use-inflation-brackets" class="font-semibold text-slate-300 text-xs" title="Index brackets, standard deduction and IRMAA thresholds for inflation each year">Inflate tax brackets &amp; deductions</label>
                         </div><div class="flex items-center space-x-2 pt-1">
-                            <input type="checkbox" id="inp-include-invest-income" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                            <input type="checkbox" id="inp-include-invest-income" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                             <label title="Cash interest plus a 2% brokerage yield, taxed as ordinary income" for="inp-include-invest-income" class="font-semibold text-slate-300 text-xs">Tax interest &amp; dividends</label>
                         </div><div class="flex items-center space-x-2 pt-1">
-                            <input type="checkbox" id="inp-include-cap-gains" class="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                            <input type="checkbox" id="inp-include-cap-gains" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4">
                             <label title="0/15/20% rates on gains from brokerage sales, plus the 3.8% NIIT" for="inp-include-cap-gains" class="font-semibold text-slate-300 text-xs">Tax capital gains</label>
                         </div><div id="basis-wrap" class="pt-1 hidden">
                             <label class="block font-semibold text-slate-300 mb-1">Brokerage cost basis (% of balance)</label>
-                            <input type="number" id="inp-brokerage-basis-pct" value="70" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="number" id="inp-brokerage-basis-pct" value="70" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <span class="block font-semibold text-slate-200 text-[11px] pt-1">Stress test</span>
                         <div class="grid grid-cols-2 gap-2 pt-1">
@@ -372,47 +386,91 @@
         <!-- RIGHT PANEL: Dashboard Metrics, Chart & Ledger -->
         <main class="flex-1 bg-slate-50 p-4 md:p-6 overflow-y-auto custom-scrollbar space-y-6">
 
-            <!-- Executive Summary Banner & Client Header -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <!-- Comprehensive Retirement Cash Flow & Tax Projection: header, KPIs, then Executive Summary -->
+            <section id="projection-overview" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+                <div class="flex items-center justify-between flex-wrap gap-3">
                 <div class="space-y-0.5">
                     <div class="flex items-center space-x-2">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-indigo-100 text-indigo-800 uppercase tracking-wide">Client Review</span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wide">Client Review</span>
                         <span class="text-xs text-slate-400 font-medium">| Baseline Scenario</span>
                     </div>
-                    <h2 class="text-base font-black text-slate-900 tracking-tight">Comprehensive Retirement Cash Flow & Tax Projection</h2>
+                    <h2 class="text-base font-bold text-slate-900 tracking-tight">Comprehensive Retirement Cash Flow & Tax Projection</h2>
                 </div>
                 <div class="flex items-center space-x-3 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 text-xs">
                     <span class="font-bold text-slate-600">Plan Solvency Status:</span>
-                    <span id="header-solvency-pill" class="px-2 py-0.5 rounded font-black bg-emerald-100 text-emerald-800">Fully Funded</span>
+                    <span id="header-solvency-pill" class="px-2 py-0.5 rounded-lg font-bold bg-emerald-100 text-emerald-800">Fully Funded</span>
                 </div>
             </div>
- 
-            <!-- Summary Report Panel Added Here -->
-            <section class="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl shadow-sm border border-slate-800 p-5 space-y-3">
+
+                <!-- KPI Dashboard Summary -->
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-indigo-600">
+                    <div class="p-2.5 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 flex-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ending Net Worth</p>
+                        <p id="kpi-ending-assets" class="text-base lg:text-lg font-bold text-slate-900">$0</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-emerald-600">
+                    <div class="p-2.5 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-600 flex-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Plan Solvency</p>
+                        <p id="kpi-solvency-status" class="text-base lg:text-lg font-bold text-emerald-600">Fully Funded</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-rose-600">
+                    <div class="p-2.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 flex-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lifetime Tax</p>
+                        <p id="kpi-lifetime-tax" class="text-base lg:text-lg font-bold text-slate-900">$0</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-amber-500">
+                    <div class="p-2.5 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 flex-none">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lifetime IRMAA</p>
+                        <p id="kpi-lifetime-irmaa" class="text-base lg:text-lg font-bold text-slate-900">$0</p>
+                    </div>
+                </div>
+            </section>
+
+                <!-- Executive Summary -->
+                <section class="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl shadow-sm border border-slate-800 p-5 space-y-3">
                 <div class="flex items-center justify-between border-b border-indigo-800/80 pb-2.5">
                     <div class="flex items-center space-x-2">
                         <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <h3 class="text-sm font-black tracking-wide uppercase text-indigo-100">Executive Summary Report</h3>
+                        <h3 class="text-sm font-bold tracking-wide uppercase text-indigo-100">Executive Summary</h3>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button type="button" id="btn-open-sensitivity" class="text-[10px] font-bold px-2.5 py-1 rounded-full border border-indigo-400 text-indigo-100 hover:bg-indigo-800/80 transition">Sensitivity</button>
-                        <button type="button" id="btn-open-report" class="text-[10px] font-bold px-2.5 py-1 rounded-full border border-indigo-400 text-indigo-100 hover:bg-indigo-800/80 transition">Detailed Report</button>
-                        <button type="button" id="btn-export-pdf" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white transition">Export PDF</button>
+                        <button type="button" id="btn-open-sensitivity" class="ui-btn ui-btn-sm ui-btn-outline-dark">Sensitivity</button>
+                        <button type="button" id="btn-open-report" class="ui-btn ui-btn-sm ui-btn-outline-dark">Detailed Report</button>
+                        <button type="button" id="btn-export-pdf" class="ui-btn ui-btn-sm ui-btn-primary-dark">Export PDF</button>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                     <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/60 space-y-1">
-                        <span class="block text-[10px] font-bold text-indigo-300 uppercase tracking-wider">Plan Horizon & Solvency</span>
+                        <span class="block text-[11px] font-bold text-indigo-300 uppercase tracking-wider">Plan Horizon & Solvency</span>
                         <p id="summary-solvency-desc" class="font-medium text-indigo-100">Your portfolio is projected to remain fully funded through age 95 with zero deficits.</p>
                     </div>
                     <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/60 space-y-1">
-                        <span class="block text-[10px] font-bold text-indigo-300 uppercase tracking-wider">Tax & Conversion Outlook</span>
+                        <span class="block text-[11px] font-bold text-indigo-300 uppercase tracking-wider">Tax & Conversion Outlook</span>
                         <p id="summary-tax-desc" class="font-medium text-indigo-100">Lifetime federal income tax is projected from your inputs. State income tax is not included.</p>
                     </div>
                     <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/60 space-y-1">
-                        <span class="block text-[10px] font-bold text-indigo-300 uppercase tracking-wider">Key Recommendation</span>
+                        <span class="block text-[11px] font-bold text-indigo-300 uppercase tracking-wider">Key Recommendation</span>
                         <p id="summary-rec-desc" class="font-medium text-indigo-100">Maintain current accumulation discipline and review Roth conversion brackets annually.</p>
                     </div>
                 </div>
@@ -425,60 +483,18 @@
                     and confirm with your state revenue department or a tax professional.
                 </div>
             </section>
-
-            <!-- KPI Dashboard Summary -->
-            <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-indigo-600">
-                    <div class="p-2.5 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 flex-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Ending Net Worth</p>
-                        <p id="kpi-ending-assets" class="text-base lg:text-lg font-black text-slate-900">$0</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-emerald-600">
-                    <div class="p-2.5 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-600 flex-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Plan Solvency</p>
-                        <p id="kpi-solvency-status" class="text-base lg:text-lg font-black text-emerald-600">Fully Funded</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-rose-600">
-                    <div class="p-2.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 flex-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Lifetime Tax</p>
-                        <p id="kpi-lifetime-tax" class="text-base lg:text-lg font-black text-slate-900">$0</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-amber-500">
-                    <div class="p-2.5 bg-amber-50 border border-amber-100 rounded-xl text-amber-600 flex-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Lifetime IRMAA</p>
-                        <p id="kpi-lifetime-irmaa" class="text-base lg:text-lg font-black text-slate-900">$0</p>
-                    </div>
-                </div>
             </section>
 
             <!-- Chart Section -->
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
                     <div>
-                        <h2 class="text-sm font-black text-slate-900 tracking-tight">Portfolio & Tax Projection Visualizer</h2>
+                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Portfolio & Tax Projection Visualizer</h2>
                     </div>
                     <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 space-x-1">
-                        <button id="btn-chart-assets" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-white text-slate-900 shadow-sm transition">Assets Trajectory</button>
-                        <button id="btn-chart-tax" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Tax Exposure</button>
-                        <button id="btn-chart-cashflow" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition">Cash Flow Sources</button>
+                        <button id="btn-chart-assets" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition">Assets Trajectory</button>
+                        <button id="btn-chart-tax" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Tax Exposure</button>
+                        <button id="btn-chart-cashflow" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Cash Flow Sources</button>
                     </div>
                 </div>
                 
@@ -494,13 +510,13 @@
                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
-                        <h2 class="text-sm font-black text-slate-900 tracking-tight">Year-by-Year Cash Flow & Tax Ledger</h2>
+                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Year-by-Year Cash Flow & Tax Ledger</h2>
                     </div>
                     <div class="flex items-center space-x-3">
-                        <div class="flex items-center space-x-2 text-[10px] text-slate-500 font-medium">
-                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-indigo-100 border border-indigo-200 inline-block"></span><span>Retire</span></span>
-                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-emerald-100 border border-emerald-200 inline-block"></span><span>SS Start</span></span>
-                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded bg-amber-100 border border-amber-200 inline-block"></span><span>RMD Onset</span></span>
+                        <div class="flex items-center space-x-2 text-[11px] text-slate-500 font-medium">
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-100 border border-indigo-200 inline-block"></span><span>Retire</span></span>
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-100 border border-emerald-200 inline-block"></span><span>SS Start</span></span>
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-100 border border-amber-200 inline-block"></span><span>RMD Onset</span></span>
                         </div>
                     </div>
                 </div>
@@ -510,11 +526,11 @@
                         <table class="w-full text-right text-xs border-collapse">
                             <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0 z-20">
                                 <tr class="border-b border-slate-300 text-xs">
-                                    <th colspan="2" class="py-2.5 px-3 text-center bg-slate-200 text-slate-900 font-black tracking-wider uppercase border-r border-slate-300">Profile & Timeline</th>
-                                    <th colspan="8" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-black tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
-                                    <th colspan="5" class="py-2.5 px-3 text-center bg-emerald-100 text-emerald-950 font-black tracking-wider uppercase border-r border-slate-300">Withdrawal Waterfall</th>
-                                    <th colspan="9" class="py-2.5 px-3 text-center bg-rose-100 text-rose-950 font-black tracking-wider uppercase border-r border-slate-300">Tax Calculations</th>
-                                    <th colspan="5" class="py-2.5 px-3 text-center bg-amber-100 text-amber-950 font-black tracking-wider uppercase">Ending Balances</th>
+                                    <th colspan="2" class="py-2.5 px-3 text-center bg-slate-200 text-slate-900 font-bold tracking-wider uppercase border-r border-slate-300">Profile & Timeline</th>
+                                    <th colspan="8" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-bold tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
+                                    <th colspan="5" class="py-2.5 px-3 text-center bg-emerald-100 text-emerald-950 font-bold tracking-wider uppercase border-r border-slate-300">Withdrawal Waterfall</th>
+                                    <th colspan="9" class="py-2.5 px-3 text-center bg-rose-100 text-rose-950 font-bold tracking-wider uppercase border-r border-slate-300">Tax Calculations</th>
+                                    <th colspan="5" class="py-2.5 px-3 text-center bg-amber-100 text-amber-950 font-bold tracking-wider uppercase">Ending Balances</th>
                                 </tr>
                                 <tr class="text-[11px]">
                                     <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
@@ -532,7 +548,7 @@
                                     <th class="py-2.5 px-3 min-w-[95px]">Brokerage W/D</th>
                                     <th class="py-2.5 px-3 min-w-[95px]">Trad IRA W/D</th>
                                     <th class="py-2.5 px-3 min-w-[95px] border-r border-slate-300">Roth W/D</th>
-                                    <th class="py-2.5 px-3 bg-slate-200/60 font-black min-w-[95px]">Total AGI</th>
+                                    <th class="py-2.5 px-3 bg-slate-200/60 font-bold min-w-[95px]">Total AGI</th>
                                     <th class="py-2.5 px-3 min-w-[95px]">Taxable Inc</th>
                                     <th class="py-2.5 px-3 min-w-[80px]">Eff. Rate</th>
                                     <th class="py-2.5 px-3 min-w-[80px]">Marg. Rate</th>
@@ -545,7 +561,7 @@
                                     <th class="py-2.5 px-3 min-w-[100px]">End Brokerage</th>
                                     <th class="py-2.5 px-3 min-w-[100px]">End Trad IRA</th>
                                     <th class="py-2.5 px-3 min-w-[100px]">End Roth</th>
-                                    <th class="py-2.5 px-3 bg-indigo-50 text-indigo-900 font-black min-w-[110px]">Total Assets</th>
+                                    <th class="py-2.5 px-3 bg-indigo-50 text-indigo-900 font-bold min-w-[110px]">Total Assets</th>
                                 </tr>
                             </thead>
                             <tbody id="ledger-tbody" class="divide-y divide-slate-100 text-slate-700">
@@ -603,20 +619,20 @@
                 <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 mt-4 text-center">
                     <div class="grid grid-cols-2 divide-x divide-indigo-200">
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-500 uppercase">Estimated Monthly Spending</span>
-                            <span id="calc-out-monthly" class="text-base font-black text-slate-900">$7,500</span>
+                            <span class="block text-[11px] font-bold text-slate-500 uppercase">Estimated Monthly Spending</span>
+                            <span id="calc-out-monthly" class="text-base font-bold text-slate-900">$7,500</span>
                         </div>
                         <div>
-                            <span class="block text-[10px] font-bold text-slate-500 uppercase">Annualized Goal</span>
-                            <span id="calc-out-annual" class="text-base font-black text-indigo-700">$90,000</span>
+                            <span class="block text-[11px] font-bold text-slate-500 uppercase">Annualized Goal</span>
+                            <span id="calc-out-annual" class="text-base font-bold text-indigo-700">$90,000</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="bg-slate-100 px-6 py-3 border-t flex justify-end space-x-3">
-                <button id="btn-cancel-spend-modal" class="px-4 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-800 transition">Cancel</button>
-                <button id="btn-apply-spend-goal" class="px-4 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition shadow-sm">Apply Goal & Update</button>
+                <button id="btn-cancel-spend-modal" class="ui-btn ui-btn-outline">Cancel</button>
+                <button id="btn-apply-spend-goal" class="ui-btn ui-btn-primary">Apply Goal & Update</button>
             </div>
         </div>
     </div>
@@ -631,14 +647,14 @@
             <div class="p-6 space-y-4 overflow-y-auto text-sm text-slate-700">
                 <div class="flex flex-wrap items-center gap-2">
                     <input type="text" id="scn-name" value="My scenario" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs w-44" aria-label="Scenario name">
-                    <button type="button" id="btn-scn-save" class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 cursor-pointer">Save inputs to file</button>
-                    <label class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 cursor-pointer">Load file into inputs<input type="file" id="scn-file" accept=".json,application/json" class="hidden"></label>
+                    <button type="button" id="btn-scn-save" class="ui-btn ui-btn-outline">Save inputs to file</button>
+                    <label class="ui-btn ui-btn-outline">Load file into inputs<input type="file" id="scn-file" accept=".json,application/json" class="hidden"></label>
                 </div>
                 <div class="border-t border-slate-200 pt-3 space-y-2">
                     <div class="text-xs font-semibold text-slate-800">Compare</div>
                     <div class="flex flex-wrap items-center gap-2">
-                        <button type="button" id="btn-scn-pin" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white">Pin current inputs as baseline</button>
-                        <label class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 cursor-pointer">Use a saved file as baseline<input type="file" id="scn-base-file" accept=".json,application/json" class="hidden"></label>
+                        <button type="button" id="btn-scn-pin" class="ui-btn ui-btn-primary">Pin current inputs as baseline</button>
+                        <label class="ui-btn ui-btn-outline">Use a saved file as baseline<input type="file" id="scn-base-file" accept=".json,application/json" class="hidden"></label>
                     </div>
                     <p class="text-xs text-slate-500">Pin a baseline, then change any input in the panel. The comparison below updates live.</p>
                 </div>
@@ -654,10 +670,10 @@
 
     <div id="modal-report" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-5xl w-full mx-4 overflow-hidden max-h-[92vh] flex flex-col">
-            <div class="bg-indigo-950 text-white px-6 py-3 flex justify-between items-center border-b border-indigo-900 flex-none">
+            <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center border-b border-indigo-900 flex-none">
                 <h3 class="text-base font-bold">Detailed Summary Report</h3>
                 <div class="flex items-center gap-3">
-                    <button type="button" id="btn-report-print" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white">Export PDF</button>
+                    <button type="button" id="btn-report-print" class="ui-btn ui-btn-primary-dark">Export PDF</button>
                     <button id="btn-close-report" class="text-slate-400 hover:text-white transition" aria-label="Close"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                 </div>
             </div>
@@ -710,23 +726,23 @@
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <span class="font-bold text-slate-700 block">Married Filing Jointly (MFJ) Ceilings</span>
                             <div class="grid grid-cols-2 gap-2">
-                                <div><label class="text-[10px] text-slate-500">10% Ceiling</label><input type="number" id="tax-mfj-10" value="24800" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">12% Ceiling</label><input type="number" id="tax-mfj-12" value="100800" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">22% Ceiling</label><input type="number" id="tax-mfj-22" value="211400" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">24% Ceiling</label><input type="number" id="tax-mfj-24" value="403550" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">32% Ceiling</label><input type="number" id="tax-mfj-32" value="512450" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">35% Ceiling</label><input type="number" id="tax-mfj-35" value="768700" class="w-full bg-white border rounded p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">10% Ceiling</label><input type="number" id="tax-mfj-10" value="24800" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">12% Ceiling</label><input type="number" id="tax-mfj-12" value="100800" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">22% Ceiling</label><input type="number" id="tax-mfj-22" value="211400" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">24% Ceiling</label><input type="number" id="tax-mfj-24" value="403550" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">32% Ceiling</label><input type="number" id="tax-mfj-32" value="512450" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">35% Ceiling</label><input type="number" id="tax-mfj-35" value="768700" class="w-full bg-white border rounded-lg p-1.5"></div>
                             </div>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <span class="font-bold text-slate-700 block">Single Ceilings</span>
                             <div class="grid grid-cols-2 gap-2">
-                                <div><label class="text-[10px] text-slate-500">10% Ceiling</label><input type="number" id="tax-single-10" value="12400" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">12% Ceiling</label><input type="number" id="tax-single-12" value="50400" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">22% Ceiling</label><input type="number" id="tax-single-22" value="105700" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">24% Ceiling</label><input type="number" id="tax-single-24" value="201775" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">32% Ceiling</label><input type="number" id="tax-single-32" value="256225" class="w-full bg-white border rounded p-1.5"></div>
-                                <div><label class="text-[10px] text-slate-500">35% Ceiling</label><input type="number" id="tax-single-35" value="640600" class="w-full bg-white border rounded p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">10% Ceiling</label><input type="number" id="tax-single-10" value="12400" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">12% Ceiling</label><input type="number" id="tax-single-12" value="50400" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">22% Ceiling</label><input type="number" id="tax-single-22" value="105700" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">24% Ceiling</label><input type="number" id="tax-single-24" value="201775" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">32% Ceiling</label><input type="number" id="tax-single-32" value="256225" class="w-full bg-white border rounded-lg p-1.5"></div>
+                                <div><label class="text-[11px] text-slate-500">35% Ceiling</label><input type="number" id="tax-single-35" value="640600" class="w-full bg-white border rounded-lg p-1.5"></div>
                             </div>
                         </div>
                     </div>
@@ -738,23 +754,23 @@
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <span class="font-bold text-slate-700 block">Married Filing Jointly (MFJ) IRMAA</span>
                             <div class="space-y-2">
-                                <div class="grid grid-cols-3 gap-1 text-[10px] font-bold text-slate-500"><span>Tier</span><span>Threshold ($)</span><span>Surcharge ($/yr)</span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 1</span><input type="number" id="tax-irmaa-mfj-t1" value="218000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-mfj-t1-cost" value="1148" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 2</span><input type="number" id="tax-irmaa-mfj-t2" value="274000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-mfj-t2-cost" value="2885" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 3</span><input type="number" id="tax-irmaa-mfj-t3" value="342000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-mfj-t3-cost" value="4620" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 4</span><input type="number" id="tax-irmaa-mfj-t4" value="410000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-mfj-t4-cost" value="6356" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 5</span><input type="number" id="tax-irmaa-mfj-t5" value="750000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-mfj-t5-cost" value="6936" class="w-full bg-white border rounded p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 text-[11px] font-bold text-slate-500"><span>Tier</span><span>Threshold ($)</span><span>Surcharge ($/yr)</span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 1</span><input type="number" id="tax-irmaa-mfj-t1" value="218000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-mfj-t1-cost" value="1148" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 2</span><input type="number" id="tax-irmaa-mfj-t2" value="274000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-mfj-t2-cost" value="2885" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 3</span><input type="number" id="tax-irmaa-mfj-t3" value="342000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-mfj-t3-cost" value="4620" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 4</span><input type="number" id="tax-irmaa-mfj-t4" value="410000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-mfj-t4-cost" value="6356" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 5</span><input type="number" id="tax-irmaa-mfj-t5" value="750000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-mfj-t5-cost" value="6936" class="w-full bg-white border rounded-lg p-1"></span></div>
                             </div>
                         </div>
                         <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
                             <span class="font-bold text-slate-700 block">Single IRMAA</span>
                             <div class="space-y-2">
-                                <div class="grid grid-cols-3 gap-1 text-[10px] font-bold text-slate-500"><span>Tier</span><span>Threshold ($)</span><span>Surcharge ($/yr)</span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 1</span><input type="number" id="tax-irmaa-single-t1" value="109000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-single-t1-cost" value="1148" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 2</span><input type="number" id="tax-irmaa-single-t2" value="137000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-single-t2-cost" value="2885" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 3</span><input type="number" id="tax-irmaa-single-t3" value="171000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-single-t3-cost" value="4620" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 4</span><input type="number" id="tax-irmaa-single-t4" value="205000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-single-t4-cost" value="6356" class="w-full bg-white border rounded p-1"></span></div>
-                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 5</span><input type="number" id="tax-irmaa-single-t5" value="500000" class="w-full bg-white border rounded p-1"><span><input type="number" id="tax-irmaa-single-t5-cost" value="6936" class="w-full bg-white border rounded p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 text-[11px] font-bold text-slate-500"><span>Tier</span><span>Threshold ($)</span><span>Surcharge ($/yr)</span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 1</span><input type="number" id="tax-irmaa-single-t1" value="109000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-single-t1-cost" value="1148" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 2</span><input type="number" id="tax-irmaa-single-t2" value="137000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-single-t2-cost" value="2885" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 3</span><input type="number" id="tax-irmaa-single-t3" value="171000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-single-t3-cost" value="4620" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 4</span><input type="number" id="tax-irmaa-single-t4" value="205000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-single-t4-cost" value="6356" class="w-full bg-white border rounded-lg p-1"></span></div>
+                                <div class="grid grid-cols-3 gap-1 items-center"><span class="font-semibold">Tier 5</span><input type="number" id="tax-irmaa-single-t5" value="500000" class="w-full bg-white border rounded-lg p-1"><span><input type="number" id="tax-irmaa-single-t5-cost" value="6936" class="w-full bg-white border rounded-lg p-1"></span></div>
                             </div>
                         </div>
                     </div>
@@ -762,7 +778,7 @@
             </div>
 
             <div class="bg-slate-100 px-6 py-3 border-t flex justify-end space-x-3 flex-none">
-                <button id="btn-save-tax-params" class="px-4 py-1.5 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg transition shadow-sm">Close</button>
+                <button id="btn-save-tax-params" class="ui-btn ui-btn-primary">Close</button>
             </div>
         </div>
     </div>
@@ -1679,10 +1695,14 @@
         }
 
         // ---- Detailed report + PDF export ----
+        // Shared palette: each account / income source keeps the same color in every chart and in the report
+        const PALETTE = { cash: '#94a3b8', brokerage: '#0ea5e9', trad: '#8b5cf6', roth: '#10b981', total: '#0f172a', tax: '#f43f5e', cumTax: '#be123c', irmaa: '#f59e0b', salary: '#6366f1', ss: '#14b8a6', pension: '#f97316', withdrawals: '#ec4899' };
+        const paletteAlpha = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
         const TAX_LAW_AS_OF = 'September 2026';   // update when the tax parameters are refreshed
         let lastRunOut = null;
         const rEsc = (t) => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
         const rK = (v) => (v === 0 || v === undefined || v === null) ? '-' : Math.round(v / 1000).toLocaleString('en-US');
+        const rD = (v) => (v === 0 || v === undefined || v === null || Math.abs(v) < 0.5) ? '-' : Math.round(v).toLocaleString('en-US');
         const rPct = (v, d = 1) => `${(v * 100).toFixed(d)}%`;
 
         function reportChartImage(kind) {
@@ -1692,8 +1712,8 @@
                 const c = document.createElement('canvas'); c.width = 900; c.height = 360;
                 const bar = (label, key, color) => ({ label, data: rs.map(r => r[key]), backgroundColor: color, stack: 's' });
                 const datasets = kind === 'assets'
-                    ? [bar('Cash', 'balCash', '#f59e0b'), bar('Brokerage', 'balBrokerage', '#0ea5e9'), bar('Tax-deferred', 'balTrad', '#6366f1'), bar('Roth', 'balRoth', '#10b981')]
-                    : [bar('Federal income tax', 'fedTax', '#f43f5e'), bar('IRMAA surcharge', 'irmaaCost', '#f59e0b')];
+                    ? [bar('Cash', 'balCash', PALETTE.cash), bar('Brokerage', 'balBrokerage', PALETTE.brokerage), bar('Tax-deferred', 'balTrad', PALETTE.trad), bar('Roth', 'balRoth', PALETTE.roth)]
+                    : [bar('Federal income tax', 'fedTax', PALETTE.tax), bar('IRMAA surcharge', 'irmaaCost', PALETTE.irmaa)];
                 const title = kind === 'assets' ? 'Year-end balances by account type (x-axis: P1 age)' : 'Annual federal tax and IRMAA surcharges (x-axis: P1 age)';
                 const ch = new Chart(c, { type: 'bar', data: { labels, datasets }, options: { animation: false, responsive: false, devicePixelRatio: 2,
                     plugins: { title: { display: true, text: title }, legend: { position: 'bottom' } },
@@ -1732,8 +1752,9 @@
             const bracketRows = (arr) => arr.map((b, i) => `${Math.round(b.rate * 100)}% up to ${b.max === Infinity || b.max === null ? 'no limit' : fmtCurr(b.max)}`).join('<br>');
             const irmaaRows = P.irmaaTiersMFJ.map((t, i) => `<tr><td>${t.tierName}</td><td>${fmtCurr(t.threshold)}+</td><td>${fmtCurr(P.irmaaTiersSingle[i].threshold)}+</td><td>${fmtCurr(t.surchargePerPerson)}</td></tr>`).join('');
 
-            const rowH = Math.max(15, Math.min(28, Math.floor(640 / (rs.length + 1.5)))), fsz = Math.max(8.5, Math.min(12, rowH * 0.58)).toFixed(1);
-            const yrRows = rs.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td><td>${rK(r.salary + r.ssIncome + r.pensionIncome)}</td><td>${rK(r.rmdAmount)}</td><td>${rK(r.rothConvAmount)}</td><td>${rK(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rK(r.agi)}</td><td>${rK(r.fedTax)}</td><td>${rK(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rK(r.balCash)}</td><td>${rK(r.balBrokerage)}</td><td>${rK(r.balTrad)}</td><td>${rK(r.balRoth)}</td><td><b>${rK(r.endTotalAssets)}</b></td></tr>`).join('');
+            const maxLen = rs.reduce((m, r) => Math.max(m, ...[r.salary + r.ssIncome + r.pensionIncome, r.rmdAmount, r.rothConvAmount, r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth, r.agi, r.fedTax, r.irmaaCost, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets].map(v => rD(v).length)), 4);
+            const rowH = Math.max(15, Math.min(28, Math.floor(640 / (rs.length + 1.5)))), fsz = Math.max(7.5, Math.min(11, rowH * 0.58, 54 / (maxLen * 0.6))).toFixed(1);
+            const yrRows = rs.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td><td>${rD(r.salary + r.ssIncome + r.pensionIncome)}</td><td>${rD(r.rmdAmount)}</td><td>${rD(r.rothConvAmount)}</td><td>${rD(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rD(r.agi)}</td><td>${rD(r.fedTax)}</td><td>${rD(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rD(r.balCash)}</td><td>${rD(r.balBrokerage)}</td><td>${rD(r.balTrad)}</td><td>${rD(r.balRoth)}</td><td><b>${rD(r.endTotalAssets)}</b></td></tr>`).join('');
 
             const imgA = reportChartImage('assets'), imgT = reportChartImage('tax');
             const solv = document.getElementById('summary-solvency-desc').textContent, taxd = document.getElementById('summary-tax-desc').textContent, rec = document.getElementById('summary-rec-desc').textContent;
@@ -1797,7 +1818,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 </ul>
 
 <div class="rpt-wide rpt-break">
-<h2>8. Appendix: year-by-year projection ($ thousands)</h2>
+<h2>8. Appendix: year-by-year projection (whole dollars)</h2>
 <table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>P1</th><th>P2</th><th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
 <p class="note">Income = salary + Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
 </div>
@@ -1949,14 +1970,14 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 
             if (deficitYears === 0) {
                 solvencyEl.textContent = "Fully Funded";
-                solvencyEl.className = "text-base lg:text-lg font-black text-emerald-600";
+                solvencyEl.className = "text-base lg:text-lg font-bold text-emerald-600";
                 headerPill.textContent = "Fully Funded";
-                headerPill.className = "px-2 py-0.5 rounded font-black bg-emerald-100 text-emerald-800";
+                headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-emerald-100 text-emerald-800";
             } else {
                 solvencyEl.textContent = `${deficitYears} Deficit Yrs`;
-                solvencyEl.className = "text-base lg:text-lg font-black text-rose-600";
+                solvencyEl.className = "text-base lg:text-lg font-bold text-rose-600";
                 headerPill.textContent = `Deficit Risk (${deficitYears} yrs)`;
-                headerPill.className = "px-2 py-0.5 rounded font-black bg-rose-100 text-rose-800";
+                headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-rose-100 text-rose-800";
             }
         }
 
@@ -2010,7 +2031,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
                     <td class="py-2 px-3">${fmtCurr(r.balBrokerage)}</td>
                     <td class="py-2 px-3">${fmtCurr(r.balTrad)}</td>
                     <td class="py-2 px-3">${fmtCurr(r.balRoth)}</td>
-                    <td class="py-2 px-3 bg-indigo-50/60 font-black text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
+                    <td class="py-2 px-3 bg-indigo-50/60 font-bold text-indigo-950">${fmtCurr(r.endTotalAssets)}</td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -2030,32 +2051,32 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             {
                 label: 'Cash Savings',
                 data: simulationResults.map(r => r.balCash),
-                backgroundColor: 'rgba(148, 163, 184, 0.7)', // Slate-400
-                borderColor: '#94a3b8',
+                backgroundColor: paletteAlpha(PALETTE.cash, 0.7), // Slate-400
+                borderColor: PALETTE.cash,
                 borderWidth: 1,
                 stack: 'assets'
             },
             {
                 label: 'Taxable Brokerage',
                 data: simulationResults.map(r => r.balBrokerage),
-                backgroundColor: 'rgba(59, 130, 246, 0.7)', // Blue-500
-                borderColor: '#3b82f6',
+                backgroundColor: paletteAlpha(PALETTE.brokerage, 0.7), // Blue-500
+                borderColor: PALETTE.brokerage,
                 borderWidth: 1,
                 stack: 'assets'
             },
             {
                 label: 'Tax-Def (Trad IRA/401k)',
                 data: simulationResults.map(r => r.balTrad),
-                backgroundColor: 'rgba(245, 158, 11, 0.7)', // Amber-500
-                borderColor: '#f59e0b',
+                backgroundColor: paletteAlpha(PALETTE.trad, 0.7), // Amber-500
+                borderColor: PALETTE.trad,
                 borderWidth: 1,
                 stack: 'assets'
             },
             {
                 label: 'Tax-Exempt (Roth / IUL)',
                 data: simulationResults.map(r => r.balRoth),
-                backgroundColor: 'rgba(16, 185, 129, 0.7)', // Emerald-500
-                borderColor: '#10b981',
+                backgroundColor: paletteAlpha(PALETTE.roth, 0.7), // Emerald-500
+                borderColor: PALETTE.roth,
                 borderWidth: 1,
                 stack: 'assets'
             },
@@ -2063,7 +2084,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
                 label: 'Total Assets',
                 data: simulationResults.map(r => r.endTotalAssets),
                 type: 'line',
-                borderColor: '#6366f1', // Indigo-500
+                borderColor: PALETTE.total, // Indigo-500
                 backgroundColor: 'transparent',
                 borderWidth: 3,
                 pointRadius: 2,
@@ -2076,16 +2097,16 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             {
                 label: 'Federal Income Tax',
                 data: simulationResults.map(r => r.fedTax),
-                backgroundColor: 'rgba(244, 63, 94, 0.7)', // Rose-500
-                borderColor: '#f43f5e',
+                backgroundColor: paletteAlpha(PALETTE.tax, 0.7), // Rose-500
+                borderColor: PALETTE.tax,
                 borderWidth: 1,
                 stack: 'tax'
             },
             {
                 label: 'Medicare IRMAA Surcharges',
                 data: simulationResults.map(r => r.irmaaCost),
-                backgroundColor: 'rgba(217, 119, 6, 0.7)', // Amber-600
-                borderColor: '#d97706',
+                backgroundColor: paletteAlpha(PALETTE.irmaa, 0.7), // Amber-600
+                borderColor: PALETTE.irmaa,
                 borderWidth: 1,
                 stack: 'tax'
             },
@@ -2093,7 +2114,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
                 label: 'Cumulative Tax (Line)',
                 data: simulationResults.map(r => r.cumulativeTax),
                 type: 'line',
-                borderColor: '#be123c', // Rose-700
+                borderColor: PALETTE.cumTax, // Rose-700
                 backgroundColor: 'transparent',
                 borderWidth: 2.5,
                 pointRadius: 1,
@@ -2106,32 +2127,32 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             {
                 label: 'Salary & Earned Income',
                 data: simulationResults.map(r => r.salary),
-                backgroundColor: 'rgba(99, 102, 241, 0.7)', // Indigo-500
-                borderColor: '#6366f1',
+                backgroundColor: paletteAlpha(PALETTE.salary, 0.7), // Indigo-500
+                borderColor: PALETTE.salary,
                 borderWidth: 1,
                 stack: 'flow'
             },
             {
                 label: 'Social Security Benefit',
                 data: simulationResults.map(r => r.ssIncome),
-                backgroundColor: 'rgba(16, 185, 129, 0.7)', // Emerald-500
-                borderColor: '#10b981',
+                backgroundColor: paletteAlpha(PALETTE.ss, 0.7), // Emerald-500
+                borderColor: PALETTE.ss,
                 borderWidth: 1,
                 stack: 'flow'
             },
             {
                 label: 'Pension / Annuity',
                 data: simulationResults.map(r => r.pensionIncome),
-                backgroundColor: 'rgba(59, 130, 246, 0.7)', // Blue-500
-                borderColor: '#3b82f6',
+                backgroundColor: paletteAlpha(PALETTE.pension, 0.7), // Blue-500
+                borderColor: PALETTE.pension,
                 borderWidth: 1,
                 stack: 'flow'
             },
             {
                 label: 'Total Withdrawals (W/D)',
                 data: simulationResults.map(r => r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth),
-                backgroundColor: 'rgba(236, 72, 153, 0.7)', // Pink-500
-                borderColor: '#ec4899',
+                backgroundColor: paletteAlpha(PALETTE.withdrawals, 0.7), // Pink-500
+                borderColor: PALETTE.withdrawals,
                 borderWidth: 1,
                 stack: 'flow'
             }
@@ -2292,25 +2313,25 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             // Chart Mode Switchers
             document.getElementById('btn-chart-assets').addEventListener('click', (e) => {
                 activeChartMode = 'assets';
-                e.target.className = "px-3 py-1.5 text-[11px] font-bold rounded-lg bg-white text-slate-900 shadow-sm transition";
-                document.getElementById('btn-chart-tax').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
-                document.getElementById('btn-chart-cashflow').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                e.target.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition";
+                document.getElementById('btn-chart-tax').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                document.getElementById('btn-chart-cashflow').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
                 renderChart();
             });
 
             document.getElementById('btn-chart-tax').addEventListener('click', (e) => {
                 activeChartMode = 'tax';
-                e.target.className = "px-3 py-1.5 text-[11px] font-bold rounded-lg bg-white text-slate-900 shadow-sm transition";
-                document.getElementById('btn-chart-assets').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
-                document.getElementById('btn-chart-cashflow').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                e.target.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition";
+                document.getElementById('btn-chart-assets').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                document.getElementById('btn-chart-cashflow').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
                 renderChart();
             });
 
             document.getElementById('btn-chart-cashflow').addEventListener('click', (e) => {
                 activeChartMode = 'cashflow';
-                e.target.className = "px-3 py-1.5 text-[11px] font-bold rounded-lg bg-white text-slate-900 shadow-sm transition";
-                document.getElementById('btn-chart-assets').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
-                document.getElementById('btn-chart-tax').className = "px-3 py-1.5 text-[11px] font-bold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                e.target.className = "px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition";
+                document.getElementById('btn-chart-assets').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
+                document.getElementById('btn-chart-tax').className = "px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition";
                 renderChart();
             });
 
