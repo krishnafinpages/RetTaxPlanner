@@ -233,10 +233,7 @@
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="401k, IRA, HSA">Tax-Def (401k/IRA/HSA)</label><input type="number" id="inp-bal-trad" value="500000" step="10000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-trad" value="10000" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Roth, IUL">Tax-exempt (ROTH/IUL)</label><input type="number" id="inp-bal-roth" value="100000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="work-only"><input type="number" id="inp-contrib-roth" value="0" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                         </div>
-                        <div class="work-only flex items-center gap-2 border-t border-dashed border-slate-800 pt-2">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
+                        
                     </div>
                 </details>
                 
@@ -321,6 +318,10 @@
                         <div id="work-conv-wrap" class="flex items-center space-x-2 pt-1">
                             <input type="checkbox" id="inp-allow-work-conversions" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
                             <label for="inp-allow-work-conversions" class="font-semibold text-slate-300 text-xs">Convert while working (tax paid from cash)</label>
+                        </div>
+                        <div title="Used only to size Roth conversions during working years" class="work-only flex items-center gap-2 pt-1">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
 
                         
@@ -517,13 +518,60 @@
             </section>
 
             <!-- Table with Sticky Super-Headers -->
+            <!-- Pre-Retirement Years (accumulation phase) -->
+            <section id="pre-ret-card" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <details id="pre-ret-details" open class="group">
+                    <summary class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5 flex justify-between items-center cursor-pointer select-none">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <h2 class="text-sm font-bold text-slate-900 tracking-tight">Pre-Retirement Years (Accumulation Phase)</h2>
+                            <span id="pre-ret-badge" class="text-[11px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold"></span>
+                        </div>
+                        <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="px-5 py-2 text-xs text-slate-500 border-b border-slate-100">Contributions, Taxes and Withdrawals roll into each account; the ledger below starts in the first retirement year.</p>
+                    <div class="overflow-x-auto custom-scrollbar w-full">
+                        <div class="min-w-max">
+                            <table class="w-full text-right text-xs border-collapse">
+                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                    <tr class="border-b border-slate-300 text-xs">
+                                        <th colspan="2" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-slate-200 text-slate-900 border-r border-slate-300">Timeline</th>
+                                        <th colspan="3" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-indigo-100 text-indigo-950 border-r border-slate-300">Pre-Retirement Activity</th>
+                                        <th colspan="4" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-rose-100 text-rose-950 border-r border-slate-300">Conversion Tax Paid From</th>
+                                        <th colspan="5" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-amber-100 text-amber-950">Ending Balances</th>
+                                    </tr>
+                                    <tr class="text-[11px]">
+                                        <th class="py-2.5 px-3 text-left min-w-[50px]">Yr</th>
+                                        <th class="py-2.5 px-3 text-left border-r border-slate-200 min-w-[70px]">Ages</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">Contributions</th>
+                                        <th class="py-2.5 px-3 min-w-[90px]">Roth Conv</th>
+                                        <th class="py-2.5 px-3 min-w-[90px] border-r border-slate-200">Conv Tax</th>
+                                        <th class="py-2.5 px-3 min-w-[85px]">Cash</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">Brokerage</th>
+                                        <th class="py-2.5 px-3 min-w-[80px]">IRA</th>
+                                        <th class="py-2.5 px-3 min-w-[80px] border-r border-slate-200">Roth</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">End Cash</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Brokerage</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Trad IRA</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Roth</th>
+                                        <th class="py-2.5 px-3 min-w-[100px] bg-indigo-50 text-indigo-900">Total Assets</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pre-ret-tbody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                                <tfoot id="pre-ret-tfoot" class="bg-indigo-50/60 font-bold text-slate-900 border-t-2 border-indigo-200"></tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5 flex justify-between items-center">
                     <div class="flex items-center space-x-2">
                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
-                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Year-by-Year Cash Flow & Tax Ledger</h2>
+                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Retirement Year-by-Year Cash Flow & Tax Ledger</h2>
                     </div>
                     <div class="flex items-center space-x-3">
                         <div class="flex items-center space-x-2 text-[11px] text-slate-500 font-medium">
@@ -540,7 +588,7 @@
                             <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0 z-20">
                                 <tr class="border-b border-slate-300 text-xs">
                                     <th colspan="2" class="py-2.5 px-3 text-center bg-slate-200 text-slate-900 font-bold tracking-wider uppercase border-r border-slate-300">Profile & Timeline</th>
-                                    <th colspan="8" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-bold tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
+                                    <th colspan="6" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-bold tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
                                     <th colspan="5" class="py-2.5 px-3 text-center bg-emerald-100 text-emerald-950 font-bold tracking-wider uppercase border-r border-slate-300">Withdrawal Waterfall</th>
                                     <th colspan="9" class="py-2.5 px-3 text-center bg-rose-100 text-rose-950 font-bold tracking-wider uppercase border-r border-slate-300">Tax Calculations</th>
                                     <th colspan="5" class="py-2.5 px-3 text-center bg-amber-100 text-amber-950 font-bold tracking-wider uppercase">Ending Balances</th>
@@ -548,8 +596,6 @@
                                 <tr class="text-[11px]">
                                     <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
                                     <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[70px] border-r border-slate-300">Ages</th>
-                                    <th class="py-2.5 px-3 min-w-[90px]">Salary</th>
-                                    <th class="py-2.5 px-3 min-w-[90px]">Savings Add</th>
                                     <th class="py-2.5 px-3 min-w-[90px]">Spend Goal</th>
                                     <th class="py-2.5 px-3 min-w-[85px]">P1 SS</th>
                                     <th class="py-2.5 px-3 min-w-[85px]">P2 SS</th>
@@ -1010,8 +1056,7 @@
             section('Starting balances');
             const b0 = kv('Cash', i.balCash, XL_USD); kv('Brokerage', i.balBrokerage, XL_USD, i.capGainsOn ? `Cost basis ${(i.basisPct * 100).toFixed(0)}% of balance` : ''); kv('Tax-deferred (401k/IRA/HSA)', i.balTrad, XL_USD); const b3 = kv('Tax-exempt (Roth/IUL)', i.balRoth, XL_USD);
             const tr = kv('Total', { formula: `SUM(B${b0}:B${b3})`, result: i.balCash + i.balBrokerage + i.balTrad + i.balRoth }, XL_USD); ws.getRow(tr).font = { bold: true };
-            section('Working years');
-            kv('Salary', i.currentSalary, XL_USD, 'P1 salary until retirement'); kv('Salary growth', i.salaryGrowth, XL_PCT1);
+            section('Pre-retirement contributions');
             kv('Annual savings: cash', i.contribCash, XL_USD); kv('Annual savings: brokerage', i.contribBrokerage, XL_USD); kv('Annual savings: tax-deferred', i.contribTrad, XL_USD); kv('Annual savings: Roth', i.contribRoth, XL_USD);
             section('Retirement spending and income');
             kv('Spending goal per year', i.baseSpendingGoal, XL_USD, i.todaysDollars ? "Entered in today's dollars" : 'Entered in retirement dollars (as of the year each begins)'); kv('Dollar basis', i.todaysDollars ? "Today's dollars" : 'Retirement dollars');
@@ -1023,7 +1068,7 @@
             kv('Return: pre-retirement', i.returnPre, XL_PCT1); kv('Return: post-retirement', i.returnPost, XL_PCT1); kv('Return: cash', i.returnCash, XL_PCT1); kv('Inflation', i.inflation, XL_PCT1);
             section('Tax and strategy settings');
             kv('Tax brackets indexed for inflation', yn(i.useInflationBrackets)); kv('Interest and dividends taxed', yn(i.includeInvestIncome)); kv('Capital gains taxed', yn(i.capGainsOn));
-            kv('Roth conversion strategy', c.strategyLabel); if (i.rothStrategy === 'fixed_amount') kv('Fixed conversion per year', i.rothFixedAmt, XL_USD); kv('Convert while working', yn(i.allowWorkConversions));
+            kv('Roth conversion strategy', c.strategyLabel); if (i.rothStrategy === 'fixed_amount') kv('Fixed conversion per year', i.rothFixedAmt, XL_USD); kv('Convert while working', yn(i.allowWorkConversions)); kv('Salary (sizes working-year Roth conversions)', i.currentSalary, XL_USD, 'Used only to size conversions before retirement'); kv('Salary growth', i.salaryGrowth, XL_PCT1);
             section('Stress test');
             kv('Market drop year', i.shockYear > 0 ? i.shockYear : 'None', '0'); kv('Market drop size', i.shockYear > 0 ? i.shockPct : 0, XL_PCT0);
             r += 2; xlBand(ws, r, `Prepared by ${BRAND.legal}`, 3, XL.indigo9, XL.white); r++;
@@ -1038,7 +1083,7 @@
             let r = 3; const m = c.m;
             xlBand(ws, r, 'Key results', 2); r++;
             [['Ending total assets (future dollars)', m.endAssets, XL_USD], ['Plan status', m.deficit === 0 ? 'Fully funded' : `${m.deficit} shortfall year(s)`, null], ['Lifetime federal income tax', m.tax, XL_USD], ['Lifetime IRMAA surcharges', m.irmaa, XL_USD], ['Tax + IRMAA', m.taxIrmaa, XL_USD],
-             ['Total Roth conversions', m.conv, XL_USD], ['Peak tax-deferred balance', m.peakTrad, XL_USD], ['Ending tax-deferred balance', m.endTrad, XL_USD], ['Ending Roth balance', m.endRoth, XL_USD]].forEach(([k, v, f], n) => {
+             ['Total Roth conversions', m.conv, XL_USD], ['Pre-retirement contributions (total)', c.pre.contrib, XL_USD], ['Pre-retirement Roth conversions', c.pre.conv, XL_USD], ['Pre-retirement Roth conversion taxes', c.pre.convTax, XL_USD], ['Conversion taxes paid from', c.pre.convTax > 0.5 ? preTaxSources(c.pre).map(([k, v]) => `${k} ${fmtCurr(v)}`).join(' | ') : 'n/a (no conversions)', null], ['Peak tax-deferred balance', m.peakTrad, XL_USD], ['Ending tax-deferred balance', m.endTrad, XL_USD], ['Ending Roth balance', m.endRoth, XL_USD]].forEach(([k, v, f], n) => {
                 const row = ws.getRow(r); row.getCell(1).value = k; row.getCell(2).value = v; xlBody(row.getCell(1), null, n % 2); xlBody(row.getCell(2), f, n % 2); row.getCell(1).font = { bold: true }; row.getCell(2).alignment = { horizontal: 'left' };
                 if (k === 'Plan status') row.getCell(2).font = { bold: true, color: { argb: m.deficit === 0 ? XL.green : XL.red } }; r++; });
             r++; xlBand(ws, r, 'Key milestones', 2); r++; ['Milestone', 'Detail'].forEach((h, k) => { const x = ws.getCell(r, k + 1); x.value = h; xlHead(x); }); r++;
@@ -1052,7 +1097,7 @@
 
         const XL_LEDGER = [ // [header, group, getter, format, width]
             ['Year', 'Timeline', r => r.year, '0', 7], ['P1 Age', 'Timeline', r => r.p1Age, '0', 7], ['P2 Age', 'Timeline', r => r.p2Age || null, '0', 7],
-            ['Salary', 'Income & Spending', r => r.salary, XL_USD, 12], ['Savings Add', 'Income & Spending', r => r.totalSavingsAdd, XL_USD, 12], ['Spend Goal', 'Income & Spending', r => r.spendGoal, XL_USD, 12],
+            ['Spend Goal', 'Income & Spending', r => r.spendGoal, XL_USD, 12],
             ['P1 SS', 'Income & Spending', r => r.p1SSIncome, XL_USD, 11], ['P2 SS', 'Income & Spending', r => r.p2SSIncome, XL_USD, 11], ['Total SS', 'Income & Spending', r => r.ssIncome, XL_USD, 11], ['Pension', 'Income & Spending', r => r.pensionIncome, XL_USD, 11],
             ['RMD', 'Withdrawals', r => r.rmdAmount, XL_USD, 11], ['Roth Conversion', 'Withdrawals', r => r.rothConvAmount, XL_USD, 12], ['Cash W/D', 'Withdrawals', r => r.wdCash, XL_USD, 11], ['Brokerage W/D', 'Withdrawals', r => r.wdbrokerage, XL_USD, 12], ['Trad IRA W/D', 'Withdrawals', r => r.wdTrad, XL_USD, 12], ['Roth W/D', 'Withdrawals', r => r.wdRoth, XL_USD, 11],
             ['AGI', 'Tax', r => r.agi, XL_USD, 12], ['Taxable Income', 'Tax', r => r.taxableIncome, XL_USD, 12], ['Effective Rate', 'Tax', r => r.effectiveRate, XL_PCT1, 9], ['Marginal Rate', 'Tax', r => r.marginalRate, XL_PCT0, 9], ['Federal Tax', 'Tax', r => r.fedTax, XL_USD, 11], ['Cumulative Tax', 'Tax', r => r.cumulativeTax, XL_USD, 12],
@@ -1062,23 +1107,50 @@
         const XL_GROUP_FILL = { Timeline: 'FF334155', 'Income & Spending': 'FF0F766E', Withdrawals: 'FFDB2777', Tax: 'FFE11D48', IRMAA: 'FFD97706', Balances: 'FF4F46E5' };
         const XL_BAL_FILL = { 'End Cash': 'FF64748B', 'End Brokerage': 'FF0284C7', 'End Tax-Deferred': 'FF7C3AED', 'End Roth': 'FF059669', 'Total Assets': 'FF0F172A' };
 
+        const XL_PRE = [
+            ['Year', 'Timeline', r => r.year, '0', 7], ['P1 Age', 'Timeline', r => r.p1Age, '0', 8], ['P2 Age', 'Timeline', r => r.p2Age || null, '0', 8],
+            ['Contributions', 'Pre-Retirement Activity', r => r.totalSavingsAdd, XL_USD, 14], ['Roth Conversion', 'Pre-Retirement Activity', r => r.rothConvAmount, XL_USD, 14], ['Conversion Tax', 'Pre-Retirement Activity', r => r.convTax, XL_USD, 14],
+            ['Paid: Cash', 'Conversion Tax Paid From', r => r.convTaxCash, XL_USD, 12], ['Paid: Brokerage', 'Conversion Tax Paid From', r => r.convTaxBrokerage, XL_USD, 14], ['Paid: IRA', 'Conversion Tax Paid From', r => r.convTaxIra, XL_USD, 12], ['Paid: Roth', 'Conversion Tax Paid From', r => r.convTaxRoth, XL_USD, 12],
+            ['End Cash', 'Balances', r => r.balCash, XL_USD, 13], ['End Brokerage', 'Balances', r => r.balBrokerage, XL_USD, 14], ['End Tax-Deferred', 'Balances', r => r.balTrad, XL_USD, 15], ['End Roth', 'Balances', r => r.balRoth, XL_USD, 13], ['Total Assets', 'Balances', r => r.endTotalAssets, XL_USD, 15]
+        ];
+        XL_GROUP_FILL['Pre-Retirement Activity'] = 'FF4F46E5'; XL_GROUP_FILL['Conversion Tax Paid From'] = 'FFE11D48';
+
+        function xlSheetPreRetirement(wb, c) {
+            const rows = c.results.filter(r => r.isWorking), n = rows.length, nc = XL_PRE.length, GR = 3, HR = 4, first = 5, last = first + n - 1;
+            const ws = wb.addWorksheet('Pre-Retirement', { properties: { tabColor: { argb: 'FF6366F1' } }, views: [{ state: 'frozen', xSplit: 3, ySplit: HR, showGridLines: false }] });
+            ws.columns = XL_PRE.map(col => ({ width: col[4] }));
+            xlTitle(ws, 'Pre-Retirement Years (Accumulation Phase)', `${c.name} | Contributions, taxes and withdrawals roll into each account | Tax on pre-retirement earnings is not modeled; only tax caused by Roth conversions | Nominal dollars, balances are year-end`, nc);
+            for (let k = 1; k <= nc;) {
+                const g = XL_PRE[k - 1][1]; let e = k; while (e < nc && XL_PRE[e][1] === g) e++;
+                if (e > k) ws.mergeCells(GR, k, GR, e);
+                const cell = ws.getCell(GR, k); cell.value = g; xlHead(cell, XL_GROUP_FILL[g]); k = e + 1;
+            }
+            XL_PRE.forEach((col, k) => { const cell = ws.getCell(HR, k + 1); cell.value = col[0]; xlHead(cell, XL_BAL_FILL[col[0]] || XL_GROUP_FILL[col[1]]); });
+            ws.getRow(HR).height = 32;
+            rows.forEach((res, ri) => { const row = ws.getRow(first + ri); XL_PRE.forEach((col, k) => { const cell = row.getCell(k + 1); const v = col[2](res); cell.value = (typeof v === 'number' && col[3] === XL_USD) ? Math.round(v) : v; xlBody(cell, col[3], ri % 2); if (col[0] === 'Total Assets') cell.font = { bold: true }; }); });
+            const tot = ws.getRow(last + 1); tot.getCell(1).value = 'Total';
+            XL_PRE.forEach((col, k) => { const cell = tot.getCell(k + 1); if (k >= 3 && k <= 9) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
+            ws.autoFilter = { from: { row: HR, column: 1 }, to: { row: last, column: nc } };
+            return ws;
+        }
+
         function xlSheetLedger(wb, c) {
-            const ws = wb.addWorksheet('Ledger', { properties: { tabColor: { argb: 'FF0EA5E9' } }, views: [{ state: 'frozen', xSplit: 3, ySplit: 4, showGridLines: false }] });
-            const n = c.results.length, nc = XL_LEDGER.length, first = 5, last = first + n - 1;
+            const rows = c.ledgerRows, n = rows.length, nc = XL_LEDGER.length, GR = 3, HR = 4, first = 5, last = first + n - 1;
+            const ws = wb.addWorksheet('Ledger', { properties: { tabColor: { argb: 'FF0EA5E9' } }, views: [{ state: 'frozen', xSplit: 3, ySplit: HR, showGridLines: false }] });
             ws.columns = XL_LEDGER.map(col => ({ width: col[4] }));
-            xlTitle(ws, 'Year-by-Year Cash Flow Ledger', `${c.name} | Nominal (future) dollars | Balances are year-end`, nc);
-            // group band row (merge adjacent columns that share a group)
+            xlTitle(ws, 'Retirement-Phase Cash Flow Ledger', `${c.name} | Starts in the first retirement year (see the Pre-Retirement tab for earlier years) | Nominal (future) dollars | Balances are year-end`, nc);
+            // pre-retirement phase totals (contributions roll into each account; only Roth-conversion tax is counted before retirement)
             for (let k = 1; k <= nc;) {
                 const g = XL_LEDGER[k - 1][1]; let e = k; while (e < nc && XL_LEDGER[e][1] === g) e++;
-                if (e > k) ws.mergeCells(3, k, 3, e);
-                const cell = ws.getCell(3, k); cell.value = g; xlHead(cell, XL_GROUP_FILL[g]); k = e + 1;
+                if (e > k) ws.mergeCells(GR, k, GR, e);
+                const cell = ws.getCell(GR, k); cell.value = g; xlHead(cell, XL_GROUP_FILL[g]); k = e + 1;
             }
-            XL_LEDGER.forEach((col, k) => { const cell = ws.getCell(4, k + 1); cell.value = col[0]; xlHead(cell, XL_BAL_FILL[col[0]] || XL_GROUP_FILL[col[1]]); });
-            ws.getRow(4).height = 32;
-            c.results.forEach((res, ri) => { const row = ws.getRow(first + ri); XL_LEDGER.forEach((col, k) => { const cell = row.getCell(k + 1); const v = col[2](res); cell.value = (typeof v === 'number') ? (col[3] === XL_USD ? Math.round(v) : v) : v; xlBody(cell, col[3], ri % 2); if (col[0] === 'Total Assets') cell.font = { bold: true }; if (col[0] === 'IRMAA Tier') cell.alignment = { horizontal: 'center' }; }); });
+            XL_LEDGER.forEach((col, k) => { const cell = ws.getCell(HR, k + 1); cell.value = col[0]; xlHead(cell, XL_BAL_FILL[col[0]] || XL_GROUP_FILL[col[1]]); });
+            ws.getRow(HR).height = 32;
+            rows.forEach((res, ri) => { const row = ws.getRow(first + ri); XL_LEDGER.forEach((col, k) => { const cell = row.getCell(k + 1); const v = col[2](res); cell.value = (typeof v === 'number') ? (col[3] === XL_USD ? Math.round(v) : v) : v; xlBody(cell, col[3], ri % 2); if (col[0] === 'Total Assets') cell.font = { bold: true }; if (col[0] === 'IRMAA Tier') cell.alignment = { horizontal: 'center' }; }); });
             const tot = ws.getRow(last + 1); tot.getCell(1).value = 'Total';
-            XL_LEDGER.forEach((col, k) => { const cell = tot.getCell(k + 1); if (['Savings Add', 'Salary', 'Spend Goal', 'P1 SS', 'P2 SS', 'Total SS', 'Pension', 'RMD', 'Roth Conversion', 'Cash W/D', 'Brokerage W/D', 'Trad IRA W/D', 'Roth W/D', 'Federal Tax', 'IRMAA Cost'].includes(col[0])) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
-            ws.autoFilter = { from: { row: 4, column: 1 }, to: { row: last, column: nc } };
+            XL_LEDGER.forEach((col, k) => { const cell = tot.getCell(k + 1); if (['Spend Goal', 'P1 SS', 'P2 SS', 'Total SS', 'Pension', 'RMD', 'Roth Conversion', 'Cash W/D', 'Brokerage W/D', 'Trad IRA W/D', 'Roth W/D', 'Federal Tax', 'IRMAA Cost'].includes(col[0])) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
+            ws.autoFilter = { from: { row: HR, column: 1 }, to: { row: last, column: nc } };
             const taxCol = xlCol(XL_LEDGER.findIndex(x => x[0] === 'Federal Tax') + 1);
             ws.addConditionalFormatting({ ref: `${taxCol}${first}:${taxCol}${last}`, rules: [{ type: 'colorScale', cfvo: [{ type: 'min' }, { type: 'max' }], color: [{ argb: 'FFFFFFFF' }, { argb: 'FFFECDD3' }] }] });
             return { ws, first, last };
@@ -1173,21 +1245,34 @@
             xlSheetInputs(wb, c); xlSheetSummary(wb, c);
             const chartsWs = wb.addWorksheet('Charts', { properties: { tabColor: { argb: 'FF8B5CF6' } }, views: [{ showGridLines: false }] });
             xlTitle(chartsWs, 'Charts', 'Charts are native Excel charts linked to the Ledger tab and update if you edit the ledger values.', 20);
+            if (c.results.some(r => r.isWorking)) xlSheetPreRetirement(wb, c);
             const led = xlSheetLedger(wb, c), sens = xlSheetSensitivity(wb, c); xlSheetTaxLaw(wb, c);
-            const rs = c.results, first = led.first, last = led.last, ref = (name) => { const k = XL_LEDGER.findIndex(x => x[0] === name) + 1, L = xlCol(k); return { ref: `Ledger!$${L}$${first}:$${L}$${last}`, k }; };
+            const rs = c.ledgerRows, first = led.first, last = led.last, ref = (name) => { const k = XL_LEDGER.findIndex(x => x[0] === name) + 1, L = xlCol(k); return { ref: `Ledger!$${L}$${first}:$${L}$${last}`, k }; };
             const catRef = ref('P1 Age').ref, cats = rs.map(r => r.p1Age);
             const ser = (name, hdr, getter, color) => ({ name, catRef, cats, valRef: ref(hdr).ref, vals: rs.map(r => Math.round(getter(r))), color });
             const P = PALETTE, hx = h => h.slice(1).toUpperCase();
             const charts = [
                 { chart: { title: 'Year-end balances by account (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Cash', 'End Cash', r => r.balCash, hx(P.cash)), ser('Brokerage', 'End Brokerage', r => r.balBrokerage, hx(P.brokerage)), ser('Tax-deferred', 'End Tax-Deferred', r => r.balTrad, hx(P.trad)), ser('Roth', 'End Roth', r => r.balRoth, hx(P.roth))] }, c1: 0, r1: 3, c2: 12, r2: 25 },
                 { chart: { title: 'Annual federal tax and IRMAA (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Federal income tax', 'Federal Tax', r => r.fedTax, hx(P.tax)), ser('IRMAA surcharge', 'IRMAA Cost', r => r.irmaaCost, hx(P.irmaa))] }, c1: 0, r1: 27, c2: 12, r2: 49 },
-                { chart: { title: 'Funding sources vs. spending goal (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Salary', 'Salary', r => r.salary, hx(P.salary)), ser('Social Security', 'Total SS', r => r.ssIncome, hx(P.ss)), ser('Pension', 'Pension', r => r.pensionIncome, hx(P.pension)), ser('Cash W/D', 'Cash W/D', r => r.wdCash, hx(P.cash)), ser('Brokerage W/D', 'Brokerage W/D', r => r.wdbrokerage, hx(P.brokerage)), ser('Tax-deferred W/D (incl. RMD)', 'Trad IRA W/D', r => r.wdTrad + r.rmdAmount, hx(P.trad)), ser('Roth W/D', 'Roth W/D', r => r.wdRoth, hx(P.roth))], lines: [ser('Spending goal', 'Spend Goal', r => r.spendGoal, '0F172A')] }, c1: 0, r1: 51, c2: 12, r2: 73 }
+                { chart: { title: 'Funding sources vs. spending goal (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Social Security', 'Total SS', r => r.ssIncome, hx(P.ss)), ser('Pension', 'Pension', r => r.pensionIncome, hx(P.pension)), ser('Cash W/D', 'Cash W/D', r => r.wdCash, hx(P.cash)), ser('Brokerage W/D', 'Brokerage W/D', r => r.wdbrokerage, hx(P.brokerage)), ser('Tax-deferred W/D (incl. RMD)', 'Trad IRA W/D', r => r.wdTrad + r.rmdAmount, hx(P.trad)), ser('Roth W/D', 'Roth W/D', r => r.wdRoth, hx(P.roth))], lines: [ser('Spending goal', 'Spend Goal', r => r.spendGoal, '0F172A')] }, c1: 0, r1: 51, c2: 12, r2: 73 }
             ];
             const top = sens.top, n = top.length;
             const sensChart = { chart: { title: 'Biggest effects on ending assets (change vs. current)', dir: 'bar', grouping: 'clustered', legend: false, gap: 40, series: [{ name: 'Change in ending assets', catIsText: true, catRef: `Sensitivity!$H$5:$H$${4 + n}`, cats: top.map(t => t.l), valRef: `Sensitivity!$I$5:$I$${4 + n}`, vals: top.map(t => Math.round(t.d)), color: '6366F1', pointColors: top.map(t => t.d >= 0 ? '10B981' : 'F43F5E') }] }, c1: 10, r1: 2, c2: 22, r2: 28 };
             wb.worksheets.forEach(sheet => { sheet.pageSetup = { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 1 }; sheet.headerFooter = { oddHeader: `&L&"Calibri,Bold"${BRAND.name}&C${BRAND.tagline}&R&D`, oddFooter: `&L\u00A9 ${new Date().getFullYear()} Second Inning Financial LLC&C&A&RPage &P of &N` }; });
             const buf = await wb.xlsx.writeBuffer();
-            return xlInjectCharts(JSZipLib, buf, [{ sheetNo: 3, charts }, { sheetNo: 5, charts: [sensChart] }]);
+            return xlInjectCharts(JSZipLib, buf, [{ sheetNo: chartsWs.id, charts }, { sheetNo: sens.ws.id, charts: [sensChart] }]);
+        }
+
+        function preRetirementTotals(rs) {
+            const w = rs.filter(r => r.isWorking);
+            return { years: w.length, contrib: w.reduce((a, r) => a + r.totalSavingsAdd, 0), conv: w.reduce((a, r) => a + r.rothConvAmount, 0), convTax: w.reduce((a, r) => a + r.convTax, 0),
+                paidCash: w.reduce((a, r) => a + r.convTaxCash, 0), paidBrokerage: w.reduce((a, r) => a + r.convTaxBrokerage, 0), paidIra: w.reduce((a, r) => a + r.convTaxIra, 0), paidRoth: w.reduce((a, r) => a + r.convTaxRoth, 0) };
+        }
+        // How the pre-retirement Roth conversion tax was funded (Roth shown only if it was needed)
+        function preTaxSources(pre) {
+            const parts = [['Cash', pre.paidCash], ['Brokerage', pre.paidBrokerage], ['IRA', pre.paidIra]];
+            if (pre.paidRoth > 0.5) parts.push(['Roth', pre.paidRoth]);
+            return parts;
         }
 
         function computeMilestones(rs, m) {
@@ -1207,7 +1292,7 @@
         function collectExportContext() {
             const inp = readInputs(), out = lastRunOut || runProjection(inp), m = scenarioMetrics(out);
             return {
-                inp, results: simulationResults, m, milestones: computeMilestones(simulationResults, m), sens: sensitivityData(), tax: activeTaxParams, asOf: TAX_LAW_AS_OF,
+                inp, results: simulationResults, ledgerRows: simulationResults.filter(r => !r.isWorking), pre: preRetirementTotals(simulationResults), m, milestones: computeMilestones(simulationResults, m), sens: sensitivityData(), tax: activeTaxParams, asOf: TAX_LAW_AS_OF,
                 name: (document.getElementById('scn-name') || {}).value || 'Scenario', today: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
                 strategyLabel: document.querySelector('#inp-roth-strategy option:checked').textContent.trim(),
                 texts: { solv: document.getElementById('summary-solvency-desc').textContent, tax: document.getElementById('summary-tax-desc').textContent, rec: document.getElementById('summary-rec-desc').textContent }
@@ -1716,6 +1801,8 @@
                     totalDeficitYears++;
                 }
                 agiHist[yr - 1] = agi;
+                // Tax on pre-retirement earnings is ignored; only the tax caused by Roth conversions is counted
+                if (!retiredNow) fedTax = convTaxCost;
 
                 totalLifetimeTax += fedTax;
                 totalLifetimeIrmaa += irmaaCost;
@@ -1748,6 +1835,12 @@
                     p1Age: currP1Age,
                     p2Age: currP2Age,
                     salary: currSalary,
+                    isWorking,
+                    convTax: !retiredNow ? convTaxCost : 0,
+                    convTaxCash: !retiredNow ? wdCash : 0,
+                    convTaxBrokerage: !retiredNow ? wdbrokerage : 0,
+                    convTaxIra: !retiredNow ? (wdTrad + rmdUsed) : 0,
+                    convTaxRoth: !retiredNow ? wdRoth : 0,
                     totalSavingsAdd,
                     spendGoal: currSpendingGoal,
                     p1SSIncome,
@@ -1921,6 +2014,7 @@
 
             // milestones
             const ms = computeMilestones(rs, m);
+            const retRows = rs.filter(r => !r.isWorking), pre = preRetirementTotals(rs);
             const totAgi = rs.reduce((a, r) => a + r.agi, 0);
             const rates = {}; rs.forEach(r => { if (r.agi > 0) rates[r.marginalRate] = (rates[r.marginalRate] || 0) + 1; });
             const rateTxt = Object.keys(rates).sort((a, b) => a - b).map(k => `${Math.round(k * 100)}%: ${rates[k]} yrs`).join(' &middot; ');
@@ -1928,9 +2022,14 @@
             const bracketRows = (arr) => arr.map((b, i) => `${Math.round(b.rate * 100)}% up to ${b.max === Infinity || b.max === null ? 'no limit' : fmtCurr(b.max)}`).join('<br>');
             const irmaaRows = P.irmaaTiersMFJ.map((t, i) => `<tr><td>${t.tierName}</td><td>${fmtCurr(t.threshold)}+</td><td>${fmtCurr(P.irmaaTiersSingle[i].threshold)}+</td><td>${fmtCurr(t.surchargePerPerson)}</td></tr>`).join('');
 
-            const maxLen = rs.reduce((m, r) => Math.max(m, ...[r.salary + r.ssIncome + r.pensionIncome, r.rmdAmount, r.rothConvAmount, r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth, r.agi, r.fedTax, r.irmaaCost, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets].map(v => rD(v).length)), 4);
-            const rowH = Math.max(15, Math.min(28, Math.floor(640 / (rs.length + 1.5)))), fsz = Math.max(7.5, Math.min(11, rowH * 0.58, 54 / (maxLen * 0.6))).toFixed(1);
-            const yrRows = rs.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td><td>${rD(r.salary + r.ssIncome + r.pensionIncome)}</td><td>${rD(r.rmdAmount)}</td><td>${rD(r.rothConvAmount)}</td><td>${rD(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rD(r.agi)}</td><td>${rD(r.fedTax)}</td><td>${rD(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rD(r.balCash)}</td><td>${rD(r.balBrokerage)}</td><td>${rD(r.balTrad)}</td><td>${rD(r.balRoth)}</td><td><b>${rD(r.endTotalAssets)}</b></td></tr>`).join('');
+            const maxLen = retRows.reduce((m, r) => Math.max(m, ...[r.ssIncome + r.pensionIncome, r.rmdAmount, r.rothConvAmount, r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth, r.agi, r.fedTax, r.irmaaCost, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets].map(v => rD(v).length)), 4);
+            const preRows = rs.filter(r => r.isWorking);
+            const preCols = r => [r.totalSavingsAdd, r.rothConvAmount, r.convTax, r.convTaxCash, r.convTaxBrokerage, r.convTaxIra, r.convTaxRoth, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets];
+            const preMax = preRows.reduce((mx, r) => Math.max(mx, ...preCols(r).map(v => rD(v).length)), 4);
+            const rowHp = Math.max(15, Math.min(24, Math.floor(560 / (preRows.length + 3)))), fszp = Math.max(7.5, Math.min(11, rowHp * 0.58, 50 / (preMax * 0.6))).toFixed(1);
+            const preRowsHtml = preRows.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td>${preCols(r).map((v, k) => `<td${k === 11 ? ' style="font-weight:700"' : ''}>${rD(v)}</td>`).join('')}</tr>`).join('');
+            const rowH = Math.max(15, Math.min(28, Math.floor(640 / (retRows.length + 1.5)))), fsz = Math.max(7.5, Math.min(11, rowH * 0.58, 54 / (maxLen * 0.6))).toFixed(1);
+            const yrRows = retRows.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td><td>${rD(r.ssIncome + r.pensionIncome)}</td><td>${rD(r.rmdAmount)}</td><td>${rD(r.rothConvAmount)}</td><td>${rD(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rD(r.agi)}</td><td>${rD(r.fedTax)}</td><td>${rD(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rD(r.balCash)}</td><td>${rD(r.balBrokerage)}</td><td>${rD(r.balTrad)}</td><td>${rD(r.balRoth)}</td><td><b>${rD(r.endTotalAssets)}</b></td></tr>`).join('');
 
             const imgA = reportChartImage('assets'), imgT = reportChartImage('tax');
             const solv = document.getElementById('summary-solvency-desc').textContent, taxd = document.getElementById('summary-tax-desc').textContent, rec = document.getElementById('summary-rec-desc').textContent;
@@ -1959,7 +2058,7 @@ ${kv(ms)}
 ${kv([['Filing status', mfj ? 'Married filing jointly' : 'Single'], ['P1 age / retires / plan to age', `${inp.p1Age} / ${inp.p1RetireAge} / ${inp.p1TargetAge}`], mfj ? ['P2 age / retires / plan to age', `${inp.p2Age} / ${inp.p2RetireAge} / ${inp.p2TargetAge}`] : null])}
 <b>Starting balances</b>
 ${kv([['Cash', fmtCurr(inp.balCash)], ['Brokerage' + (inp.capGainsOn ? ` (${rPct(inp.basisPct, 0)} basis)` : ''), fmtCurr(inp.balBrokerage)], ['Tax-deferred (401k/IRA/HSA)', fmtCurr(inp.balTrad)], ['Tax-exempt (Roth/IUL)', fmtCurr(inp.balRoth)], ['Total', `<b>${fmtCurr(inp.balCash + inp.balBrokerage + inp.balTrad + inp.balRoth)}</b>`]])}
-${working ? `<b>Working years</b>${kv([['Salary / growth', `${fmtCurr(inp.currentSalary)} / ${rPct(inp.salaryGrowth)}`], ['Annual savings: cash / brokerage', `${fmtCurr(inp.contribCash)} / ${fmtCurr(inp.contribBrokerage)}`], ['Annual savings: tax-deferred / Roth', `${fmtCurr(inp.contribTrad)} / ${fmtCurr(inp.contribRoth)}`]])}` : ''}
+${working ? `<b>Pre-retirement contributions</b>${kv([['Annual savings: cash / brokerage', `${fmtCurr(inp.contribCash)} / ${fmtCurr(inp.contribBrokerage)}`], ['Annual savings: tax-deferred / Roth', `${fmtCurr(inp.contribTrad)} / ${fmtCurr(inp.contribRoth)}`]])}` : ''}
 </div><div>
 <b>Retirement spending and income</b>
 ${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Dollar basis', basisTxt], ['P1 Social Security / claim age', `${fmtCurr(inp.p1SSAmt)} / ${inp.p1SSAge}`], mfj ? ['P2 Social Security / claim age', `${fmtCurr(inp.p2SSAmt)} / ${inp.p2SSAge}`] : null,
@@ -1967,7 +2066,7 @@ ${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Dollar basi
   mfj ? ['P2 pension / start age / COLA', `${fmtCurr(inp.p2PensionBaseAmt)} / ${inp.p2PensionStartAge} / ${rPct(inp.p2PensionCola)}`] : null, mfj ? ['P2 pension spousal share (kept by P1)', rPct(inp.p2PensionSurvivorPct, 0)] : null])}
 <b>Growth, inflation and tax settings</b>
 ${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(inp.returnPost)} / ${rPct(inp.returnCash)}`], ['Inflation', rPct(inp.inflation)], ['Tax brackets indexed for inflation', yesNo(inp.useInflationBrackets)], ['Interest and dividends taxed', yesNo(inp.includeInvestIncome)], ['Capital gains taxed', yesNo(inp.capGainsOn)],
-  ['Roth conversion strategy', rEsc(strat)], working ? ['Convert while working', yesNo(inp.allowWorkConversions)] : null, inp.shockYear > 0 ? ['Market shock', `${rPct(inp.shockPct, 0)} decline in year ${inp.shockYear}`] : null])}
+  ['Roth conversion strategy', rEsc(strat)], working ? ['Salary / growth (sizes working-year conversions)', `${fmtCurr(inp.currentSalary)} / ${rPct(inp.salaryGrowth)}`] : null, working ? ['Convert while working', yesNo(inp.allowWorkConversions)] : null, inp.shockYear > 0 ? ['Market shock', `${rPct(inp.shockPct, 0)} decline in year ${inp.shockYear}`] : null])}
 </div></div>
 
 <h2>4. Charts</h2>
@@ -1996,10 +2095,16 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 </ul>
 <div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>&copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. ${BRAND.disclaimer}</div>
 
+${preRows.length ? `<div class="rpt-wide rpt-break">
+<h2>8. Appendix A: pre-retirement years (whole dollars)</h2>
+<table class="grid-year" style="--rowh:${rowHp}px;--fs:${fszp}px"><thead><tr><th colspan="3">Timeline</th><th colspan="3">Pre-retirement activity</th><th colspan="4">Conversion tax paid from</th><th colspan="5">Year-end balances</th></tr><tr><th>Yr</th><th>P1</th><th>P2</th><th>Contributions</th><th>Roth conv</th><th>Conv tax</th><th>Cash</th><th>Brokerage</th><th>IRA</th><th>Roth</th><th>End cash</th><th>End brokerage</th><th>End tax-deferred</th><th>End Roth</th><th>Total assets</th></tr></thead><tbody>${preRowsHtml}</tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td><b>${rD(pre.contrib)}</b></td><td><b>${rD(pre.conv)}</b></td><td><b>${rD(pre.convTax)}</b></td><td><b>${rD(pre.paidCash)}</b></td><td><b>${rD(pre.paidBrokerage)}</b></td><td><b>${rD(pre.paidIra)}</b></td><td><b>${rD(pre.paidRoth)}</b></td><td colspan="5"></td></tr></tfoot></table>
+<p class="note">Contributions, taxes and withdrawals roll into each account before retirement. Tax on pre-retirement earnings is not modeled; only tax caused by Roth conversions is counted, and it is paid from the accounts shown (cash first, then brokerage; IRA and Roth only if needed).</p>
+</div>` : ''}
+
 <div class="rpt-wide rpt-break">
-<h2>8. Appendix: year-by-year projection (whole dollars)</h2>
+<h2>${preRows.length ? '9. Appendix B' : '8. Appendix'}: retirement-phase projection (whole dollars)</h2>
 <table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>P1</th><th>P2</th><th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
-<p class="note">Income = salary + Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
+<p class="note">The table starts in the first retirement year. Income = Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
 </div>
 
 </div>`;
@@ -2164,6 +2269,22 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             }
         }
 
+        function renderPreRetirementTable() {
+            const rows = simulationResults.filter(r => r.isWorking), card = document.getElementById('pre-ret-card');
+            card.classList.toggle('hidden', rows.length === 0);
+            if (rows.length === 0) return;
+            document.getElementById('pre-ret-badge').textContent = `${rows.length} yr${rows.length === 1 ? '' : 's'}`;
+            const c = (v, cls = '') => `<td class="py-2 px-3 ${cls}">${v > 0.5 ? fmtCurr(v) : '-'}</td>`;
+            document.getElementById('pre-ret-tbody').innerHTML = rows.map(r => `<tr class="hover:bg-slate-50 transition text-xs">
+                <td class="py-2 px-3 text-left font-bold text-slate-900">${r.year}</td>
+                <td class="py-2 px-3 text-left border-r border-slate-200 text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
+                ${c(r.totalSavingsAdd)}${c(r.rothConvAmount, 'font-semibold text-indigo-700')}${c(r.convTax, 'font-semibold text-rose-700 border-r border-slate-200')}
+                ${c(r.convTaxCash)}${c(r.convTaxBrokerage)}${c(r.convTaxIra)}${c(r.convTaxRoth, 'border-r border-slate-200')}
+                ${c(r.balCash)}${c(r.balBrokerage)}${c(r.balTrad)}${c(r.balRoth)}${c(r.endTotalAssets, 'font-bold bg-indigo-50/40')}</tr>`).join('');
+            const t = preRetirementTotals(simulationResults), sm = (v) => `<td class="py-2 px-3">${v > 0.5 ? fmtCurr(v) : '-'}</td>`;
+            document.getElementById('pre-ret-tfoot').innerHTML = `<tr class="text-xs"><td class="py-2 px-3 text-left" colspan="2">Total</td>${sm(t.contrib)}${sm(t.conv)}${sm(t.convTax)}${sm(t.paidCash)}${sm(t.paidBrokerage)}${sm(t.paidIra)}${sm(t.paidRoth)}<td class="py-2 px-3" colspan="5"></td></tr>`;
+        }
+
         function renderLedgerTable() {
             const tbody = document.getElementById('ledger-tbody');
             tbody.innerHTML = '';
@@ -2175,7 +2296,8 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
             const p1BirthYear = currentCalYear - p1StartAge;
             const rmdStartAge = getRMDStartAge(p1BirthYear);
 
-            simulationResults.forEach(r => {
+            renderPreRetirementTable();
+            simulationResults.filter(r => !r.isWorking).forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition text-xs";
 
@@ -2188,8 +2310,6 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
                 tr.innerHTML = `
                     <td class="py-2 px-3 text-left font-bold text-slate-900">${r.year}</td>
                     <td class="py-2 px-3 text-left border-r border-slate-200 text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
-                    <td class="py-2 px-3">${r.salary > 0 ? fmtCurr(r.salary) : '-'}</td>
-                    <td class="py-2 px-3">${r.totalSavingsAdd > 0 ? fmtCurr(r.totalSavingsAdd) : '-'}</td>
                     <td class="py-2 px-3">${r.spendGoal > 0 ? fmtCurr(r.spendGoal) : '-'}</td>
                     <td class="py-2 px-3">${r.p1SSIncome > 0 ? fmtCurr(r.p1SSIncome) : '-'}</td>
                     <td class="py-2 px-3">${r.p2SSIncome > 0 ? fmtCurr(r.p2SSIncome) : '-'}</td>
@@ -2307,14 +2427,6 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
     } else if (activeChartMode === 'cashflow') {
         yAxisLabel = 'Annual Cash Inflow ($)';
         datasets = [
-            {
-                label: 'Salary & Earned Income',
-                data: simulationResults.map(r => r.salary),
-                backgroundColor: paletteAlpha(PALETTE.salary, 0.7), // Indigo-500
-                borderColor: PALETTE.salary,
-                borderWidth: 1,
-                stack: 'flow'
-            },
             {
                 label: 'Social Security Benefit',
                 data: simulationResults.map(r => r.ssIncome),
