@@ -28,6 +28,13 @@
 
         /* ---- Detailed report ---- */
         #print-root { display: none; }
+        /* Single filer: spouse inputs/columns are removed from view and the P1/P2 grids drop to two columns */
+        body.is-single .p2-col, body.is-single .sp-col { display: none !important; }
+        /* Single filer: each input row becomes a compact label + small box pair, flowing on one line */
+        body.is-single .p2-grid { display: flex !important; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+        body.is-single .p2-row { display: flex !important; align-items: center; gap: 6px; white-space: nowrap; }
+        body.is-single .p2-row input, body.is-single .p2-row select { width: 3.75rem !important; padding: 3px 6px !important; text-align: center; }
+        body.is-single .p2-row input[data-money] { width: 5.5rem !important; }
         .rpt { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #0f172a; font-size: 11px; line-height: 1.45; }
         .rpt h1 { font-size: 20px; margin: 0 0 2px; font-weight: 800; }
         .rpt h2 { font-size: 12px; margin: 16px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #4f46e5; font-weight: 800; color: #312e81; text-transform: uppercase; letter-spacing: .04em; }
@@ -52,6 +59,8 @@
         .rpt .grid-year { font-size: var(--fs, 8.5px); table-layout: fixed; width: 100%; }
         .rpt .grid-year th, .rpt .grid-year td { height: var(--rowh, 15px); padding: 0 3px; line-height: 1.15; vertical-align: middle; }
         .rpt .grid-year th:first-child, .rpt .grid-year td:first-child { width: 4%; }
+        .rpt ul.narr { margin: 6px 0 0 16px; padding: 0; }
+        .rpt ul.narr li { margin-bottom: 3px; }
         .rpt .note, .rpt .note li { font-size: 9.5px; color: #475569; }
         .rpt img { width: 100%; margin: 4px 0; }
         @media print {
@@ -204,11 +213,11 @@
                             </select>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
-                            <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">P1</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">P2</span>
-                            <label class="text-slate-300 font-semibold">Age now</label><input type="number" id="inp-p1-age" value="58" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-age" value="55" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Retire at</label><input type="number" id="inp-p1-retire-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-retire-age" value="60" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Plan to age</label><input type="number" id="inp-p1-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                        <div class="p2-grid grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
+                            <span class="sp-col"></span><span class="sp-col text-center text-slate-400 font-semibold text-[11px]">You</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">Spouse</span>
+                            <div class="p2-row contents"><label class="text-slate-300 font-semibold">Age now</label><input type="number" id="inp-p1-age" value="58" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-age" value="55" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                            <div class="p2-row contents"><label class="text-slate-300 font-semibold">Retire at</label><input type="number" id="inp-p1-retire-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-retire-age" value="60" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                            <div class="p2-row contents"><label class="text-slate-300 font-semibold">Plan to age</label><input type="number" id="inp-p1-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-horizon" value="95" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
                         </div>
                     </div>
                 </details>
@@ -227,7 +236,7 @@
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
                         <div id="acct-grid" class="grid gap-x-2 gap-y-1.5 items-center" style="grid-template-columns: max-content minmax(0,1fr) minmax(0,1fr);">
-                            <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">Balance ($)</span><span class="text-center text-slate-400 font-semibold text-[11px]" title="Contributions until P1 retires">Add/yr ($)</span>
+                            <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">Balance ($)</span><span class="text-center text-slate-400 font-semibold text-[11px]" title="Contributions until you retire">Add/yr ($)</span>
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Cash</label><input type="number" id="inp-bal-cash" value="60000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span><input type="number" id="inp-contrib-cash" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Brokerage</label><input type="number" id="inp-bal-brokerage" value="150000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span><input type="number" id="inp-contrib-brokerage" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="401k, IRA, HSA">Tax-Def (401k/IRA/HSA)</label><input type="number" id="inp-bal-trad" value="500000" step="10000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span><input type="number" id="inp-contrib-trad" value="10000" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
@@ -263,20 +272,20 @@
                             <button id="btn-open-spend-calc" type="button" class="ui-btn ui-btn-sm ui-btn-primary-dark flex-none"><svg class="w-3 h-3 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m-6 4h6m-6 4h6M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg><span>Calculate</span></button>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
-                            <span class="text-[11px] text-slate-400 font-semibold">Social Security</span><span class="text-center text-slate-400 font-semibold text-[11px]">P1</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">P2</span>
-                            <label class="text-slate-300 font-semibold">Benefit ($/yr)</label><input type="number" id="inp-p1-ss-amt" value="43000" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-amt" value="21500" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                            <label class="text-slate-300 font-semibold">Claim age</label><input type="number" id="inp-p1-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-age" value="67" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                        <div class="p2-grid grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
+                            <span class="sp-col"></span><span class="sp-col text-center text-slate-400 font-semibold text-[11px]">You</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">Spouse</span>
+                            <div class="p2-row contents"><label class="text-slate-300 font-semibold">Social Security ($/yr)</label><input type="number" id="inp-p1-ss-amt" data-money="1" value="43000" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-ss-amt" value="21500" step="500" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                            <div class="p2-row contents"><label class="text-slate-300 font-semibold">SS claim age</label><select id="inp-p1-ss-age" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="62" class="bg-slate-800 text-slate-100">62</option><option value="63" class="bg-slate-800 text-slate-100">63</option><option value="64" class="bg-slate-800 text-slate-100">64</option><option value="65" class="bg-slate-800 text-slate-100">65</option><option value="66" class="bg-slate-800 text-slate-100">66</option><option value="67" selected class="bg-slate-800 text-slate-100">67</option><option value="68" class="bg-slate-800 text-slate-100">68</option><option value="69" class="bg-slate-800 text-slate-100">69</option><option value="70" class="bg-slate-800 text-slate-100">70</option></select><span class="p2-col"><select id="inp-p2-ss-age" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="62" class="bg-slate-800 text-slate-100">62</option><option value="63" class="bg-slate-800 text-slate-100">63</option><option value="64" class="bg-slate-800 text-slate-100">64</option><option value="65" class="bg-slate-800 text-slate-100">65</option><option value="66" class="bg-slate-800 text-slate-100">66</option><option value="67" selected class="bg-slate-800 text-slate-100">67</option><option value="68" class="bg-slate-800 text-slate-100">68</option><option value="69" class="bg-slate-800 text-slate-100">69</option><option value="70" class="bg-slate-800 text-slate-100">70</option></select></span></div>
                         </div>
 
                         <div class="border-t border-dashed border-slate-800 pt-2 space-y-2">
                             <span class="block font-semibold text-slate-200 text-[11px]">Pension / annuity / other income</span>
-                            <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
-                                <span></span><span class="text-center text-slate-400 font-semibold text-[11px]">P1</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">P2</span>
-                                <label class="text-slate-300 font-semibold">Annual ($)</label><input type="number" id="inp-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                                <label class="text-slate-300 font-semibold">Start age</label><input type="number" id="inp-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                                <label class="text-slate-300 font-semibold">COLA (%)</label><input type="number" id="inp-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
-                                <label class="p2-col text-slate-300 font-semibold" title="Share of this income the surviving spouse keeps after the holder dies"><span class="p2-col">Spousal %</span></label><span class="p2-col"><input type="number" id="inp-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span><span class="p2-col"><input type="number" id="inp-p2-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span>
+                            <div class="p2-grid grid grid-cols-3 gap-x-2 gap-y-1.5 items-center">
+                                <span class="sp-col"></span><span class="sp-col text-center text-slate-400 font-semibold text-[11px]">You</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">Spouse</span>
+                                <div class="p2-row contents"><label class="text-slate-300 font-semibold">Annual ($)</label><input type="number" id="inp-pension-amt" data-money="1" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                                <div class="p2-row contents"><label class="text-slate-300 font-semibold">Start age</label><input type="number" id="inp-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                                <div class="p2-row contents"><label class="text-slate-300 font-semibold">COLA (%)</label><input type="number" id="inp-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
+                                <div class="p2-row p2-col contents"><label class="p2-col text-slate-300 font-semibold" title="Share of this income the surviving spouse keeps after the holder dies"><span class="p2-col">Spousal %</span></label><span class="p2-col"><input type="number" id="inp-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span><span class="p2-col"><input type="number" id="inp-p2-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
                             </div>
                         </div>
 
@@ -419,7 +428,7 @@
             </div>
 
                 <!-- KPI Dashboard Summary -->
-                <section class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-indigo-600">
                     <div class="p-2.5 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 flex-none">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -441,15 +450,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-emerald-600">
-                    <div class="p-2.5 bg-emerald-50 border border-emerald-100 rounded-xl text-emerald-600 flex-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Plan Solvency</p>
-                        <p id="kpi-solvency-status" class="text-base lg:text-lg font-bold text-emerald-600">Fully Funded</p>
-                    </div>
-                </div>
+                
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-rose-600">
                     <div class="p-2.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 flex-none">
@@ -566,7 +567,7 @@
                                     </tr>
                                     <tr class="text-[11px]">
                                         <th class="py-2.5 px-3 text-left min-w-[50px]">Yr</th>
-                                        <th class="py-2.5 px-3 text-left border-r border-slate-200 min-w-[70px]">Ages</th>
+                                        <th class="ages-th py-2.5 px-3 text-left border-r border-slate-200 min-w-[70px]">Ages</th>
                                         <th class="py-2.5 px-3 min-w-[95px]">Contributions</th>
                                         <th class="py-2.5 px-3 min-w-[90px]">Roth Conv</th>
                                         <th class="py-2.5 px-3 min-w-[90px] border-r border-slate-200">Conv Tax</th>
@@ -621,18 +622,18 @@
                             <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200 sticky top-0 z-20">
                                 <tr class="border-b border-slate-300 text-xs">
                                     <th colspan="2" class="py-2.5 px-3 text-center bg-slate-200 text-slate-900 font-bold tracking-wider uppercase border-r border-slate-300">Profile & Timeline</th>
-                                    <th colspan="6" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-bold tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
+                                    <th id="ledger-grp-income" colspan="6" class="py-2.5 px-3 text-center bg-indigo-100 text-indigo-950 font-bold tracking-wider uppercase border-r border-slate-300">Cash Flow & Incomes</th>
                                     <th colspan="5" class="py-2.5 px-3 text-center bg-emerald-100 text-emerald-950 font-bold tracking-wider uppercase border-r border-slate-300">Withdrawal Waterfall</th>
                                     <th colspan="9" class="py-2.5 px-3 text-center bg-rose-100 text-rose-950 font-bold tracking-wider uppercase border-r border-slate-300">Tax Calculations</th>
                                     <th colspan="5" class="py-2.5 px-3 text-center bg-amber-100 text-amber-950 font-bold tracking-wider uppercase">Ending Balances</th>
                                 </tr>
                                 <tr class="text-[11px]">
                                     <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
-                                    <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[70px] border-r border-slate-300">Ages</th>
+                                    <th class="ages-th py-2.5 px-3 text-left bg-slate-100 min-w-[70px] border-r border-slate-300">Ages</th>
                                     <th class="py-2.5 px-3 min-w-[90px]">Spend Goal</th>
-                                    <th class="py-2.5 px-3 min-w-[85px]">P1 SS</th>
-                                    <th class="py-2.5 px-3 min-w-[85px]">P2 SS</th>
-                                    <th class="py-2.5 px-3 min-w-[85px]">Total SS</th>
+                                    <th class="py-2.5 px-3 min-w-[85px] sp-col">Your SS</th>
+                                    <th class="py-2.5 px-3 min-w-[85px] sp-col">Spouse SS</th>
+                                    <th class="totalss-th py-2.5 px-3 min-w-[85px]">Total SS</th>
                                     <th class="py-2.5 px-3 min-w-[85px]">Pension Inc</th>
                                     <th class="py-2.5 px-3 min-w-[85px] border-r border-slate-300">RMD Amt</th>
                                     <th class="py-2.5 px-3 min-w-[85px]">Roth Conv</th>
@@ -972,9 +973,9 @@
             document.getElementById('badge-balances').textContent = `${fmtCurr(totalBal)}` + (_working && _adds > 0 ? ` • +${fmtCurr(_adds)}/yr` : '');
             syncFilingStatusUI();
             const _warn = [];
-            if (_g('inp-p1-retire-age') < _g('inp-p1-age')) _warn.push('P1 retirement age is below current age (treated as already retired).');
-            if (_g('inp-p1-horizon') <= _g('inp-p1-retire-age')) _warn.push('P1 plan-to age is not after retirement age.');
-            [['p1','P1'],['p2','P2']].forEach(([k,l]) => { const a = _g(`inp-${k}-ss-age`); if (a && (a < 62 || a > 70) && (k === 'p1' || document.getElementById('inp-filing-status').value === 'MFJ')) _warn.push(`${l} Social Security claim age should be between 62 and 70.`); });
+            if (_g('inp-p1-retire-age') < _g('inp-p1-age')) _warn.push('Your retirement age is below current age (treated as already retired).');
+            if (_g('inp-p1-horizon') <= _g('inp-p1-retire-age')) _warn.push('Your plan-to age is not after retirement age.');
+            [['p1','Your'],['p2','Spouse']].forEach(([k,l]) => { const a = _g(`inp-${k}-ss-age`); if (a && (a < 62 || a > 70) && (k === 'p1' || document.getElementById('inp-filing-status').value === 'MFJ')) _warn.push(sgl(`${l} Social Security claim age should be between 62 and 70.`)); });
             const _w = document.getElementById('input-warnings');
             _w.innerHTML = _warn.map(t => `<div>${t}</div>`).join('');
             _w.classList.toggle('hidden', _warn.length === 0);
@@ -1039,15 +1040,20 @@
             }, 305);
         }
 
-        // P2 inputs stay visible for every filing status; for Single filers they are greyed out and ignored
+        // Single filer: the spouse is removed everywhere (inputs, ledger columns, report, Excel) via one body class
+        const isSingleUI = () => document.getElementById('inp-filing-status').value === 'Single';
+        // Single filer wording: "Your retirement age" -> "Retirement age", "your age 65" -> "age 65", "(You: 65)" -> "(Age 65)"
+        function sgl(text, single = isSingleUI()) {
+            if (!single || typeof text !== 'string') return text;
+            return text.replace(/\(You: /g, '(Age ').replace(/\bYour (\w)/g, (m, c) => c.toUpperCase()).replace(/\byour age\b/g, 'age').replace(/\byour (\w)/g, '$1');
+        }
         function syncFilingStatusUI() {
-            const single = document.getElementById('inp-filing-status').value === 'Single';
-            document.querySelectorAll('.p2-col').forEach(el => {
-                el.classList.toggle('opacity-40', single);
-                el.classList.toggle('pointer-events-none', single);
-                if (el.tagName === 'INPUT') el.disabled = single;
-                el.querySelectorAll('input').forEach(i => { i.disabled = single; });
-            });
+            document.body.classList.toggle('is-single', document.getElementById('inp-filing-status').value === 'Single');
+            const g = document.getElementById('ledger-grp-income');
+            if (g) g.colSpan = document.body.classList.contains('is-single') ? 4 : 6;
+            const one = isSingleUI();
+            document.querySelectorAll('.ages-th').forEach(el => { el.textContent = one ? 'Age' : 'Ages'; });
+            document.querySelectorAll('.totalss-th').forEach(el => { el.textContent = one ? 'Social Security' : 'Total SS'; });
         }
         function handleFilingStatusChange() { syncFilingStatusUI(); }
 
@@ -1079,8 +1085,8 @@
             const section = (t) => { r++; xlBand(ws, r, t, 3); r++; ['Parameter', 'Value', 'Note'].forEach((h, k) => { const x = ws.getCell(r, k + 1); x.value = h; xlHead(x, XL.indigo6); }); };
             const kv = (label, value, fmt, note) => { r++; const z = r % 2 === 0; ws.getCell(r, 1).value = label; ws.getCell(r, 2).value = value; ws.getCell(r, 3).value = note || ''; xlBody(ws.getCell(r, 1), null, z); xlBody(ws.getCell(r, 2), fmt, z); xlBody(ws.getCell(r, 3), null, z); ws.getCell(r, 2).alignment = { horizontal: 'right' }; ws.getCell(r, 3).font = { size: 9, color: { argb: XL.slate5 } }; return r; };
             section('Household');
-            kv('Filing status', mfj ? 'Married filing jointly' : 'Single'); kv('P1 current age', i.p1Age, '0'); kv('P1 retirement age', i.p1RetireAge, '0'); kv('P1 plan-to age', i.p1TargetAge, '0');
-            if (mfj) { kv('P2 current age', i.p2Age, '0'); kv('P2 retirement age', i.p2RetireAge, '0'); kv('P2 plan-to age', i.p2TargetAge, '0'); }
+            kv('Filing status', mfj ? 'Married filing jointly' : 'Single'); kv('Your current age', i.p1Age, '0'); kv('Your retirement age', i.p1RetireAge, '0'); kv('Your plan-to age', i.p1TargetAge, '0');
+            if (mfj) { kv('Spouse current age', i.p2Age, '0'); kv('Spouse retirement age', i.p2RetireAge, '0'); kv('Spouse plan-to age', i.p2TargetAge, '0'); }
             section('Starting balances');
             const b0 = kv('Cash', i.balCash, XL_USD); kv('Brokerage', i.balBrokerage, XL_USD, i.capGainsOn ? `Cost basis ${(i.basisPct * 100).toFixed(0)}% of balance` : ''); kv('Tax-deferred (401k/IRA/HSA)', i.balTrad, XL_USD); const b3 = kv('Tax-exempt (Roth/IUL)', i.balRoth, XL_USD);
             const tr = kv('Total', { formula: `SUM(B${b0}:B${b3})`, result: i.balCash + i.balBrokerage + i.balTrad + i.balRoth }, XL_USD); ws.getRow(tr).font = { bold: true };
@@ -1088,10 +1094,10 @@
             kv('Annual savings: cash', i.contribCash, XL_USD); kv('Annual savings: brokerage', i.contribBrokerage, XL_USD); kv('Annual savings: tax-deferred', i.contribTrad, XL_USD); kv('Annual savings: Roth', i.contribRoth, XL_USD);
             section('Retirement spending and income');
             kv('Spending goal per year', i.baseSpendingGoal, XL_USD, i.todaysDollars ? "Entered in today's dollars" : 'Entered in retirement dollars (as of the year each begins)'); kv('Dollar basis', i.todaysDollars ? "Today's dollars" : 'Retirement dollars');
-            kv('P1 Social Security per year', i.p1SSAmt, XL_USD); kv('P1 claim age', i.p1SSAge, '0');
-            if (mfj) { kv('P2 Social Security per year', i.p2SSAmt, XL_USD); kv('P2 claim age', i.p2SSAge, '0'); }
-            kv('P1 pension / annuity per year', i.pensionBaseAmt, XL_USD); kv('P1 pension start age', i.pensionStartAge, '0'); kv('P1 pension COLA', i.pensionCola, XL_PCT1);
-            if (mfj) { kv('P1 pension spousal share (kept by P2)', i.pensionSurvivorPct, XL_PCT0); kv('P2 pension / annuity per year', i.p2PensionBaseAmt, XL_USD); kv('P2 pension start age', i.p2PensionStartAge, '0'); kv('P2 pension COLA', i.p2PensionCola, XL_PCT1); kv('P2 pension spousal share (kept by P1)', i.p2PensionSurvivorPct, XL_PCT0); }
+            kv('Your Social Security per year', i.p1SSAmt, XL_USD); kv('Your claim age', i.p1SSAge, '0');
+            if (mfj) { kv('Spouse Social Security per year', i.p2SSAmt, XL_USD); kv('Spouse claim age', i.p2SSAge, '0'); }
+            kv('Your pension / annuity per year', i.pensionBaseAmt, XL_USD); kv('Your pension start age', i.pensionStartAge, '0'); kv('Your pension COLA', i.pensionCola, XL_PCT1);
+            if (mfj) { kv('Your pension: share kept by spouse', i.pensionSurvivorPct, XL_PCT0); kv('Spouse pension / annuity per year', i.p2PensionBaseAmt, XL_USD); kv('Spouse pension start age', i.p2PensionStartAge, '0'); kv('Spouse pension COLA', i.p2PensionCola, XL_PCT1); kv('Spouse pension: share kept by you', i.p2PensionSurvivorPct, XL_PCT0); }
             section('Growth and inflation');
             kv('Return: pre-retirement', i.returnPre, XL_PCT1); kv('Return: post-retirement', i.returnPost, XL_PCT1); kv('Return: cash', i.returnCash, XL_PCT1); kv('Inflation', i.inflation, XL_PCT1); kv('Heirs\' tax rate on leftover IRA', i.heirTaxRate, XL_PCT0, 'Used for after-tax ending wealth');
             section('Tax and strategy settings');
@@ -1119,14 +1125,14 @@
             r++; xlBand(ws, r, 'Narrative', 2); r++;
             [c.texts.solv, c.texts.tax, c.texts.rec].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 32; r++; });
             r++; xlBand(ws, r, 'Notes', 2, XL.slate2, XL.slate7); r++;
-            [`Tax law as of ${c.asOf} (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028.`, 'Federal income tax only. State income taxes are not included and may add to your total taxes depending on where you live.', 'Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).', 'Educational projection, not tax, legal or investment advice.', `Prepared by ${BRAND.legal} | ${BRAND.contact}`, `\u00A9 ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved.`].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.font = { size: 10, color: { argb: XL.slate5 } }; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 28; r++; });
+            [`Tax law as of ${c.asOf} (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).`, 'Federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to your total taxes depending on where you live. Educational projection, not tax, legal or investment advice.', ].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.font = { size: 10, color: { argb: XL.slate5 } }; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 28; r++; });
             return ws;
         }
 
         const XL_LEDGER = [ // [header, group, getter, format, width]
-            ['Year', 'Timeline', r => r.retYear, '0', 7], ['P1 Age', 'Timeline', r => r.p1Age, '0', 7], ['P2 Age', 'Timeline', r => r.p2Age || null, '0', 7],
+            ['Year', 'Timeline', r => r.retYear, '0', 7], ['Your Age', 'Timeline', r => r.p1Age, '0', 7], ['Spouse Age', 'Timeline', r => r.p2Age || null, '0', 7],
             ['Spend Goal', 'Income & Spending', r => r.spendGoal, XL_USD, 12],
-            ['P1 SS', 'Income & Spending', r => r.p1SSIncome, XL_USD, 11], ['P2 SS', 'Income & Spending', r => r.p2SSIncome, XL_USD, 11], ['Total SS', 'Income & Spending', r => r.ssIncome, XL_USD, 11], ['Pension', 'Income & Spending', r => r.pensionIncome, XL_USD, 11],
+            ['Your SS', 'Income & Spending', r => r.p1SSIncome, XL_USD, 11], ['Spouse SS', 'Income & Spending', r => r.p2SSIncome, XL_USD, 11], ['Total SS', 'Income & Spending', r => r.ssIncome, XL_USD, 11], ['Pension', 'Income & Spending', r => r.pensionIncome, XL_USD, 11],
             ['RMD', 'Withdrawals', r => r.rmdAmount, XL_USD, 11], ['Roth Conversion', 'Withdrawals', r => r.rothConvAmount, XL_USD, 12], ['Cash W/D', 'Withdrawals', r => r.wdCash, XL_USD, 11], ['Brokerage W/D', 'Withdrawals', r => r.wdbrokerage, XL_USD, 12], ['Trad IRA W/D', 'Withdrawals', r => r.wdTrad, XL_USD, 12], ['Roth W/D', 'Withdrawals', r => r.wdRoth, XL_USD, 11],
             ['AGI', 'Tax', r => r.agi, XL_USD, 12], ['Taxable Income', 'Tax', r => r.taxableIncome, XL_USD, 12], ['Effective Rate', 'Tax', r => r.effectiveRate, XL_PCT1, 9], ['Marginal Rate', 'Tax', r => r.marginalRate, XL_PCT0, 9], ['Federal Tax', 'Tax', r => r.fedTax, XL_USD, 11], ['Cumulative Tax', 'Tax', r => r.cumulativeTax, XL_USD, 12],
             ['IRMAA Tier', 'IRMAA', r => r.irmaaTier, null, 9], ['IRMAA Cost', 'IRMAA', r => r.irmaaCost, XL_USD, 10], ['Cumulative IRMAA', 'IRMAA', r => r.cumulativeIrmaa, XL_USD, 12],
@@ -1136,14 +1142,18 @@
         const XL_BAL_FILL = { 'End Cash': 'FF64748B', 'End Brokerage': 'FF0284C7', 'End Tax-Deferred': 'FF7C3AED', 'End Roth': 'FF059669', 'Total Assets': 'FF0F172A' };
 
         const XL_PRE = [
-            ['Year', 'Timeline', r => r.year, '0', 7], ['P1 Age', 'Timeline', r => r.p1Age, '0', 8], ['P2 Age', 'Timeline', r => r.p2Age || null, '0', 8],
+            ['Year', 'Timeline', r => r.year, '0', 7], ['Your Age', 'Timeline', r => r.p1Age, '0', 8], ['Spouse Age', 'Timeline', r => r.p2Age || null, '0', 8],
             ['Contributions', 'Pre-Retirement Activity', r => r.totalSavingsAdd, XL_USD, 14], ['Roth Conversion', 'Pre-Retirement Activity', r => r.rothConvAmount, XL_USD, 14], ['Conversion Tax', 'Pre-Retirement Activity', r => r.convTax, XL_USD, 14],
             ['Paid: Cash', 'Conversion Tax Paid From', r => r.convTaxCash, XL_USD, 12], ['Paid: Brokerage', 'Conversion Tax Paid From', r => r.convTaxBrokerage, XL_USD, 14], ['Paid: IRA', 'Conversion Tax Paid From', r => r.convTaxIra, XL_USD, 12], ['Paid: Roth', 'Conversion Tax Paid From', r => r.convTaxRoth, XL_USD, 12],
             ['End Cash', 'Balances', r => r.balCash, XL_USD, 13], ['End Brokerage', 'Balances', r => r.balBrokerage, XL_USD, 14], ['End Tax-Deferred', 'Balances', r => r.balTrad, XL_USD, 15], ['End Roth', 'Balances', r => r.balRoth, XL_USD, 13], ['Total Assets', 'Balances', r => r.endTotalAssets, XL_USD, 15]
         ];
         XL_GROUP_FILL['Pre-Retirement Activity'] = 'FF4F46E5'; XL_GROUP_FILL['Conversion Tax Paid From'] = 'FFE11D48';
 
+        const xlLedgerCols = single => XL_LEDGER.filter(col => !(single && ['Spouse Age', 'Your SS', 'Spouse SS'].includes(col[0])));
+        const xlPreCols = single => XL_PRE.filter(col => !(single && col[0] === 'Spouse Age'));
+
         function xlSheetPreRetirement(wb, c) {
+            const XL_PRE = xlPreCols(c.inp.filingStatus === 'Single');
             const rows = c.results.filter(r => r.isWorking), n = rows.length, nc = XL_PRE.length, GR = 3, HR = 4, first = 5, last = first + n - 1;
             const ws = wb.addWorksheet('Pre-Retirement', { properties: { tabColor: { argb: 'FF6366F1' } }, views: [{ state: 'frozen', xSplit: 3, ySplit: HR, showGridLines: false }] });
             ws.columns = XL_PRE.map(col => ({ width: col[4] }));
@@ -1157,12 +1167,13 @@
             ws.getRow(HR).height = 32;
             rows.forEach((res, ri) => { const row = ws.getRow(first + ri); XL_PRE.forEach((col, k) => { const cell = row.getCell(k + 1); const v = col[2](res); cell.value = (typeof v === 'number' && col[3] === XL_USD) ? Math.round(v) : v; xlBody(cell, col[3], ri % 2); if (col[0] === 'Total Assets') cell.font = { bold: true }; }); });
             const tot = ws.getRow(last + 1); tot.getCell(1).value = 'Total';
-            XL_PRE.forEach((col, k) => { const cell = tot.getCell(k + 1); if (k >= 3 && k <= 9) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
+            XL_PRE.forEach((col, k) => { const cell = tot.getCell(k + 1); if (['Contributions', 'Roth Conversion', 'Conversion Tax', 'Paid: Cash', 'Paid: Brokerage', 'Paid: IRA', 'Paid: Roth'].includes(col[0])) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
             ws.autoFilter = { from: { row: HR, column: 1 }, to: { row: last, column: nc } };
             return ws;
         }
 
         function xlSheetLedger(wb, c) {
+            const XL_LEDGER = xlLedgerCols(c.inp.filingStatus === 'Single');
             const rows = c.ledgerRows, n = rows.length, nc = XL_LEDGER.length, GR = 3, HR = 4, first = 5, last = first + n - 1;
             const ws = wb.addWorksheet('Ledger', { properties: { tabColor: { argb: 'FF0EA5E9' } }, views: [{ state: 'frozen', xSplit: 3, ySplit: HR, showGridLines: false }] });
             ws.columns = XL_LEDGER.map(col => ({ width: col[4] }));
@@ -1177,7 +1188,7 @@
             ws.getRow(HR).height = 32;
             rows.forEach((res, ri) => { const row = ws.getRow(first + ri); XL_LEDGER.forEach((col, k) => { const cell = row.getCell(k + 1); const v = col[2](res); cell.value = (typeof v === 'number') ? (col[3] === XL_USD ? Math.round(v) : v) : v; xlBody(cell, col[3], ri % 2); if (col[0] === 'Total Assets') cell.font = { bold: true }; if (col[0] === 'IRMAA Tier') cell.alignment = { horizontal: 'center' }; }); });
             const tot = ws.getRow(last + 1); tot.getCell(1).value = 'Total';
-            XL_LEDGER.forEach((col, k) => { const cell = tot.getCell(k + 1); if (['Spend Goal', 'P1 SS', 'P2 SS', 'Total SS', 'Pension', 'RMD', 'Roth Conversion', 'Cash W/D', 'Brokerage W/D', 'Trad IRA W/D', 'Roth W/D', 'Federal Tax', 'IRMAA Cost'].includes(col[0])) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
+            XL_LEDGER.forEach((col, k) => { const cell = tot.getCell(k + 1); if (['Spend Goal', 'Your SS', 'Spouse SS', 'Total SS', 'Pension', 'RMD', 'Roth Conversion', 'Cash W/D', 'Brokerage W/D', 'Trad IRA W/D', 'Roth W/D', 'Federal Tax', 'IRMAA Cost'].includes(col[0])) { const L = xlCol(k + 1); cell.value = { formula: `SUM(${L}${first}:${L}${last})` }; cell.numFmt = XL_USD; } cell.font = { bold: true }; cell.fill = xlFill(XL.indigo1); cell.border = { top: { style: 'medium', color: { argb: XL.indigo9 } } }; });
             ws.autoFilter = { from: { row: HR, column: 1 }, to: { row: last, column: nc } };
             const taxCol = xlCol(XL_LEDGER.findIndex(x => x[0] === 'Federal Tax') + 1);
             ws.addConditionalFormatting({ ref: `${taxCol}${first}:${taxCol}${last}`, rules: [{ type: 'colorScale', cfvo: [{ type: 'min' }, { type: 'max' }], color: [{ argb: 'FFFFFFFF' }, { argb: 'FFFECDD3' }] }] });
@@ -1275,17 +1286,18 @@
             xlTitle(chartsWs, 'Charts', 'Charts are native Excel charts linked to the Ledger tab and update if you edit the ledger values.', 20);
             if (c.results.some(r => r.isWorking)) xlSheetPreRetirement(wb, c);
             const led = xlSheetLedger(wb, c), sens = xlSheetSensitivity(wb, c); xlSheetTaxLaw(wb, c);
-            const rs = c.ledgerRows, first = led.first, last = led.last, ref = (name) => { const k = XL_LEDGER.findIndex(x => x[0] === name) + 1, L = xlCol(k); return { ref: `Ledger!$${L}$${first}:$${L}$${last}`, k }; };
-            const catRef = ref('P1 Age').ref, cats = rs.map(r => r.p1Age);
+            const rs = c.ledgerRows, first = led.first, last = led.last, ref = (name) => { const k = xlLedgerCols(c.inp.filingStatus === 'Single').findIndex(x => x[0] === name) + 1, L = xlCol(k); return { ref: `Ledger!$${L}$${first}:$${L}$${last}`, k }; };
+            const catRef = ref('Your Age').ref, cats = rs.map(r => r.p1Age);
             const ser = (name, hdr, getter, color) => ({ name, catRef, cats, valRef: ref(hdr).ref, vals: rs.map(r => Math.round(getter(r))), color });
             const P = PALETTE, hx = h => h.slice(1).toUpperCase();
             const charts = [
-                { chart: { title: 'Year-end balances by account (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Cash', 'End Cash', r => r.balCash, hx(P.cash)), ser('Brokerage', 'End Brokerage', r => r.balBrokerage, hx(P.brokerage)), ser('Tax-deferred', 'End Tax-Deferred', r => r.balTrad, hx(P.trad)), ser('Roth', 'End Roth', r => r.balRoth, hx(P.roth))] }, c1: 0, r1: 3, c2: 12, r2: 25 },
-                { chart: { title: 'Annual federal tax and IRMAA (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Federal income tax', 'Federal Tax', r => r.fedTax, hx(P.tax)), ser('IRMAA surcharge', 'IRMAA Cost', r => r.irmaaCost, hx(P.irmaa))] }, c1: 0, r1: 27, c2: 12, r2: 49 },
-                { chart: { title: 'Funding sources vs. spending goal (x-axis: P1 age)', dir: 'col', grouping: 'stacked', series: [ser('Social Security', 'Total SS', r => r.ssIncome, hx(P.ss)), ser('Pension', 'Pension', r => r.pensionIncome, hx(P.pension)), ser('Cash W/D', 'Cash W/D', r => r.wdCash, hx(P.cash)), ser('Brokerage W/D', 'Brokerage W/D', r => r.wdbrokerage, hx(P.brokerage)), ser('Tax-deferred W/D (incl. RMD)', 'Trad IRA W/D', r => r.wdTrad + r.rmdAmount, hx(P.trad)), ser('Roth W/D', 'Roth W/D', r => r.wdRoth, hx(P.roth))], lines: [ser('Spending goal', 'Spend Goal', r => r.spendGoal, '0F172A')] }, c1: 0, r1: 51, c2: 12, r2: 73 }
+                { chart: { title: 'Year-end balances by account (x-axis: your age)', dir: 'col', grouping: 'stacked', series: [ser('Cash', 'End Cash', r => r.balCash, hx(P.cash)), ser('Brokerage', 'End Brokerage', r => r.balBrokerage, hx(P.brokerage)), ser('Tax-deferred', 'End Tax-Deferred', r => r.balTrad, hx(P.trad)), ser('Roth', 'End Roth', r => r.balRoth, hx(P.roth))] }, c1: 0, r1: 3, c2: 12, r2: 25 },
+                { chart: { title: 'Annual federal tax and IRMAA (x-axis: your age)', dir: 'col', grouping: 'stacked', series: [ser('Federal income tax', 'Federal Tax', r => r.fedTax, hx(P.tax)), ser('IRMAA surcharge', 'IRMAA Cost', r => r.irmaaCost, hx(P.irmaa))] }, c1: 0, r1: 27, c2: 12, r2: 49 },
+                { chart: { title: 'Funding sources vs. spending goal (x-axis: your age)', dir: 'col', grouping: 'stacked', series: [ser('Social Security', 'Total SS', r => r.ssIncome, hx(P.ss)), ser('Pension', 'Pension', r => r.pensionIncome, hx(P.pension)), ser('Cash W/D', 'Cash W/D', r => r.wdCash, hx(P.cash)), ser('Brokerage W/D', 'Brokerage W/D', r => r.wdbrokerage, hx(P.brokerage)), ser('Tax-deferred W/D (incl. RMD)', 'Trad IRA W/D', r => r.wdTrad + r.rmdAmount, hx(P.trad)), ser('Roth W/D', 'Roth W/D', r => r.wdRoth, hx(P.roth))], lines: [ser('Spending goal', 'Spend Goal', r => r.spendGoal, '0F172A')] }, c1: 0, r1: 51, c2: 12, r2: 73 }
             ];
             const top = sens.top, n = top.length;
             const sensChart = { chart: { title: 'Biggest effects on ending assets (change vs. current)', dir: 'bar', grouping: 'clustered', legend: false, gap: 40, series: [{ name: 'Change in ending assets', catIsText: true, catRef: `Sensitivity!$I$5:$I$${4 + n}`, cats: top.map(t => t.l), valRef: `Sensitivity!$J$5:$J$${4 + n}`, vals: top.map(t => Math.round(t.d)), color: '6366F1', pointColors: top.map(t => t.d >= 0 ? '10B981' : 'F43F5E') }] }, c1: 11, r1: 2, c2: 23, r2: 28 };
+            if (c.inp.filingStatus === 'Single') wb.worksheets.forEach(ws => ws.eachRow(row => row.eachCell(cell => { if (typeof cell.value === 'string') cell.value = cell.value === 'Total SS' ? 'Social Security' : sgl(cell.value, true); })));
             wb.worksheets.forEach(sheet => { sheet.pageSetup = { orientation: 'landscape', fitToPage: true, fitToWidth: 1, fitToHeight: 0, paperSize: 1 }; sheet.headerFooter = { oddHeader: `&L&"Calibri,Bold"${BRAND.name}&C${BRAND.tagline}&R&D`, oddFooter: `&L\u00A9 ${new Date().getFullYear()} Second Inning Financial LLC&C&A&RPage &P of &N` }; });
             const buf = await wb.xlsx.writeBuffer();
             return xlInjectCharts(JSZipLib, buf, [{ sheetNo: chartsWs.id, charts }, { sheetNo: sens.ws.id, charts: [sensChart] }]);
@@ -1306,16 +1318,16 @@
         function computeMilestones(rs, m) {
             const first = f => rs.find(f), ms = [];
             const yl = r => r.isWorking ? `pre-retirement yr ${r.year}` : `retirement yr ${r.retYear}`;
-            const retRow = first(r => !r.isWorking); if (retRow) ms.push(['First retirement year', `Retirement yr 1 (P1 age ${retRow.p1Age})`]);
-            const ssRow = first(r => r.ssIncome > 0); if (ssRow) ms.push(['Social Security begins', `Retirement yr ${ssRow.retYear} (P1 age ${ssRow.p1Age}), ${fmtCurr(ssRow.ssIncome)}/yr`]);
-            const rmdRow = first(r => r.rmdAmount > 0); if (rmdRow) ms.push(['First required minimum distribution', `Retirement yr ${rmdRow.retYear} (P1 age ${rmdRow.p1Age}), ${fmtCurr(rmdRow.rmdAmount)}`]);
+            const retRow = first(r => !r.isWorking); if (retRow) ms.push(['First retirement year', `Retirement yr 1 (your age ${retRow.p1Age})`]);
+            const ssRow = first(r => r.ssIncome > 0); if (ssRow) ms.push(['Social Security begins', `Retirement yr ${ssRow.retYear} (your age ${ssRow.p1Age}), ${fmtCurr(ssRow.ssIncome)}/yr`]);
+            const rmdRow = first(r => r.rmdAmount > 0); if (rmdRow) ms.push(['First required minimum distribution', `Retirement yr ${rmdRow.retYear} (your age ${rmdRow.p1Age}), ${fmtCurr(rmdRow.rmdAmount)}`]);
             const convRows = rs.filter(r => r.rothConvAmount > 0);
-            if (convRows.length) ms.push(['Roth conversions', `${convRows.length} yr${convRows.length === 1 ? '' : 's'}, P1 age ${convRows[0].p1Age} to ${convRows[convRows.length - 1].p1Age}, total ${fmtCurr(m.conv)}`]);
+            if (convRows.length) ms.push(['Roth conversions', `${convRows.length} yr${convRows.length === 1 ? '' : 's'}, your age ${convRows[0].p1Age} to ${convRows[convRows.length - 1].p1Age}, total ${fmtCurr(m.conv)}`]);
             const irmRow = first(r => r.irmaaCost > 0); if (irmRow) ms.push(['First IRMAA surcharge', `Retirement yr ${irmRow.retYear} (${irmRow.irmaaTier}), ${fmtCurr(irmRow.irmaaCost)}`]);
-            const peakTrad = rs.reduce((a, r) => r.balTrad > a.balTrad ? r : a, rs[0] || { balTrad: 0 }); ms.push(['Peak tax-deferred balance', `${fmtCurr(peakTrad.balTrad)} in ${yl(peakTrad)} (P1 age ${peakTrad.p1Age})`]);
-            const peakTax = rs.reduce((a, r) => r.fedTax > a.fedTax ? r : a, rs[0] || { fedTax: 0 }); ms.push(['Highest single-year federal tax', `${fmtCurr(peakTax.fedTax)} in ${yl(peakTax)} (P1 age ${peakTax.p1Age})`]);
-            const dep = first(r => r.endTotalAssets < 1 && r.spendGoal > 0); ms.push(['Portfolio depleted', dep ? `Retirement yr ${dep.retYear} (P1 age ${dep.p1Age})` : 'Not within the plan horizon']);
-            return ms;
+            const peakTrad = rs.reduce((a, r) => r.balTrad > a.balTrad ? r : a, rs[0] || { balTrad: 0 }); ms.push(['Peak tax-deferred balance', `${fmtCurr(peakTrad.balTrad)} in ${yl(peakTrad)} (your age ${peakTrad.p1Age})`]);
+            const peakTax = rs.reduce((a, r) => r.fedTax > a.fedTax ? r : a, rs[0] || { fedTax: 0 }); ms.push(['Highest single-year federal tax', `${fmtCurr(peakTax.fedTax)} in ${yl(peakTax)} (your age ${peakTax.p1Age})`]);
+            const dep = first(r => r.endTotalAssets < 1 && r.spendGoal > 0); ms.push(['Portfolio depleted', dep ? `Retirement yr ${dep.retYear} (your age ${dep.p1Age})` : 'Not within the plan horizon']);
+            return ms.map(([k, v]) => [sgl(k), sgl(v)]);
         }
 
         function collectExportContext() {
@@ -2027,7 +2039,7 @@
                 const datasets = kind === 'assets'
                     ? [bar('Cash', 'balCash', PALETTE.cash), bar('Brokerage', 'balBrokerage', PALETTE.brokerage), bar('Tax-deferred', 'balTrad', PALETTE.trad), bar('Roth', 'balRoth', PALETTE.roth)]
                     : [bar('Federal income tax', 'fedTax', PALETTE.tax), bar('IRMAA surcharge', 'irmaaCost', PALETTE.irmaa)];
-                const title = kind === 'assets' ? 'Year-end balances by account type (x-axis: P1 age)' : 'Annual federal tax and IRMAA surcharges (x-axis: P1 age)';
+                const title = kind === 'assets' ? 'Year-end balances by account type (x-axis: your age)' : 'Annual federal tax and IRMAA surcharges (x-axis: your age)';
                 const ch = new Chart(c, { type: 'bar', data: { labels, datasets }, options: { animation: false, responsive: false, devicePixelRatio: 2,
                     plugins: { title: { display: true, text: title }, legend: { position: 'bottom' } },
                     scales: { x: { stacked: true }, y: { stacked: true, ticks: { callback: v => (kind === 'assets' ? '$' + (v / 1e6).toFixed(1) + 'M' : '$' + Math.round(v / 1000) + 'k') } } } } });
@@ -2062,17 +2074,17 @@
             const preCols = r => [r.totalSavingsAdd, r.rothConvAmount, r.convTax, r.convTaxCash, r.convTaxBrokerage, r.convTaxIra, r.convTaxRoth, r.balCash, r.balBrokerage, r.balTrad, r.balRoth, r.endTotalAssets];
             const preMax = preRows.reduce((mx, r) => Math.max(mx, ...preCols(r).map(v => rD(v).length)), 4);
             const rowHp = Math.max(15, Math.min(24, Math.floor(560 / (preRows.length + 3)))), fszp = Math.max(7.5, Math.min(11, rowHp * 0.58, 50 / (preMax * 0.6))).toFixed(1);
-            const preRowsHtml = preRows.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td>${preCols(r).map((v, k) => `<td${k === 11 ? ' style="font-weight:700"' : ''}>${rD(v)}</td>`).join('')}</tr>`).join('');
+            const preRowsHtml = preRows.map(r => `<tr><td>${r.year}</td><td>${r.p1Age}</td>${mfj ? `<td>${r.p2Age || '-'}</td>` : ''}${preCols(r).map((v, k) => `<td${k === 11 ? ' style="font-weight:700"' : ''}>${rD(v)}</td>`).join('')}</tr>`).join('');
             const rowH = Math.max(15, Math.min(28, Math.floor(640 / (retRows.length + 1.5)))), fsz = Math.max(7.5, Math.min(11, rowH * 0.58, 54 / (maxLen * 0.6))).toFixed(1);
-            const yrRows = retRows.map(r => `<tr><td>${r.retYear}</td><td>${r.p1Age}</td><td>${r.p2Age || '-'}</td><td>${rD(r.ssIncome + r.pensionIncome)}</td><td>${rD(r.rmdAmount)}</td><td>${rD(r.rothConvAmount)}</td><td>${rD(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rD(r.agi)}</td><td>${rD(r.fedTax)}</td><td>${rD(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rD(r.balCash)}</td><td>${rD(r.balBrokerage)}</td><td>${rD(r.balTrad)}</td><td>${rD(r.balRoth)}</td><td><b>${rD(r.endTotalAssets)}</b></td></tr>`).join('');
+            const yrRows = retRows.map(r => `<tr><td>${r.retYear}</td><td>${r.p1Age}</td>${mfj ? `<td>${r.p2Age || '-'}</td>` : ''}<td>${rD(r.ssIncome + r.pensionIncome)}</td><td>${rD(r.rmdAmount)}</td><td>${rD(r.rothConvAmount)}</td><td>${rD(r.wdCash + r.wdbrokerage + r.wdTrad + r.wdRoth)}</td><td>${rD(r.agi)}</td><td>${rD(r.fedTax)}</td><td>${rD(r.irmaaCost)}</td><td>${rPct(r.effectiveRate)}</td><td>${rD(r.balCash)}</td><td>${rD(r.balBrokerage)}</td><td>${rD(r.balTrad)}</td><td>${rD(r.balRoth)}</td><td><b>${rD(r.endTotalAssets)}</b></td></tr>`).join('');
 
             const imgA = reportChartImage('assets'), imgT = reportChartImage('tax');
             const solv = document.getElementById('summary-solvency-desc').textContent, taxd = document.getElementById('summary-tax-desc').textContent, rec = document.getElementById('summary-rec-desc').textContent;
 
-            return `<div class="rpt">
+            return sgl(`<div class="rpt">
 <div class="rpt-brand"><div class="rpt-brand-l"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="6" y="6" width="18" height="18" rx="2" transform="rotate(45 15 15)" fill="#4f46e5"/><circle cx="15" cy="15" r="3.2" fill="#fff"/></svg><div><div class="rpt-brand-name">${BRAND.name.toUpperCase()}</div><div class="rpt-brand-tag">${BRAND.tagline}</div></div></div><div class="rpt-brand-r"><b>Retirement Projection Report</b><br>Prepared ${today}</div></div>
 <h1>Retirement Cash Flow &amp; Tax Projection</h1>
-<div class="sub">Detailed report &middot; ${name} &middot; Prepared ${today} &middot; ${mfj ? 'Married filing jointly' : 'Single filer'} &middot; Tax law as of ${TAX_LAW_AS_OF}</div>
+<div class="sub">${name} &middot; ${mfj ? 'Married filing jointly' : 'Single filer'} &middot; Tax law as of ${TAX_LAW_AS_OF}</div>
 
 <h2>1. Executive summary</h2>
 <div class="kpis">
@@ -2082,7 +2094,7 @@
 <div class="kpi"><span class="sub">Lifetime tax (retirement + Roth conv.)</span><b>${fmtCurr(m.tax)}</b></div>
 <div class="kpi"><span class="sub">Lifetime IRMAA</span><b>${fmtCurr(m.irmaa)}</b></div>
 </div>
-<p>${rEsc(solv)}</p><p>${rEsc(taxd)}</p><p>${rEsc(rec)}</p>
+<ul class="narr"><li>${rEsc(solv)}</li><li>${rEsc(taxd)}</li><li>${rEsc(rec)}</li></ul>
 
 <h2>2. Key milestones</h2>
 ${kv(ms)}
@@ -2091,15 +2103,15 @@ ${kv(ms)}
 <h2>3. Inputs and assumptions</h2>
 <div class="two"><div>
 <b>Household</b>
-${kv([['Filing status', mfj ? 'Married filing jointly' : 'Single'], ['P1 age / retires / plan to age', `${inp.p1Age} / ${inp.p1RetireAge} / ${inp.p1TargetAge}`], mfj ? ['P2 age / retires / plan to age', `${inp.p2Age} / ${inp.p2RetireAge} / ${inp.p2TargetAge}`] : null])}
+${kv([['Filing status', mfj ? 'Married filing jointly' : 'Single'], ['Your age / retires / plan to age', `${inp.p1Age} / ${inp.p1RetireAge} / ${inp.p1TargetAge}`], mfj ? ['Spouse age / retires / plan to age', `${inp.p2Age} / ${inp.p2RetireAge} / ${inp.p2TargetAge}`] : null])}
 <b>Starting balances</b>
 ${kv([['Cash', fmtCurr(inp.balCash)], ['Brokerage' + (inp.capGainsOn ? ` (${rPct(inp.basisPct, 0)} basis)` : ''), fmtCurr(inp.balBrokerage)], ['Tax-deferred (401k/IRA/HSA)', fmtCurr(inp.balTrad)], ['Tax-exempt (Roth/IUL)', fmtCurr(inp.balRoth)], ['Total', `<b>${fmtCurr(inp.balCash + inp.balBrokerage + inp.balTrad + inp.balRoth)}</b>`]])}
 ${working ? `<b>Pre-retirement contributions</b>${kv([['Annual savings: cash / brokerage', `${fmtCurr(inp.contribCash)} / ${fmtCurr(inp.contribBrokerage)}`], ['Annual savings: tax-deferred / Roth', `${fmtCurr(inp.contribTrad)} / ${fmtCurr(inp.contribRoth)}`]])}` : ''}
 </div><div>
 <b>Retirement spending and income</b>
-${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Dollar basis', basisTxt], ['P1 Social Security / claim age', `${fmtCurr(inp.p1SSAmt)} / ${inp.p1SSAge}`], mfj ? ['P2 Social Security / claim age', `${fmtCurr(inp.p2SSAmt)} / ${inp.p2SSAge}`] : null,
-  ['P1 pension / start age / COLA', `${fmtCurr(inp.pensionBaseAmt)} / ${inp.pensionStartAge} / ${rPct(inp.pensionCola)}`], mfj ? ['P1 pension spousal share (kept by P2)', rPct(inp.pensionSurvivorPct, 0)] : null,
-  mfj ? ['P2 pension / start age / COLA', `${fmtCurr(inp.p2PensionBaseAmt)} / ${inp.p2PensionStartAge} / ${rPct(inp.p2PensionCola)}`] : null, mfj ? ['P2 pension spousal share (kept by P1)', rPct(inp.p2PensionSurvivorPct, 0)] : null])}
+${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Dollar basis', basisTxt], ['Your Social Security / claim age', `${fmtCurr(inp.p1SSAmt)} / ${inp.p1SSAge}`], mfj ? ['Spouse Social Security / claim age', `${fmtCurr(inp.p2SSAmt)} / ${inp.p2SSAge}`] : null,
+  ['Your pension / start age / COLA', `${fmtCurr(inp.pensionBaseAmt)} / ${inp.pensionStartAge} / ${rPct(inp.pensionCola)}`], mfj ? ['Your pension: share kept by spouse', rPct(inp.pensionSurvivorPct, 0)] : null,
+  mfj ? ['Spouse pension / start age / COLA', `${fmtCurr(inp.p2PensionBaseAmt)} / ${inp.p2PensionStartAge} / ${rPct(inp.p2PensionCola)}`] : null, mfj ? ['Spouse pension: share kept by you', rPct(inp.p2PensionSurvivorPct, 0)] : null])}
 <b>Growth, inflation and tax settings</b>
 ${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(inp.returnPost)} / ${rPct(inp.returnCash)}`], ['Inflation', rPct(inp.inflation)], ['Tax brackets indexed for inflation', yesNo(inp.useInflationBrackets)], ['Interest and dividends taxed', yesNo(inp.includeInvestIncome)], ['Capital gains taxed', yesNo(inp.capGainsOn)],
   ['Heirs\' tax rate on leftover IRA', rPct(inp.heirTaxRate, 0)], ['Roth conversion strategy', rEsc(strat)], working ? ['Salary / growth (sizes working-year conversions)', `${fmtCurr(inp.currentSalary)} / ${rPct(inp.salaryGrowth)}`] : null, working ? ['Convert while working', yesNo(inp.allowWorkConversions)] : null, inp.shockYear > 0 ? ['Market shock', `${rPct(inp.shockPct, 0)} decline in year ${inp.shockYear}`] : null])}
@@ -2112,7 +2124,7 @@ ${imgT ? `<img src="${imgT}" alt="Annual tax and IRMAA">` : ''}
 <h2>5. Sensitivity analysis</h2>
 ${sensReportHTML()}
 
-<h2>6. Tax law used (2026 tax year, as of ${TAX_LAW_AS_OF})</h2>
+<h2>6. Tax law used (2026 tax year)</h2>
 <div class="two"><div>
 ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${fmtCurr(P.stdDeduction.Single)}`], ['Age 65+ add-on: MFJ (each) / Single', `${fmtCurr(P.stdDeduction.add65MFJ)} / ${fmtCurr(P.stdDeduction.add65Single)}`], ['Senior deduction (through ' + P.seniorDed.endYear + ')', `${fmtCurr(P.seniorDed.amount)} per person, phases out above ${fmtCurr(P.seniorDed.phaseStart.MFJ)} / ${fmtCurr(P.seniorDed.phaseStart.Single)} MAGI`], ['0% capital gains up to: MFJ / Single', `${fmtCurr(P.cgThresholds.MFJ.z)} / ${fmtCurr(P.cgThresholds.Single.z)}`]])}
 </div><div>
@@ -2122,28 +2134,26 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 
 <h2>7. Notes and limitations</h2>
 <ul class="note">
-<li>This report covers federal income tax only. State income taxes are not included and may add to total taxes depending on where you live.</li>
+<li>This report covers federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to total taxes depending on where you live.</li>
 <li>Returns and inflation are constant assumptions in the base projection; actual results will vary. The sensitivity section shows how results change under other assumptions, including a market drop at retirement, but it is not a probability forecast.</li>
-<li>Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</li>
-<li>Tax rules reflect law as of ${TAX_LAW_AS_OF} for the 2026 tax year (IRS Rev. Proc. 2025-32 and the 2025 tax act). The $6,000 senior deduction applies only to tax years 2025 through 2028 and ends after 2028; the projection stops applying it from 2029. Other future law changes are not anticipated.</li>
-<li>Simplifications: interest and dividends (when enabled) are taxed at ordinary rates; IRMAA uses income from two years earlier (current-year income as a proxy for the first two years); a deceased spouse is assumed to have claimed Social Security at the claim age; early-withdrawal penalties, the Roth 5-year rule, ACA subsidies and itemized deductions are not modeled.</li>
-<li>This is an educational projection, not tax, legal or investment advice. Consult a qualified professional before acting.</li>
+<li>Rules follow IRS Rev. Proc. 2025-32 and the 2025 tax act. The $6,000 senior deduction applies only to tax years 2025 through 2028 and is not applied from 2029; other future law changes are not anticipated. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</li>
+<li>Simplifications: interest and dividends (when enabled) are taxed at ordinary rates; IRMAA uses income from two years earlier (current-year income as a proxy for the first two years); ${mfj ? 'a deceased spouse is assumed to have claimed Social Security at the claim age; ' : ''}early-withdrawal penalties, the Roth 5-year rule, ACA subsidies and itemized deductions are not modeled.</li>
 </ul>
-<div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>&copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. ${BRAND.disclaimer}</div>
+<div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>&copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. Educational projection, not tax, legal or investment advice; consult a qualified professional before acting.</div>
 
 ${preRows.length ? `<div class="rpt-wide rpt-break">
 <h2>8. Appendix A: pre-retirement years (whole dollars)</h2>
-<table class="grid-year" style="--rowh:${rowHp}px;--fs:${fszp}px"><thead><tr><th colspan="3">Timeline</th><th colspan="3">Pre-retirement activity</th><th colspan="4">Conversion tax paid from</th><th colspan="5">Year-end balances</th></tr><tr><th>Yr</th><th>P1</th><th>P2</th><th>Contributions</th><th>Roth conv</th><th>Conv tax</th><th>Cash</th><th>Brokerage</th><th>IRA</th><th>Roth</th><th>End cash</th><th>End brokerage</th><th>End tax-deferred</th><th>End Roth</th><th>Total assets</th></tr></thead><tbody>${preRowsHtml}</tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td><b>${rD(pre.contrib)}</b></td><td><b>${rD(pre.conv)}</b></td><td><b>${rD(pre.convTax)}</b></td><td><b>${rD(pre.paidCash)}</b></td><td><b>${rD(pre.paidBrokerage)}</b></td><td><b>${rD(pre.paidIra)}</b></td><td><b>${rD(pre.paidRoth)}</b></td><td colspan="5"></td></tr></tfoot></table>
+<table class="grid-year" style="--rowh:${rowHp}px;--fs:${fszp}px"><thead><tr><th colspan="${mfj ? 3 : 2}">Timeline</th><th colspan="3">Pre-retirement activity</th><th colspan="4">Conversion tax paid from</th><th colspan="5">Year-end balances</th></tr><tr><th>Yr</th><th>${mfj ? 'You' : 'Age'}</th>${mfj ? '<th>Spouse</th>' : ''}<th>Contributions</th><th>Roth conv</th><th>Conv tax</th><th>Cash</th><th>Brokerage</th><th>IRA</th><th>Roth</th><th>End cash</th><th>End brokerage</th><th>End tax-deferred</th><th>End Roth</th><th>Total assets</th></tr></thead><tbody>${preRowsHtml}</tbody><tfoot><tr><td colspan="${mfj ? 3 : 2}"><b>Total</b></td><td><b>${rD(pre.contrib)}</b></td><td><b>${rD(pre.conv)}</b></td><td><b>${rD(pre.convTax)}</b></td><td><b>${rD(pre.paidCash)}</b></td><td><b>${rD(pre.paidBrokerage)}</b></td><td><b>${rD(pre.paidIra)}</b></td><td><b>${rD(pre.paidRoth)}</b></td><td colspan="5"></td></tr></tfoot></table>
 <p class="note">Contributions, taxes and withdrawals roll into each account before retirement. Tax on pre-retirement earnings is not modeled; only tax caused by Roth conversions is counted, and it is paid from the accounts shown (cash first, then brokerage; IRA and Roth only if needed).</p>
 </div>` : ''}
 
 <div class="rpt-wide rpt-break">
 <h2>${preRows.length ? '9. Appendix B' : '8. Appendix'}: Retirement Cash Flow & Tax Ledger (Year-by-Year, whole dollars)</h2>
-<table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>P1</th><th>P2</th><th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
+<table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>${mfj ? 'You' : 'Age'}</th>${mfj ? '<th>Spouse</th>' : ''}<th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
 <p class="note">Year 1 is the first retirement year. Income = Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
 </div>
 
-</div>`;
+</div>`, !mfj);
         }
 
         function openReport() {
@@ -2172,14 +2182,15 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
         const SS_CLAIM_FACTOR = { 62: 0.70, 63: 0.75, 64: 0.80, 65: 0.8667, 66: 0.9333, 67: 1, 68: 1.08, 69: 1.16, 70: 1.24 };
         function sensitivityCases(base) {
             const cases = [];
-            const add = (group, label, mut) => cases.push({ group, label, inp: Object.assign({}, base, mut) });
+            const single = base.filingStatus === 'Single';
+            const add = (group, label, mut) => cases.push({ group: sgl(group, single), label: sgl(label, single), inp: Object.assign({}, base, mut) });
             [-0.02, -0.01, 0.01, 0.02].forEach(d => add('Investment returns (pre- and post-retirement)', `${d > 0 ? '+' : ''}${(d * 100).toFixed(0)} pt per year`, { returnPre: Math.max(0, base.returnPre + d), returnPost: Math.max(0, base.returnPost + d) }));
             [-0.01, 0.01, 0.02].forEach(d => { const v = Math.max(0, base.inflation + d); if (v !== base.inflation) add('Inflation', `${(v * 100).toFixed(1)}% (${d > 0 ? '+' : ''}${(d * 100).toFixed(0)} pt)`, { inflation: v }); });
             [-0.10, 0.10, 0.20].forEach(d => add('Retirement spending', `${d > 0 ? '+' : ''}${(d * 100).toFixed(0)}% (${fmtCurr(base.baseSpendingGoal * (1 + d))}/yr)`, { baseSpendingGoal: base.baseSpendingGoal * (1 + d) }));
             const f0 = SS_CLAIM_FACTOR[base.p1SSAge], f2 = SS_CLAIM_FACTOR[base.p2SSAge];
-            if (f0) [62, 65, 67, 70].filter(a => a !== base.p1SSAge).forEach(a => add('Social Security claim age (both spouses; benefit scaled from full retirement age 67)', `Claim at ${a}`,
+            if (f0) [62, 65, 67, 70].filter(a => a !== base.p1SSAge).forEach(a => add(`Social Security claim age (${base.filingStatus === 'MFJ' ? 'both spouses; ' : ''}benefit scaled from full retirement age 67)`, `Claim at ${a}`,
                 { p1SSAge: a, p1SSAmt: base.p1SSAmt * SS_CLAIM_FACTOR[a] / f0, p2SSAge: a, p2SSAmt: base.p2SSAmt * SS_CLAIM_FACTOR[a] / (f2 || f0) }));
-            [-2, 2, 5].forEach(d => { const a = base.p1RetireAge + d; if (a >= base.p1Age && a < base.p1TargetAge) add('P1 retirement age', `Retire at ${a} (${d > 0 ? '+' : ''}${d} yrs)`, { p1RetireAge: a }); });
+            [-2, 2, 5].forEach(d => { const a = base.p1RetireAge + d; if (a >= base.p1Age && a < base.p1TargetAge) add('Your retirement age', `Retire at ${a} (${d > 0 ? '+' : ''}${d} yrs)`, { p1RetireAge: a }); });
             const retYear = Math.max(1, base.p1RetireAge - base.p1Age + 1);
             [0.20, 0.30, 0.40].forEach(p => add('Market drop in first retirement year', `-${(p * 100).toFixed(0)}% in retirement yr 1`, { shockYear: retYear, shockPct: p }));
             [['none', 'None'], ['fill_12', 'Fill 12% bracket'], ['fill_22', 'Fill 22% bracket'], ['optimal', 'Optimal']].filter(([k]) => k !== base.rothStrategy).forEach(([k, l]) => add('Roth conversion strategy', l, { rothStrategy: k }));
@@ -2188,7 +2199,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
         function sensMetrics(inp) {
             const out = runProjection(inp), m = scenarioMetrics(out);
             const dep = out.results.find(r => r.endTotalAssets < 1 && r.spendGoal > 0);
-            m.status = dep ? `Runs out at P1 age ${dep.p1Age}` : 'Funded';
+            m.status = dep ? sgl(`Runs out at your age ${dep.p1Age}`, inp.filingStatus === 'Single') : 'Funded';
             m.funded = !dep;
             return m;
         }
@@ -2211,7 +2222,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             const col = (d, g) => Math.abs(d) < 0.5 ? '#94a3b8' : (d * g > 0 ? '#059669' : '#e11d48');
             const dl = (d, g) => `<td style="color:${col(d, g)}">${Math.abs(d) < 0.5 ? '-' : (d > 0 ? '+' : '-') + fmtCurr(Math.abs(d))}</td>`;
             const img = sensChartImage(b, cases);
-            let h = `<p class="note">Each row changes one assumption from the current inputs and leaves everything else unchanged. Current inputs: ending assets ${fmtCurr(b.endAssets)} (future dollars), lifetime federal tax ${fmtCurr(b.tax)}, ${b.status.toLowerCase()}.</p>` + (img ? `<img src="${img}" alt="Sensitivity chart">` : '');
+            let h = `<p class="note">Each row changes one assumption from the current inputs and leaves everything else unchanged. Ending assets are in future dollars.</p>` + (img ? `<img src="${img}" alt="Sensitivity chart">` : '');
             [...new Set(cases.map(c => c.group))].forEach(g => {
                 h += `<table><thead><tr><th>${g}</th><th>Ending assets</th><th>vs. current</th><th>After-tax ending</th><th>Lifetime tax</th><th>vs. current</th><th>Plan status</th></tr></thead><tbody>`
                     + cases.filter(c => c.group === g).map(c => `<tr><td>${c.label}</td><td>${fmtCurr(c.m.endAssets)}</td>${dl(c.m.endAssets - b.endAssets, 1)}<td>${fmtCurr(c.m.afterTax)}</td><td>${fmtCurr(c.m.tax)}</td>${dl(c.m.tax - b.tax, -1)}<td${c.m.funded ? '' : ' style="color:#e11d48;font-weight:700"'}>${c.m.status}</td></tr>`).join('')
@@ -2257,30 +2268,34 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             renderSensitivity();
         }
 
-        function updateSummaryReportText(deficitYears, lifetimeTax) {
-            const solvencyDesc = document.getElementById('summary-solvency-desc');
-            const taxDesc = document.getElementById('summary-tax-desc');
-            const recDesc = document.getElementById('summary-rec-desc');
+        // Narrative only adds insight; the dollar figures live in the KPI cards / report KPI boxes (no repeated numbers)
+        function buildSummaryTexts() {
+            const out = lastRunOut, rs = out ? out.results : [];
+            if (!rs.length) return { solv: '', tax: '', rec: '' };
+            const ret = rs.filter(r => !r.isWorking), last = rs[rs.length - 1], dep = rs.find(r => r.endTotalAssets < 1 && r.spendGoal > 0), deficit = out.totalDeficitYears;
+            const spend = ret.reduce((a, r) => a + r.spendGoal, 0), guaranteed = ret.reduce((a, r) => a + Math.min(r.spendGoal, r.ssIncome + r.pensionIncome), 0);
+            const cover = spend > 0 ? Math.round(guaranteed / spend * 100) : 0;
+            const coverTxt = cover > 0 ? ` Social Security and pension cover about ${cover}% of spending.` : ' Portfolio withdrawals fund all spending.';
+            let solv;
+            if (dep) solv = `The portfolio runs out at your age ${dep.p1Age}, so spending is not fully funded after that. Consider a lower spending goal or later retirement.`;
+            else if (deficit > 0) solv = `Spending falls short in ${deficit} year${deficit === 1 ? '' : 's'}. Consider a lower spending goal or a later retirement age.`;
+            else solv = `Fully funded through your age ${last.p1Age} with no shortfall years.` + coverTxt;
+            const taxed = ret.filter(r => r.taxableIncome > 0 && r.marginalRate > 0);
+            const topRate = taxed.reduce((m, r) => Math.max(m, r.marginalRate), 0), topRow = taxed.find(r => r.marginalRate === topRate), irm = rs.find(r => r.irmaaCost > 0);
+            let tax = topRow ? `The highest federal bracket reached is ${Math.round(topRate * 100)}% (first at your age ${topRow.p1Age}).` : 'No federal income tax is due in retirement under these inputs.';
+            tax += irm ? ` Medicare IRMAA surcharges begin at your age ${irm.p1Age}.` : ' No IRMAA surcharges are triggered.';
+            const label = document.querySelector('#inp-roth-strategy option:checked').textContent.trim();
+            const rec = document.getElementById('inp-roth-strategy').value === 'none'
+                ? 'Tip: try a bracket-filling or Optimal Roth strategy and compare them on After-Tax Ending Wealth.'
+                : `Strategy: ${label}. Compare alternatives in Sensitivity or Scenarios on After-Tax Ending Wealth.`;
+            return { solv: sgl(solv), tax: sgl(tax), rec };
+        }
 
-            const finalAssets = simulationResults.length > 0 ? simulationResults[simulationResults.length - 1].endTotalAssets : 0;
-
-            if (deficitYears === 0 && finalAssets > 0) {
-                solvencyDesc.textContent = `Portfolio remains fully funded across your entire horizon, ending with ${fmtCurr(finalAssets)} in net assets with zero shortfalls.`;
-            } else if (deficitYears > 0) {
-                solvencyDesc.textContent = `Warning: Portfolio experiences shortfalls across ${deficitYears} years. Consider adjusting your spending goal or savings rate.`;
-            } else {
-                solvencyDesc.textContent = `Portfolio is depleted before reaching the target horizon. Review your asset allocation and retirement age.`;
-            }
-
-            const _fr = simulationResults[simulationResults.length - 1], _hr = lastRunOut ? lastRunOut.heirTaxRate : 0;
-            taxDesc.textContent = `Projected lifetime federal income tax on retirement withdrawals and Roth conversions is ${fmtCurr(lifetimeTax)} (tax on pre-retirement earnings and state income tax are not included). After-tax ending wealth, with the leftover IRA taxed at ${(_hr * 100).toFixed(0)}%, is ${fmtCurr(_fr ? _fr.endTotalAssets - _fr.balTrad * _hr : 0)}.`;
-            
-            const rothStrat = document.getElementById('inp-roth-strategy').value;
-            if (rothStrat === 'none') {
-                recDesc.textContent = `Tip: Consider enabling an Optimal or Bracket-Filling Roth conversion strategy to minimize lifetime RMD impacts.`;
-            } else {
-                recDesc.textContent = `Active strategy (${rothStrat}) is applied; compare lifetime tax and IRMAA against the no-conversion case and monitor tax law updates.`;
-            }
+        function updateSummaryReportText() {
+            const t = buildSummaryTexts();
+            document.getElementById('summary-solvency-desc').textContent = t.solv;
+            document.getElementById('summary-tax-desc').textContent = t.tax;
+            document.getElementById('summary-rec-desc').textContent = t.rec;
         }
 
         function renderDashboardMetrics(totalTax, totalIrmaa, deficitYears) {
@@ -2294,17 +2309,12 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('kpi-after-tax-sub').textContent = `Leftover IRA taxed at ${(heirRate * 100).toFixed(0)}%`;
             document.getElementById('kpi-lifetime-irmaa').textContent = fmtCurr(totalIrmaa);
 
-            const solvencyEl = document.getElementById('kpi-solvency-status');
             const headerPill = document.getElementById('header-solvency-pill');
 
             if (deficitYears === 0) {
-                solvencyEl.textContent = "Fully Funded";
-                solvencyEl.className = "text-base lg:text-lg font-bold text-emerald-600";
                 headerPill.textContent = "Fully Funded";
                 headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-emerald-100 text-emerald-800";
             } else {
-                solvencyEl.textContent = `${deficitYears} Deficit Yrs`;
-                solvencyEl.className = "text-base lg:text-lg font-bold text-rose-600";
                 headerPill.textContent = `Deficit Risk (${deficitYears} yrs)`;
                 headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-rose-100 text-rose-800";
             }
@@ -2326,7 +2336,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('pre-ret-tfoot').innerHTML = `<tr class="text-xs"><td class="py-2 px-3 text-left" colspan="2">Total</td>${sm(t.contrib)}${sm(t.conv)}${sm(t.convTax)}${sm(t.paidCash)}${sm(t.paidBrokerage)}${sm(t.paidIra)}${sm(t.paidRoth)}<td class="py-2 px-3" colspan="5"></td></tr>`;
         }
 
-        // Milestone timeline (ordered by P1 age) shown above the chart
+        // Milestone timeline (ordered by your age) shown above the chart
         function renderMilestoneStrip() {
             const el = document.getElementById('milestone-strip'), rs = simulationResults, ev = [];
             const add = (r, label, dot) => { if (r) ev.push({ age: r.p1Age, label, dot }); };
@@ -2340,7 +2350,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             add(rs.find(r => r.endTotalAssets < 1 && r.spendGoal > 0), 'Funds depleted', 'bg-red-600');
             ev.sort((a, b) => a.age - b.age);
             el.classList.toggle('hidden', ev.length === 0);
-            el.innerHTML = '<span class="font-semibold text-slate-400 uppercase tracking-wider text-[11px] mr-1">Timeline (P1 age)</span>' + ev.map(e => `<span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1"><span class="w-2 h-2 rounded-full ${e.dot}"></span><b class="text-slate-900">${e.age}</b><span>${e.label}</span></span>`).join('<span class="text-slate-300">&rarr;</span>');
+            el.innerHTML = `<span class="font-semibold text-slate-400 uppercase tracking-wider text-[11px] mr-1">${sgl('Timeline (your age)')}</span>` + ev.map(e => `<span class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2 py-1"><span class="w-2 h-2 rounded-full ${e.dot}"></span><b class="text-slate-900">${e.age}</b><span>${e.label}</span></span>`).join('<span class="text-slate-300">&rarr;</span>');
         }
 
         // One small colored cell per retirement year showing the marginal federal bracket
@@ -2351,7 +2361,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             if (!rows.length) return;
             const rateOf = r => (r.taxableIncome > 0 && r.marginalRate > 0) ? Math.round(r.marginalRate * 100) / 100 : 0;
             const used = [...new Set(rows.map(rateOf))].sort((a, b) => a - b);
-            const cells = rows.map(r => { const k = rateOf(r), c = BRACKET_COLORS[k] || BRACKET_COLORS[0]; return `<span class="flex-1 min-w-[6px] h-4 first:rounded-l last:rounded-r ${c[0]}" title="Yr ${r.retYear} (P1 age ${r.p1Age}): ${k ? c[1] + ' marginal bracket' : 'no federal tax'}"></span>`; }).join('');
+            const cells = rows.map(r => { const k = rateOf(r), c = BRACKET_COLORS[k] || BRACKET_COLORS[0]; return `<span class="flex-1 min-w-[6px] h-4 first:rounded-l last:rounded-r ${c[0]}" title="Yr ${r.retYear} (your age ${r.p1Age}): ${k ? c[1] + ' marginal bracket' : 'no federal tax'}"></span>`; }).join('');
             el.innerHTML = `<div class="flex items-center justify-between mb-1.5"><span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Marginal bracket by retirement year</span><span class="text-[11px] text-slate-500 flex flex-wrap gap-x-3">${used.map(k => `<span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm ${BRACKET_COLORS[k][0]}"></span>${BRACKET_COLORS[k][1]}</span>`).join('')}</span></div><div class="flex gap-px">${cells}</div><div class="flex justify-between text-[11px] text-slate-400 mt-0.5"><span>Yr 1 (age ${rows[0].p1Age})</span><span>Yr ${rows[rows.length - 1].retYear} (age ${rows[rows.length - 1].p1Age})</span></div>`;
         }
 
@@ -2366,6 +2376,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             const p1BirthYear = currentCalYear - p1StartAge;
             const rmdStartAge = getRMDStartAge(p1BirthYear);
 
+            syncFilingStatusUI();
             renderPreRetirementTable();
             renderBracketStrip();
             const keyRows = { retire: simulationResults.find(r => !r.isWorking), ss: simulationResults.find(r => r.ssIncome > 0), rmd: simulationResults.find(r => r.rmdAmount > 0) };
@@ -2383,8 +2394,8 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                     <td class="py-2 px-3 text-left font-bold text-slate-900">${r.retYear}${r.rothConvAmount > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-violet-500 align-middle" title="Roth conversion year"></span>' : ''}${r.irmaaCost > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-rose-500 align-middle" title="IRMAA surcharge year"></span>' : ''}</td>
                     <td class="py-2 px-3 text-left border-r border-slate-200 text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
                     <td class="py-2 px-3">${r.spendGoal > 0 ? fmtCurr(r.spendGoal) : '-'}</td>
-                    <td class="py-2 px-3">${r.p1SSIncome > 0 ? fmtCurr(r.p1SSIncome) : '-'}</td>
-                    <td class="py-2 px-3">${r.p2SSIncome > 0 ? fmtCurr(r.p2SSIncome) : '-'}</td>
+                    <td class="py-2 px-3 sp-col">${r.p1SSIncome > 0 ? fmtCurr(r.p1SSIncome) : '-'}</td>
+                    <td class="py-2 px-3 sp-col">${r.p2SSIncome > 0 ? fmtCurr(r.p2SSIncome) : '-'}</td>
                     <td class="py-2 px-3 font-semibold text-emerald-700">${r.ssIncome > 0 ? fmtCurr(r.ssIncome) : '-'}</td>
                     <td class="py-2 px-3">${r.pensionIncome > 0 ? fmtCurr(r.pensionIncome) : '-'}</td>
                     <td class="py-2 px-3 border-r border-slate-200">${r.rmdAmount > 0 ? fmtCurr(r.rmdAmount) : '-'}</td>
@@ -2422,7 +2433,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
     const ctx = document.getElementById('mainChart').getContext('2d');
     
     const rows = chartRows();
-    const labels = rows.map(r => r.isWorking ? `Pre ${r.year} (P1: ${r.p1Age})` : `Yr ${r.retYear} (P1: ${r.p1Age})`);
+    const labels = rows.map(r => sgl(r.isWorking ? `Pre ${r.year} (You: ${r.p1Age})` : `Yr ${r.retYear} (You: ${r.p1Age})`));
 
     let datasets = [];
     let yAxisLabel = 'Amount ($)';
