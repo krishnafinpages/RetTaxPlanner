@@ -117,14 +117,6 @@
                 </svg>
                 <div>
                     <h1 class="text-lg font-bold tracking-tight text-white leading-tight">Retirement Cash Flow & Tax Engine</h1>
-                    <div class="flex items-center space-x-1.5 mt-0.5">
-                        <svg class="w-3.5 h-3.5 text-amber-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                        <span class="block text-xs text-amber-300 italic">
-                            Designed for estimation purposes only. Contact krishna.fincoach@gmail.com for creating a personalized plan.
-                        </span>
-                    </div>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
@@ -285,7 +277,6 @@
                                 <span class="sp-col"></span><span class="sp-col text-center text-slate-400 font-semibold text-[11px]">You</span><span class="p2-col text-center text-slate-400 font-semibold text-[11px]">Spouse</span>
                                 <div class="p2-row contents"><label class="text-slate-300 font-semibold">Annual ($)</label><input type="number" id="inp-pension-amt" data-money="1" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-amt" value="0" step="1000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
                                 <div class="p2-row contents"><label class="text-slate-300 font-semibold">Start age</label><input type="number" id="inp-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-start-age" value="65" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
-                                <div class="p2-row contents"><label class="text-slate-300 font-semibold">COLA (%)</label><input type="number" id="inp-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><span class="p2-col"><input type="number" id="inp-p2-pension-cola" value="0.0" step="0.1" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
                                 <div class="p2-row p2-col contents"><label class="p2-col text-slate-300 font-semibold" title="Share of this income the surviving spouse keeps after the holder dies"><span class="p2-col">Spousal %</span></label><span class="p2-col"><input type="number" id="inp-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span><span class="p2-col"><input type="number" id="inp-p2-pension-survivor" value="100" min="0" max="100" step="5" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"></span></div>
                             </div>
                         </div>
@@ -356,7 +347,7 @@
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
                         <span class="block font-semibold text-slate-200 text-[11px]">Growth and inflation</span>
                         <div class="flex flex-wrap gap-x-5 gap-y-2">
-                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Cash Growth (%)</label><input type="number" id="inp-return-cash" value="3.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Pre-Ret Growth (%)</label><input type="number" id="inp-return-preret" value="7.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Post-Ret Growth (%)</label><input type="number" id="inp-return-postret" value="6.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Inflation (%)</label><input type="number" id="inp-inflation-rate" value="2.5" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Cash Growth (%)</label><input type="number" id="inp-return-cash" value="3.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Pre-Ret Growth (%)</label><input type="number" id="inp-return-preret" value="7.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Post-Ret Growth (%)</label><input type="number" id="inp-return-postret" value="6.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap" title="Also used as the cost-of-living adjustment (COLA) for Social Security and pensions">Inflation/COLA (%)</label><input type="number" id="inp-inflation-rate" value="2.5" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
                         </div>
                         <span class="block font-semibold text-slate-200 text-[11px] pt-1">Taxes</span>
                         <div class="flex items-center space-x-2">
@@ -370,8 +361,8 @@
                         <div id="basis-wrap"><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Brokerage cost basis (% of balance)</label><input type="number" id="inp-brokerage-basis-pct" value="70" step="5" min="0" max="100" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div></div>
                         <div class="flex items-center gap-1.5"><label title="Estimated tax your heirs pay on the leftover tax-deferred balance. Roth and cash are treated as tax-free and brokerage as stepped-up." class="font-semibold text-slate-300 whitespace-nowrap">Heirs' tax rate on leftover IRA (%)</label><input type="number" id="inp-heir-tax-rate" value="24" step="1" min="0" max="50" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
                         <span class="block font-semibold text-slate-200 text-[11px] pt-1">Stress test</span>
-                        <div class="flex flex-wrap gap-x-5 gap-y-2">
-                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Year</label><select id="inp-shock-year" class="w-28 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="0" selected class="bg-slate-800 text-slate-100">None</option><option value="1" class="bg-slate-800 text-slate-100">Yr 1 Retire</option><option value="2" class="bg-slate-800 text-slate-100">Yr 2 Retire</option><option value="3" class="bg-slate-800 text-slate-100">Yr 3 Retire</option></select></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Drop</label><select id="inp-shock-pct" class="w-28 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="15" class="bg-slate-800 text-slate-100">-15% Market</option><option value="25" selected class="bg-slate-800 text-slate-100">-25% Market</option><option value="35" class="bg-slate-800 text-slate-100">-35% Market</option></select></div>
+                        <div class="flex flex-nowrap items-center gap-x-3">
+                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Year</label><select id="inp-shock-year" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="0" selected class="bg-slate-800 text-slate-100">None</option><option value="1" class="bg-slate-800 text-slate-100">Yr 1 Retire</option><option value="2" class="bg-slate-800 text-slate-100">Yr 2 Retire</option><option value="3" class="bg-slate-800 text-slate-100">Yr 3 Retire</option></select></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Drop</label><select id="inp-shock-pct" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="15" class="bg-slate-800 text-slate-100">-15% Market</option><option value="25" selected class="bg-slate-800 text-slate-100">-25% Market</option><option value="35" class="bg-slate-800 text-slate-100">-35% Market</option></select></div>
                         </div>
                     </div>
                 </details>
@@ -474,23 +465,10 @@
                         <p id="summary-rec-desc" class="font-medium text-indigo-100">Maintain current accumulation discipline and review Roth conversion brackets annually.</p>
                     </div>
                 </div>
-                <details id="summary-notes" class="border-t border-indigo-800/80 pt-2.5 group">
-                    <summary class="cursor-pointer select-none text-[11px] text-indigo-200 flex items-center gap-2 list-none">
-                        <span class="font-bold text-indigo-100 flex-none">Assumptions &amp; notes</span>
-                        <span class="text-indigo-300/80 truncate">Tax law as of <span id="notes-asof"></span> &middot; Federal tax only &middot; RMDs follow SECURE 2.0</span>
-                        <svg class="w-3.5 h-3.5 flex-none text-indigo-300 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </summary>
-                    <div class="mt-2 space-y-2">
-                        <div id="summary-law-note" class="text-[11px] leading-relaxed text-indigo-200"><span class="font-bold text-indigo-100">Tax law as of <span id="tax-law-asof"></span></span> (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</div>
-                <div id="summary-state-tax-note" class="text-[11px] leading-relaxed text-indigo-200">
-                    <span class="font-bold text-indigo-100">Note on state taxes:</span> This report covers federal income tax only. State income taxes are not included and may add to your total tax depending on where you live, since states differ in whether and how they tax Social Security, pensions, and IRA/401(k) withdrawals. To estimate your state's impact, see
-                    <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">Tax Foundation: 2026 state tax changes</a>
-                    or
-                    <a href="https://incomelaboratory.com/state-retirement-taxes-guide/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">a state-by-state guide to retirement income taxes</a>,
-                    and confirm with your state revenue department or a tax professional.
+                <div id="summary-notes" class="border-t border-indigo-800/80 pt-2.5 space-y-1 text-[11px] leading-snug text-indigo-200">
+                    <div id="summary-law-note"><span class="font-bold text-indigo-100">Tax law as of <span id="tax-law-asof"></span>:</span> 2026 tax year. The $6,000 senior deduction ends after 2028. RMDs follow SECURE 2.0 (age 73, or 75 if born 1960 or later).</div>
+                    <div id="summary-state-tax-note"><span class="font-bold text-indigo-100">Federal tax only:</span> state income tax is not included and varies by state. See the <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">Tax Foundation</a> or a <a href="https://incomelaboratory.com/state-retirement-taxes-guide/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">state-by-state retirement tax guide</a>.</div>
                 </div>
-                    </div>
-                </details>
             </section>
             </section>
 
@@ -1067,10 +1045,10 @@
             kv('Spending goal per year', i.baseSpendingGoal, XL_USD, i.todaysDollars ? "Entered in today's dollars" : 'Entered in retirement dollars (as of the year each begins)'); kv('Dollar basis', i.todaysDollars ? "Today's dollars" : 'Retirement dollars');
             kv('Your Social Security per year', i.p1SSAmt, XL_USD); kv('Your claim age', i.p1SSAge, '0');
             if (mfj) { kv('Spouse Social Security per year', i.p2SSAmt, XL_USD); kv('Spouse claim age', i.p2SSAge, '0'); }
-            kv('Your pension / annuity per year', i.pensionBaseAmt, XL_USD); kv('Your pension start age', i.pensionStartAge, '0'); kv('Your pension COLA', i.pensionCola, XL_PCT1);
-            if (mfj) { kv('Your pension: share kept by spouse', i.pensionSurvivorPct, XL_PCT0); kv('Spouse pension / annuity per year', i.p2PensionBaseAmt, XL_USD); kv('Spouse pension start age', i.p2PensionStartAge, '0'); kv('Spouse pension COLA', i.p2PensionCola, XL_PCT1); kv('Spouse pension: share kept by you', i.p2PensionSurvivorPct, XL_PCT0); }
+            kv('Your pension / annuity per year', i.pensionBaseAmt, XL_USD); kv('Your pension start age', i.pensionStartAge, '0');
+            if (mfj) { kv('Your pension: share kept by spouse', i.pensionSurvivorPct, XL_PCT0); kv('Spouse pension / annuity per year', i.p2PensionBaseAmt, XL_USD); kv('Spouse pension start age', i.p2PensionStartAge, '0'); kv('Spouse pension: share kept by you', i.p2PensionSurvivorPct, XL_PCT0); }
             section('Growth and inflation');
-            kv('Return: pre-retirement', i.returnPre, XL_PCT1); kv('Return: post-retirement', i.returnPost, XL_PCT1); kv('Return: cash', i.returnCash, XL_PCT1); kv('Inflation', i.inflation, XL_PCT1); kv('Heirs\' tax rate on leftover IRA', i.heirTaxRate, XL_PCT0, 'Used for after-tax ending wealth');
+            kv('Return: pre-retirement', i.returnPre, XL_PCT1); kv('Return: post-retirement', i.returnPost, XL_PCT1); kv('Return: cash', i.returnCash, XL_PCT1); kv('Inflation / COLA', i.inflation, XL_PCT1, 'Also the cost-of-living adjustment for Social Security and pensions'); kv('Heirs\' tax rate on leftover IRA', i.heirTaxRate, XL_PCT0, 'Used for after-tax ending wealth');
             section('Tax and strategy settings');
             kv('Tax brackets indexed for inflation', yn(i.useInflationBrackets)); kv('Interest, dividends & capital gains taxed', yn(i.capGainsOn));
             kv('Roth conversion strategy', c.strategyLabel); kv('Excess RMD / surplus saved to', i.rmdSaveTo === 'brokerage' ? 'Brokerage' : 'Cash'); if (i.rothStrategy === 'fixed_amount') kv('Fixed conversion per year', i.rothFixedAmt, XL_USD); kv('Convert while working', yn(i.allowWorkConversions)); kv('Salary (sizes working-year Roth conversions)', i.currentSalary, XL_USD, 'Used only to size conversions before retirement'); kv('Salary growth', i.salaryGrowth, XL_PCT1);
@@ -1454,13 +1432,13 @@
             const p2SSAge = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-ss-age').value) || 67) : 999;
             const pensionBaseAmt = parseFloat(document.getElementById('inp-pension-amt').value) || 0;
             const pensionStartAge = parseInt(document.getElementById('inp-pension-start-age').value) || 65;
-            const pensionCola = (parseFloat(document.getElementById('inp-pension-cola').value) || 0) / 100;
+            const pensionCola = inflation; // pensions use the Inflation/COLA assumption
             const rmdSaveTo = document.getElementById('inp-rmd-save-to').value === 'brokerage' ? 'brokerage' : 'cash';
             const heirTaxRate = Math.min(1, Math.max(0, (parseFloat(document.getElementById('inp-heir-tax-rate').value) || 0) / 100));
             const pensionSurvivorPct = Math.min(1, Math.max(0, (parseFloat(document.getElementById('inp-pension-survivor').value) || 0) / 100));
             const p2PensionBaseAmt = filingStatus === 'MFJ' ? (parseFloat(document.getElementById('inp-p2-pension-amt').value) || 0) : 0;
             const p2PensionStartAge = parseInt(document.getElementById('inp-p2-pension-start-age').value) || 65;
-            const p2PensionCola = (parseFloat(document.getElementById('inp-p2-pension-cola').value) || 0) / 100;
+            const p2PensionCola = inflation;
             const p2PensionSurvivorPct = Math.min(1, Math.max(0, (parseFloat(document.getElementById('inp-p2-pension-survivor').value) || 0) / 100));
             const todaysDollars = document.querySelector('input[name="inp-dollar-basis"]:checked').value === 'today';
             const rothStrategy = document.getElementById('inp-roth-strategy').value;
@@ -2084,10 +2062,10 @@ ${working ? `<b>Pre-retirement contributions</b>${kv([['Annual savings: cash / b
 </div><div>
 <b>Retirement spending and income</b>
 ${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Dollar basis', basisTxt], ['Your Social Security / claim age', `${fmtCurr(inp.p1SSAmt)} / ${inp.p1SSAge}`], mfj ? ['Spouse Social Security / claim age', `${fmtCurr(inp.p2SSAmt)} / ${inp.p2SSAge}`] : null,
-  ['Your pension / start age / COLA', `${fmtCurr(inp.pensionBaseAmt)} / ${inp.pensionStartAge} / ${rPct(inp.pensionCola)}`], mfj ? ['Your pension: share kept by spouse', rPct(inp.pensionSurvivorPct, 0)] : null,
-  mfj ? ['Spouse pension / start age / COLA', `${fmtCurr(inp.p2PensionBaseAmt)} / ${inp.p2PensionStartAge} / ${rPct(inp.p2PensionCola)}`] : null, mfj ? ['Spouse pension: share kept by you', rPct(inp.p2PensionSurvivorPct, 0)] : null])}
+  ['Your pension / start age', `${fmtCurr(inp.pensionBaseAmt)} / ${inp.pensionStartAge}`], mfj ? ['Your pension: share kept by spouse', rPct(inp.pensionSurvivorPct, 0)] : null,
+  mfj ? ['Spouse pension / start age', `${fmtCurr(inp.p2PensionBaseAmt)} / ${inp.p2PensionStartAge}`] : null, mfj ? ['Spouse pension: share kept by you', rPct(inp.p2PensionSurvivorPct, 0)] : null])}
 <b>Growth, inflation and tax settings</b>
-${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(inp.returnPost)} / ${rPct(inp.returnCash)}`], ['Inflation', rPct(inp.inflation)], ['Tax brackets indexed for inflation', yesNo(inp.useInflationBrackets)], ['Interest, dividends & capital gains taxed', yesNo(inp.capGainsOn)],
+${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(inp.returnPost)} / ${rPct(inp.returnCash)}`], ['Inflation / COLA', rPct(inp.inflation)], ['Tax brackets indexed for inflation', yesNo(inp.useInflationBrackets)], ['Interest, dividends & capital gains taxed', yesNo(inp.capGainsOn)],
   ['Heirs\' tax rate on leftover IRA', rPct(inp.heirTaxRate, 0)], ['Roth conversion strategy', rEsc(strat)], ['Excess RMD / surplus saved to', inp.rmdSaveTo === 'brokerage' ? 'Brokerage' : 'Cash'], working ? ['Salary / growth (sizes working-year conversions)', `${fmtCurr(inp.currentSalary)} / ${rPct(inp.salaryGrowth)}`] : null, working ? ['Convert while working', yesNo(inp.allowWorkConversions)] : null, inp.shockYear > 0 ? ['Market shock', `${rPct(inp.shockPct, 0)} decline in year ${inp.shockYear}`] : null])}
 </div></div>
 
@@ -2609,7 +2587,6 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('btn-open-sensitivity').addEventListener('click', () => { document.getElementById('modal-sensitivity').classList.remove('hidden'); renderSensitivity(); });
             document.getElementById('btn-close-sensitivity').addEventListener('click', () => document.getElementById('modal-sensitivity').classList.add('hidden'));
             document.getElementById('tax-law-asof').textContent = TAX_LAW_AS_OF;
-            document.getElementById('notes-asof').textContent = TAX_LAW_AS_OF;
             document.getElementById('copyright-year').textContent = new Date().getFullYear();
             document.getElementById('btn-open-report').addEventListener('click', openReport);
             document.getElementById('btn-close-report').addEventListener('click', () => document.getElementById('modal-report').classList.add('hidden'));
