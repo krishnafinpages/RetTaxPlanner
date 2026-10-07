@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Retirement Cash Flow & Tax Engine</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,6 +28,12 @@
 
         /* ---- Detailed report ---- */
         #print-root { display: none; }
+        /* label + box pairs, two per line, columns aligned and left-aligned */
+        .pair-grid { display: grid; grid-template-columns: max-content 3.5rem max-content 3.5rem; column-gap: 6px; row-gap: 8px; align-items: center; justify-content: start; }
+        .pair-grid > :nth-child(4n+3) { margin-left: 18px; }
+        .pair-grid input, .pair-grid select { width: 100% !important; min-width: 0; }
+        .pair-grid.pg-sel { grid-template-columns: max-content 6rem max-content 6rem; }
+        .pair-grid.pg-sal { grid-template-columns: max-content 5.5rem max-content 3.5rem; }
         /* Single filer: spouse inputs/columns are removed from view and the P1/P2 grids drop to two columns */
         body.is-single .p2-col, body.is-single .sp-col { display: none !important; }
         /* Single filer: each input row becomes a compact label + small box pair, flowing on one line */
@@ -152,7 +158,7 @@
                     <div class="flex items-center space-x-2">
                         <button type="button" id="btn-open-scenarios" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Scenarios</button>
                         <button type="button" id="btn-reset-inputs" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Reset</button>
-                        <button id="btn-toggle-panel" title="Toggle Panel" class="p-1.5 bg-indigo-400 hover:bg-indigo-300 text-slate-950 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-indigo-400 shadow-sm flex items-center justify-center">
+                        <button id="btn-toggle-panel" title="Toggle Panel" class="ui-btn ui-btn-sm bg-indigo-400 hover:bg-indigo-300 text-slate-950 shadow-sm justify-center" style="padding: 0 7px;">
                             <svg id="icon-collapse" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                             </svg>
@@ -161,7 +167,7 @@
                 </div>
 
                 <!-- Quick-Jump & Expand/Collapse Utility Bar Integrated inside Header Block -->
-                <div class="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 space-y-1.5 panel-content-text">
+                <div id="panel-quickjump" class="bg-slate-800/80 p-2 rounded-xl border border-slate-700/80 space-y-1.5 panel-content-text">
                     <div class="flex justify-between items-center text-[11px]">
                         <span class="font-bold uppercase tracking-wider text-slate-400">Quick-Jump</span>
                         <div class="space-x-1.5 text-[11px]">
@@ -300,7 +306,7 @@
                         </div>
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
-                        <div title="Used only to size Roth conversions during working years" class="flex items-center gap-2">
+                        <div title="Used only to size Roth conversions during working years" class="pair-grid pg-sal">
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Salary Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
@@ -340,7 +346,7 @@
                 <!-- Group 6: Assumptions & Tax Settings (collapsed) -->
                 <details id="section-assumptions" class="group bg-slate-800/40 border border-slate-800 rounded-xl overflow-hidden panel-content-text pb-1">
                     <summary class="flex justify-between items-center px-3.5 py-2.5 cursor-pointer bg-slate-800/60 hover:bg-slate-800 text-indigo-400 font-bold select-none transition">
-                        <span class="flex items-center space-x-2"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg><span class="text-[11px] uppercase tracking-wider">5. Rates, Assumptions and Stress Test</span></span>
+                        <span class="flex items-center space-x-2"><svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg><span class="text-[11px] uppercase tracking-wider">5. Rates &amp; Stress Test</span></span>
                         <div class="flex items-center space-x-2">
                             <span id="badge-assumptions" class="text-[11px] bg-slate-700 text-indigo-200 px-2 py-0.5 rounded-full font-medium">Defaults</span>
                             <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -348,16 +354,15 @@
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
                         <span class="block font-semibold text-slate-200 text-[11px]">Growth and inflation</span>
-                        <div class="flex flex-wrap gap-x-5 gap-y-2">
-                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Cash Growth (%)</label><input type="number" id="inp-return-cash" value="3.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Pre-Ret Growth (%)</label><input type="number" id="inp-return-preret" value="7.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Post-Ret Growth (%)</label><input type="number" id="inp-return-postret" value="6.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap" title="Also used as the cost-of-living adjustment (COLA) for Social Security and pensions">Inflation/COLA (%)</label><input type="number" id="inp-inflation-rate" value="2.5" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                        <div class="pair-grid">
+                            <div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap">Cash Growth (%)</label><input type="number" id="inp-return-cash" value="3.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap">Pre-Ret Growth (%)</label><input type="number" id="inp-return-preret" value="7.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap">Post-Ret Growth (%)</label><input type="number" id="inp-return-postret" value="6.0" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div><div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap" title="Also used as the cost-of-living adjustment (COLA) for Social Security and pensions">Inflation/COLA (%)</label><input type="number" id="inp-inflation-rate" value="2.5" step="0.1" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
                         </div>
-                        <span class="block font-semibold text-slate-200 text-[11px] pt-1">Taxes</span>
                         
                         
                         
                         <span class="block font-semibold text-slate-200 text-[11px] pt-1">Stress test</span>
-                        <div class="flex flex-nowrap items-center gap-x-3">
-                            <div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Year</label><select id="inp-shock-year" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="0" selected class="bg-slate-800 text-slate-100">None</option><option value="1" class="bg-slate-800 text-slate-100">Yr 1 Retire</option><option value="2" class="bg-slate-800 text-slate-100">Yr 2 Retire</option><option value="3" class="bg-slate-800 text-slate-100">Yr 3 Retire</option></select></div><div class="flex items-center gap-1.5"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Drop</label><select id="inp-shock-pct" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="15" class="bg-slate-800 text-slate-100">-15% Market</option><option value="25" selected class="bg-slate-800 text-slate-100">-25% Market</option><option value="35" class="bg-slate-800 text-slate-100">-35% Market</option></select></div>
+                        <div class="pair-grid pg-sel">
+                            <div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Year</label><select id="inp-shock-year" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="0" selected class="bg-slate-800 text-slate-100">None</option><option value="1" class="bg-slate-800 text-slate-100">Yr 1 Retire</option><option value="2" class="bg-slate-800 text-slate-100">Yr 2 Retire</option><option value="3" class="bg-slate-800 text-slate-100">Yr 3 Retire</option></select></div><div class="contents"><label class="font-semibold text-slate-300 whitespace-nowrap">Shock Drop</label><select id="inp-shock-pct" class="w-24 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="15" class="bg-slate-800 text-slate-100">-15% Market</option><option value="25" selected class="bg-slate-800 text-slate-100">-25% Market</option><option value="35" class="bg-slate-800 text-slate-100">-35% Market</option></select></div>
                         </div>
                     </div>
                 </details>
@@ -371,8 +376,10 @@
                         </div>
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
-                        <div class="flex items-center gap-1.5" title="Where leftover RMD and surplus income (after spending and tax) is saved"><label class="font-semibold text-slate-300 whitespace-nowrap">Save excess RMD to</label><select id="inp-rmd-save-to" class="w-28 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="cash" selected class="bg-slate-800 text-slate-100">Cash</option><option value="brokerage" class="bg-slate-800 text-slate-100">Brokerage</option></select></div>
+                        <div class="flex items-center gap-1.5" title="Where leftover RMD and surplus income (after spending and tax) goes: saved to cash, saved to brokerage, or spent (not saved)"><label class="font-semibold text-slate-300 whitespace-nowrap">Excess RMD goes to</label><select id="inp-rmd-save-to" class="w-28 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"><option value="cash" class="bg-slate-800 text-slate-100">Cash</option><option value="brokerage" selected class="bg-slate-800 text-slate-100">Brokerage</option><option value="spend" class="bg-slate-800 text-slate-100">Spend (not saved)</option></select></div>
                         <div class="flex items-center gap-1.5"><label title="Estimated tax your heirs pay on the leftover tax-deferred balance. Roth and cash are treated as tax-free and brokerage as stepped-up." class="font-semibold text-slate-300 whitespace-nowrap">Heirs' tax rate on leftover IRA (%)</label><input type="number" id="inp-heir-tax-rate" value="24" step="1" min="0" max="50" class="w-14 bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-1.5 py-1 text-xs text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"></div>
+                        <p id="legacy-excess-note" class="text-[11px] leading-snug text-indigo-300"></p>
+                        <p class="text-[11px] leading-snug text-slate-500">Brokerage and cash pass to heirs tax-free (stepped-up basis at death) and Roth is tax-free. Only the leftover IRA is taxed at the heirs' rate.</p>
                     </div>
                 </details>
 
@@ -393,9 +400,9 @@
                     </div>
                     <h2 class="text-base font-bold text-slate-900 tracking-tight">Comprehensive Retirement Cash Flow & Tax Projection</h2>
                 </div>
-                <div class="flex items-center space-x-3 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 text-xs">
-                    <span class="font-bold text-slate-600">Plan Solvency Status:</span>
-                    <span id="header-solvency-pill" class="px-2 py-0.5 rounded-lg font-bold bg-emerald-100 text-emerald-800">Fully Funded</span>
+                <div class="flex items-center space-x-3 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-300 shadow-sm">
+                    <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Plan Solvency Status:</span>
+                    <span id="header-solvency-pill" class="px-3.5 py-1 rounded-lg text-base font-bold bg-emerald-100 text-emerald-800">Fully Funded</span>
                 </div>
             </div>
 
@@ -477,7 +484,7 @@
                 <div id="summary-notes" class="border-t border-indigo-800/80 pt-2.5 space-y-1 text-[11px] leading-snug text-indigo-200">
                     <div id="summary-law-note"><span class="font-bold text-indigo-100">Tax law as of <span id="tax-law-asof"></span>:</span> 2026 tax year. The $6,000 senior deduction ends after 2028. RMDs follow SECURE 2.0 (age 73, or 75 if born 1960 or later).</div>
                     <div id="summary-infl-note"><span class="font-bold text-indigo-100">Inflation/COLA (<span id="notes-infl"></span>) is applied to:</span> spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 pt faster). Not inflated: Social Security tax thresholds, NIIT thresholds and the senior deduction.</div>
-                    <div id="summary-invest-note"><span class="font-bold text-indigo-100">Investment income is taxed:</span> interest and a 2% brokerage yield at ordinary rates; brokerage gains at 0/15/20% plus the 3.8% NIIT.</div>
+                    <div id="summary-invest-note"><span class="font-bold text-indigo-100">Investment income is taxed:</span> cash interest at ordinary rates; qualified dividends (2% brokerage yield) and brokerage gains at 0/15/20% (0% when taxable income is low) plus the 3.8% NIIT.</div>
                     <div id="summary-state-tax-note"><span class="font-bold text-indigo-100">Federal tax only:</span> state income tax is not included and varies by state. See the <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">Tax Foundation</a> or a <a href="https://incomelaboratory.com/state-retirement-taxes-guide/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">state-by-state retirement tax guide</a>.</div>
                 </div>
             </section>
@@ -629,7 +636,7 @@
     </div>
 
     <footer class="flex-none bg-indigo-950 border-t border-indigo-900 text-slate-400 text-[11px] px-4 sm:px-6 py-1.5 flex items-center justify-between gap-4">
-        <span>&copy; <span id="copyright-year">2026</span> Second Inning Financial LLC. All rights reserved.</span>
+        <span>&copy; <span id="copyright-year">2026</span> Second Inning Financial LLC. All rights reserved. &middot; v<span id="app-version"></span></span>
         <span class="hidden md:inline">For estimation and educational purposes only. Not tax, legal or investment advice.</span>
     </footer>
 
@@ -935,7 +942,7 @@
             syncFilingStatusUI();
             document.getElementById('fixed-roth-container').classList.toggle('hidden', document.getElementById('inp-roth-strategy').value !== 'fixed_amount');
             document.getElementById('pension-fields').classList.toggle('hidden', !document.getElementById('inp-has-pension').checked);
-            document.getElementById('badge-legacy').textContent = `Heirs ${document.getElementById('inp-heir-tax-rate').value || 0}% \u2022 RMD to ${document.getElementById('inp-rmd-save-to').value === 'brokerage' ? 'brokerage' : 'cash'}`;
+            document.getElementById('badge-legacy').textContent = `Heirs ${document.getElementById('inp-heir-tax-rate').value || 0}% \u2022 RMD: ${({ cash: 'cash', brokerage: 'brokerage', spend: 'spend' })[document.getElementById('inp-rmd-save-to').value]}`;
             const _warn = [];
             if (_g('inp-p1-retire-age') < _g('inp-p1-age')) _warn.push('Your retirement age is below current age (treated as already retired).');
             if (_g('inp-p1-horizon') <= _g('inp-p1-retire-age')) _warn.push('Your plan-to age is not after retirement age.');
@@ -982,6 +989,8 @@
 
                 panelBody.classList.add('hidden');
                 panelTexts.forEach(el => el.classList.add('hidden'));
+                document.getElementById('panel-header-title').classList.add('hidden');
+                document.getElementById('panel-quickjump').classList.add('hidden');
                 
                 iconCollapse.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />`;
             } else {
@@ -993,6 +1002,8 @@
 
                 panelBody.classList.remove('hidden');
                 panelTexts.forEach(el => el.classList.remove('hidden'));
+                document.getElementById('panel-header-title').classList.remove('hidden');
+                document.getElementById('panel-quickjump').classList.remove('hidden');
 
                 iconCollapse.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />`;
             }
@@ -1067,7 +1078,7 @@
             section('Tax and strategy settings');
             kv('Roth conversion strategy', c.strategyLabel); if (i.rothStrategy === 'fixed_amount') kv('Fixed conversion per year', i.rothFixedAmt, XL_USD); kv('Convert while working', yn(i.allowWorkConversions)); kv('Salary (sizes working-year Roth conversions)', i.currentSalary, XL_USD, 'Used only to size conversions before retirement'); kv('Salary growth', i.salaryGrowth, XL_PCT1);
             section('Legacy planning');
-            kv('Excess RMD / surplus saved to', i.rmdSaveTo === 'brokerage' ? 'Brokerage' : 'Cash'); kv('Heirs\' tax rate on leftover IRA', i.heirTaxRate, XL_PCT0, 'Used for after-tax ending wealth');
+            kv('Excess RMD / surplus goes to', (v => v === 'cash' ? 'Cash' : v === 'spend' ? 'Spend (not saved)' : 'Brokerage')(i.rmdSaveTo)); kv('Heirs\' tax rate on leftover IRA', i.heirTaxRate, XL_PCT0, 'Used for after-tax ending wealth');
             section('Stress test');
             kv('Market drop year', i.shockYear > 0 ? i.shockYear : 'None', '0'); kv('Market drop size', i.shockYear > 0 ? i.shockPct : 0, XL_PCT0);
             r += 2; xlBand(ws, r, `Prepared by ${BRAND.legal}`, 3, XL.indigo9, XL.white); r++;
@@ -1090,7 +1101,7 @@
             r++; xlBand(ws, r, 'Narrative', 2); r++;
             [c.texts.solv, c.texts.tax, c.texts.rec].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 32; r++; });
             r++; xlBand(ws, r, 'Notes', 2, XL.slate2, XL.slate7); r++;
-            [`Tax law as of ${c.asOf} (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).`, 'Interest, dividends and capital gains are taxed (interest and a 2% brokerage yield at ordinary rates; brokerage gains at 0/15/20% plus the 3.8% NIIT).', `Inflation/COLA of ${(c.inp.inflation * 100).toFixed(1)}% is applied to the spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 point faster). Not inflated: Social Security tax thresholds, NIIT thresholds and the senior deduction.`, 'Federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to your total taxes depending on where you live. Educational projection, not tax, legal or investment advice.', ].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.font = { size: 10, color: { argb: XL.slate5 } }; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 28; r++; });
+            [`Tax law as of ${c.asOf} (2026 tax year). The $6,000 senior deduction applies to tax years 2025 through 2028 and ends after 2028. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).`, 'Interest, dividends and capital gains are taxed (cash interest at ordinary rates; qualified dividends and brokerage gains at 0/15/20%, 0% when taxable income is low, plus the 3.8% NIIT). After-tax ending wealth taxes only the leftover IRA at the heirs\' rate; brokerage gets a stepped-up basis at death.', `Inflation/COLA of ${(c.inp.inflation * 100).toFixed(1)}% is applied to the spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 point faster). Not inflated: Social Security tax thresholds, NIIT thresholds and the senior deduction.`, 'Federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to your total taxes depending on where you live. Educational projection, not tax, legal or investment advice.', ].forEach(t => { ws.mergeCells(r, 1, r, 2); const x = ws.getCell(r, 1); x.value = t; x.font = { size: 10, color: { argb: XL.slate5 } }; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = 28; r++; });
             return ws;
         }
 
@@ -1245,7 +1256,7 @@
         }
 
         async function buildExcelWorkbook(ExcelJSLib, JSZipLib, c) {
-            const wb = new ExcelJSLib.Workbook(); wb.creator = BRAND.legal; wb.company = BRAND.legal; wb.title = 'Retirement Cash Flow & Tax Projection'; wb.subject = BRAND.tagline; wb.description = `\u00A9 ${new Date().getFullYear()} ${BRAND.legal}. ${BRAND.disclaimer}`; wb.created = new Date();
+            const wb = new ExcelJSLib.Workbook(); wb.creator = BRAND.legal; wb.company = BRAND.legal; wb.title = 'Retirement Cash Flow & Tax Projection'; wb.keywords = `v${APP_VERSION}`; wb.subject = BRAND.tagline; wb.description = `\u00A9 ${new Date().getFullYear()} ${BRAND.legal}. ${BRAND.disclaimer}`; wb.created = new Date();
             xlSheetInputs(wb, c); xlSheetSummary(wb, c);
             const chartsWs = wb.addWorksheet('Charts', { properties: { tabColor: { argb: 'FF8B5CF6' } }, views: [{ showGridLines: false }] });
             xlTitle(chartsWs, 'Charts', 'Charts are native Excel charts linked to the Ledger tab and update if you edit the ledger values.', 20);
@@ -1306,17 +1317,14 @@
         }
 
         async function exportToExcel() {
-            if (!simulationResults || simulationResults.length === 0) { alert('No simulation data available to export.'); return; }
-            if (typeof ExcelJS === 'undefined' || typeof JSZip === 'undefined') { alert('The Excel export libraries could not be loaded. Check your internet connection and reload the page.'); return; }
+            if (!simulationResults || simulationResults.length === 0) { notify('No simulation data available to export.'); return; }
+            if (typeof ExcelJS === 'undefined' || typeof JSZip === 'undefined') { notify('The Excel export libraries could not be loaded. Check your internet connection and reload the page.'); return; }
             const btn = document.getElementById('btn-export-excel'), label = btn.textContent;
             try {
                 btn.disabled = true;
                 const bytes = await buildExcelWorkbook(ExcelJS, JSZip, collectExportContext());
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
-                a.download = `retirement_projection_${new Date().toISOString().slice(0, 10)}.xlsx`;
-                document.body.appendChild(a); a.click(); a.remove();
-            } catch (e) { alert('Excel export failed: ' + e.message); }
+                await saveGeneratedFile(`retirement_projection_${new Date().toISOString().slice(0, 10)}.xlsx`, bytes, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            } catch (e) { notify('Excel export failed: ' + e.message); }
             finally { btn.disabled = false; }
         }
 
@@ -1449,7 +1457,7 @@
             const pensionBaseAmt = hasPension ? (parseFloat(document.getElementById('inp-pension-amt').value) || 0) : 0;
             const pensionStartAge = parseInt(document.getElementById('inp-pension-start-age').value) || 65;
             const pensionCola = inflation; // pensions use the Inflation/COLA assumption
-            const rmdSaveTo = document.getElementById('inp-rmd-save-to').value === 'brokerage' ? 'brokerage' : 'cash';
+            const rmdSaveTo = ['cash', 'spend'].includes(document.getElementById('inp-rmd-save-to').value) ? document.getElementById('inp-rmd-save-to').value : 'brokerage';
             const heirTaxRate = Math.min(1, Math.max(0, (parseFloat(document.getElementById('inp-heir-tax-rate').value) || 0) / 100));
             const pensionSurvivorPct = Math.min(1, Math.max(0, (parseFloat(document.getElementById('inp-pension-survivor').value) || 0) / 100));
             const p2PensionBaseAmt = (hasPension && filingStatus === 'MFJ') ? (parseFloat(document.getElementById('inp-p2-pension-amt').value) || 0) : 0;
@@ -1664,7 +1672,9 @@
                     rmdP2 = balTrad / factor;
                 }
                 const totalRMD = rmdP1 + rmdP2;
-                const investIncome = includeInvestIncome ? (balCash * returnCash + balBrokerage * 0.02) : 0; // taxable interest + ~2% brokerage yield (ordinary-rate simplification)
+                // Cash interest is ordinary income; the 2% brokerage yield is qualified dividends (0/15/20% like long-term gains, reinvested)
+                const cashInterest = includeInvestIncome ? balCash * returnCash : 0, qualDiv = includeInvestIncome ? balBrokerage * 0.02 : 0;
+                const investIncome = cashInterest + qualDiv;
 
                 let nonSSIncome = isWorking 
                     ? (currSalary - yrContribTrad + pensionIncome + totalRMD + investIncome) 
@@ -1716,7 +1726,7 @@
                             let testAGI = isWorking 
                                 ? (currSalary - yrContribTrad + pensionIncome + totalRMD + investIncome + testTaxableSS + testConv) 
                                 : (testTaxableSS + pensionIncome + totalRMD + investIncome + testConv);
-                            let testTaxableInc = Math.max(0, testAGI - stdDed - seniorDedFor(testAGI));
+                            let testTaxableInc = Math.max(0, testAGI - stdDed - seniorDedFor(testAGI) - qualDiv); // bracket space is measured on ordinary income; qualified dividends stack above it
 
                             let passesIrmaa = (rothStrategy !== 'optimal') || !irmaaRelevant || (testAGI <= irmaaCap);
 
@@ -1749,7 +1759,7 @@
                 }
 
                 let taxableIncome = Math.max(0, agi - stdDeduction - seniorDedFor(agi));
-                let fedTax = calculateTax(taxableIncome, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle);
+                let fedTax = calculateFedTaxWithGains(taxableIncome, qualDiv, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle, curCg);
 
                 const retiredNow = (p1Retired || !p1Alive);
                 // IRMAA: Medicare uses MAGI from two years earlier (current-year proxy for first two years)
@@ -1774,7 +1784,7 @@
                 if (isWorking && rothConvAmount > 0) {
                     const baseAgiNoConv = currSalary - yrContribTrad + pensionIncome + totalRMD + investIncome;
                     const baseTaxableNoConv = Math.max(0, baseAgiNoConv - stdDeduction - seniorDedFor(baseAgiNoConv));
-                    convTaxCost = Math.max(0, fedTax - calculateTax(baseTaxableNoConv, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle));
+                    convTaxCost = Math.max(0, fedTax - calculateFedTaxWithGains(baseTaxableNoConv, qualDiv, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle, curCg));
                 }
 
                 let wdCash = 0, wdbrokerage = 0, wdTrad = 0, wdRoth = 0, shortfall = 0, rmdUsed = 0, realizedGain = 0;
@@ -1795,7 +1805,7 @@
                     taxableSS = calculateTaxableSocialSecurity(nonSSIncome + rothConvAmount + wdTrad + realizedGain, ssIncome, effectiveFilingStatus, curSsThreshMFJ, curSsThreshSingle);
                     agi = (isWorking ? (currSalary - yrContribTrad) : 0) + investIncome + taxableSS + pensionIncome + totalRMD + rothConvAmount + wdTrad + realizedGain;
                     taxableIncome = Math.max(0, agi - stdDeduction - seniorDedFor(agi));
-                    let newTax = calculateFedTaxWithGains(taxableIncome, realizedGain, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle, curCg);
+                    let newTax = calculateFedTaxWithGains(taxableIncome, realizedGain + qualDiv, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle, curCg);
                     if (capGainsOn) {
                         const niitThr = effectiveFilingStatus === 'MFJ' ? 250000 : 200000; // not inflation-indexed
                         newTax += 0.038 * Math.min(realizedGain + investIncome, Math.max(0, agi - niitThr));
@@ -1817,17 +1827,17 @@
                 totalLifetimeIrmaa += irmaaCost;
 
                 const effectiveRate = agi > 0 ? (fedTax / agi) : 0;
-                const marginalRate = getMarginalBracketRate(taxableIncome, effectiveFilingStatus, curBracketsMFJ, curBracketsSingle);
+                const marginalRate = getMarginalBracketRate(Math.max(0, taxableIncome - realizedGain - qualDiv), effectiveFilingStatus, curBracketsMFJ, curBracketsSingle);
 
                 const appliedCashGrowth = returnCash;
                 const appliedPreRetGrowth = returnPre;
                 const appliedPostRetGrowth = returnPost;
 
-                const surplusSaved = rmdSurplus + incomeSurplus, toBrokerage = rmdSaveTo === 'brokerage';
-                let endCash = Math.max(0, (balCash + (isWorking ? yrContribCash : 0) + (toBrokerage ? 0 : surplusSaved) - wdCash) * (1 + appliedCashGrowth));
+                const surplusSaved = rmdSurplus + incomeSurplus, toBrokerage = rmdSaveTo === 'brokerage', toCash = rmdSaveTo === 'cash';
+                let endCash = Math.max(0, (balCash + (isWorking ? yrContribCash : 0) + (toCash ? surplusSaved : 0) - wdCash) * (1 + appliedCashGrowth));
                 let endBrokerage = Math.max(0, (balBrokerage + (isWorking ? yrContribBrokerage : 0) + (toBrokerage ? surplusSaved : 0) - wdbrokerage) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
                 if (capGainsOn) {
-                    balBasis = Math.min(endBrokerage, Math.max(0, balBasis - wdbrokerage * (1 - gainFrac) + (isWorking ? yrContribBrokerage : 0) + (toBrokerage ? surplusSaved : 0)));
+                    balBasis = Math.min(endBrokerage, Math.max(0, balBasis - wdbrokerage * (1 - gainFrac) + (isWorking ? yrContribBrokerage : 0) + (toBrokerage ? surplusSaved : 0) + qualDiv)); // reinvested (already taxed) dividends add to basis
                 }
                 let endTrad = Math.max(0, (balTrad + (isWorking ? yrContribTrad : 0) - totalTradWithdrawal - wdTrad) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
                 let endRoth = Math.max(0, (balRoth + (isWorking ? yrContribRoth : 0) + rothConvAmount - wdRoth) * (1 + (isWorking ? appliedPreRetGrowth : appliedPostRetGrowth)));
@@ -1860,6 +1870,7 @@
                     p1PensionIncome,
                     p2PensionIncome,
                     rmdAmount: totalRMD,
+                    rmdSaved: surplusSaved,
                     rothConvAmount,
                     wdCash,
                     realizedGain,
@@ -1990,6 +2001,23 @@
         const PALETTE = { cash: '#94a3b8', brokerage: '#0ea5e9', trad: '#8b5cf6', roth: '#10b981', total: '#0f172a', tax: '#f43f5e', cumTax: '#be123c', irmaa: '#f59e0b', salary: '#6366f1', ss: '#14b8a6', pension: '#f97316', withdrawals: '#ec4899' };
         const paletteAlpha = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
         const BRAND = { name: 'Second Inning Financial', legal: 'Second Inning Financial LLC', tagline: 'Plan your second act', contact: 'krishna.fincoach@gmail.com', disclaimer: 'Educational projection, not tax, legal or investment advice.' };
+        const APP_VERSION = '1.0';
+        // Non-blocking message (alerts can be blocked inside a framed page)
+        function notify(msg) {
+            let t = document.getElementById('toast');
+            if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] bg-slate-900 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xl border border-slate-700'; document.body.appendChild(t); }
+            t.textContent = msg; t.classList.remove('hidden'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.add('hidden'), 6000);
+        }
+        // Save a generated file: through the viewer's downloads capability when hosted, a normal browser download otherwise
+        async function saveGeneratedFile(filename, data, mime) {
+            try {
+                const dl = (window.claude && typeof window.claude.use === 'function') ? await window.claude.use('downloads') : null;
+                if (dl) { await dl.save({ filename, data }); notify(`Saved ${filename}`); return true; }
+            } catch (e) { if (e && e.code === 'declined') return false; }
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([data], { type: mime })); a.download = filename;
+            document.body.appendChild(a); a.click(); a.remove(); return true;
+        }
         const TAX_LAW_AS_OF = 'September 2026';   // update when the tax parameters are refreshed
         let lastRunOut = null;
         const rEsc = (t) => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -2082,7 +2110,7 @@ ${kv([['Spending goal (per year)', fmtCurr(inp.baseSpendingGoal)], ['Your Social
 ${kv([['Return: pre-retirement / post / cash', `${rPct(inp.returnPre)} / ${rPct(inp.returnPost)} / ${rPct(inp.returnCash)}`], ['Inflation / COLA', rPct(inp.inflation)],
   ['Roth conversion strategy', rEsc(strat)], working ? ['Salary / growth (sizes working-year conversions)', `${fmtCurr(inp.currentSalary)} / ${rPct(inp.salaryGrowth)}`] : null, working ? ['Convert while working', yesNo(inp.allowWorkConversions)] : null, inp.shockYear > 0 ? ['Market shock', `${rPct(inp.shockPct, 0)} decline in year ${inp.shockYear}`] : null])}
 <b>Legacy planning</b>
-${kv([['Excess RMD / surplus saved to', inp.rmdSaveTo === 'brokerage' ? 'Brokerage' : 'Cash'], ['Heirs\' tax rate on leftover IRA', rPct(inp.heirTaxRate, 0)]])}
+${kv([['Excess RMD / surplus goes to', (v => v === 'cash' ? 'Cash' : v === 'spend' ? 'Spend (not saved)' : 'Brokerage')(inp.rmdSaveTo)], ['Heirs\' tax rate on leftover IRA', rPct(inp.heirTaxRate, 0)]])}
 </div></div>
 
 <h2>4. Charts</h2>
@@ -2103,13 +2131,14 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 <h2>7. Notes and limitations</h2>
 <ul class="note">
 <li>This report covers federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to total taxes depending on where you live.</li>
-<li>Interest on cash and a 2% brokerage yield are taxed at ordinary rates; gains on brokerage sales are taxed at 0/15/20% plus the 3.8% NIIT, using the cost basis entered.</li>
+<li>After-tax ending wealth taxes only the leftover IRA at the heirs' rate; brokerage receives a stepped-up basis at death, and Roth and cash are tax-free.</li>
+<li>Cash interest is taxed at ordinary rates. Qualified dividends (a 2% brokerage yield, reinvested and added to cost basis) and gains on brokerage sales, using the cost basis entered, are taxed at 0/15/20% stacked on top of ordinary income (0% when taxable income is below the threshold), plus the 3.8% NIIT.</li>
 <li>Inflation/COLA of ${rPct(inp.inflation)} is applied to the spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 point faster). Social Security tax thresholds, NIIT thresholds and the senior deduction are not inflated.</li>
 <li>Returns and inflation are constant assumptions in the base projection; actual results will vary. The sensitivity section shows how results change under other assumptions, including a market drop at retirement, but it is not a probability forecast.</li>
 <li>Rules follow IRS Rev. Proc. 2025-32 and the 2025 tax act. The $6,000 senior deduction applies only to tax years 2025 through 2028 and is not applied from 2029; other future law changes are not anticipated. Required minimum distributions follow SECURE 2.0 (start age 73, or 75 for those born in 1960 or later).</li>
 <li>Simplifications: IRMAA uses income from two years earlier (current-year income as a proxy for the first two years); ${mfj ? 'a deceased spouse is assumed to have claimed Social Security at the claim age; ' : ''}early-withdrawal penalties, the Roth 5-year rule, ACA subsidies and itemized deductions are not modeled.</li>
 </ul>
-<div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>&copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. Educational projection, not tax, legal or investment advice; consult a qualified professional before acting.</div>
+<div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>Retirement Cash Flow &amp; Tax Engine v${APP_VERSION} &middot; &copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. Educational projection, not tax, legal or investment advice; consult a qualified professional before acting.</div>
 
 ${preRows.length ? `<div class="rpt-wide rpt-break">
 <h2>8. Appendix A: pre-retirement years (whole dollars)</h2>
@@ -2130,7 +2159,20 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('report-doc').innerHTML = buildReportHTML();
             document.getElementById('modal-report').classList.remove('hidden');
         }
-        function printReport() {
+        // Self-contained, print-ready copy of the report (opens its own print dialog -> Save as PDF)
+        function buildStandaloneReportHtml() {
+            const css = [...document.querySelectorAll('style')].map(x => x.textContent).join('\n');
+            const foot = `\u00A9 ${new Date().getFullYear()} ${BRAND.legal}   |   ${BRAND.disclaimer}`;
+            return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Retirement Report</title><style>${css}\n#print-root{display:block !important}\n@page { @bottom-center { content: "${foot}"; font-size: 8pt; color: #64748b; } } @page wide { @bottom-center { content: "${foot}"; font-size: 8pt; color: #64748b; } }\nbody{margin:0;padding:16px;background:#fff}</style></head><body><div id="print-root">${buildReportHTML()}</div><script>window.addEventListener('load',function(){setTimeout(function(){window.print()},400)})<\/script></body></html>`;
+        }
+        async function printReport() {
+            const framed = window.self !== window.top;
+            if (framed && window.claude && typeof window.claude.use === 'function') {
+                const nmF = (document.getElementById('scn-name').value || 'report').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+                const ok = await saveGeneratedFile('Retirement-Report-' + nmF + '-' + new Date().toISOString().slice(0, 10) + '.html', buildStandaloneReportHtml(), 'text/html');
+                if (ok) notify('Report saved. Open the file and choose "Save as PDF" in the print dialog.');
+                return;
+            }
             const root = document.getElementById('print-root');
             root.innerHTML = buildReportHTML();
             const prevTitle = document.title, nm = (document.getElementById('scn-name').value || 'report').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
@@ -2263,6 +2305,8 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
 
         function updateSummaryReportText() {
             const t = buildSummaryTexts();
+            const ex = simulationResults.filter(r => r.rmdSaved > 0.5), exTotal = ex.reduce((a, r) => a + r.rmdSaved, 0);
+            document.getElementById('legacy-excess-note').textContent = ex.length ? `Excess RMD / surplus income in this plan: ${fmtCurr(exTotal)} over ${ex.length} year${ex.length === 1 ? '' : 's'}.` : 'No excess RMD or surplus income in this plan, so this choice does not change the results.';
             document.getElementById('notes-infl').textContent = `${(parseFloat(document.getElementById('inp-inflation-rate').value) || 0).toFixed(1)}%`;
             document.getElementById('summary-solvency-desc').textContent = t.solv;
             document.getElementById('summary-tax-desc').textContent = t.tax;
@@ -2277,17 +2321,17 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('kpi-lifetime-tax').textContent = fmtCurr(totalTax);
             const heirRate = lastRunOut ? lastRunOut.heirTaxRate : 0;
             document.getElementById('kpi-after-tax-wealth').textContent = fmtCurr(finalRow ? finalRow.endTotalAssets - finalRow.balTrad * heirRate : 0);
-            document.getElementById('kpi-after-tax-sub').textContent = `Leftover IRA taxed at ${(heirRate * 100).toFixed(0)}%`;
+            document.getElementById('kpi-after-tax-sub').textContent = `IRA taxed at ${(heirRate * 100).toFixed(0)}% \u2022 brokerage step-up`;
             document.getElementById('kpi-lifetime-irmaa').textContent = fmtCurr(totalIrmaa);
 
             const headerPill = document.getElementById('header-solvency-pill');
 
             if (deficitYears === 0) {
                 headerPill.textContent = "Fully Funded";
-                headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-emerald-100 text-emerald-800";
+                headerPill.className = "px-3.5 py-1 rounded-lg text-base font-bold bg-emerald-100 text-emerald-800";
             } else {
                 headerPill.textContent = `Deficit Risk (${deficitYears} yrs)`;
-                headerPill.className = "px-2 py-0.5 rounded-lg font-bold bg-rose-100 text-rose-800";
+                headerPill.className = "px-3.5 py-1 rounded-lg text-base font-bold bg-rose-100 text-rose-800";
             }
         }
 
@@ -2607,6 +2651,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('btn-close-sensitivity').addEventListener('click', () => document.getElementById('modal-sensitivity').classList.add('hidden'));
             document.getElementById('tax-law-asof').textContent = TAX_LAW_AS_OF;
             document.getElementById('copyright-year').textContent = new Date().getFullYear();
+            document.getElementById('app-version').textContent = APP_VERSION;
             document.getElementById('btn-open-report').addEventListener('click', openReport);
             document.getElementById('btn-close-report').addEventListener('click', () => document.getElementById('modal-report').classList.add('hidden'));
             document.getElementById('btn-report-print').addEventListener('click', printReport);
@@ -2616,15 +2661,12 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('btn-scn-pin').addEventListener('click', pinBaseline);
             document.getElementById('btn-scn-save').addEventListener('click', () => {
                 const file = buildScenarioFile();
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(new Blob([JSON.stringify(file, null, 2)], { type: 'application/json' }));
-                a.download = 'scenario-' + file.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '-' + file.saved.slice(0, 10) + '.json';
-                document.body.appendChild(a); a.click(); a.remove();
+                saveGeneratedFile('scenario-' + file.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '-' + file.saved.slice(0, 10) + '.json', JSON.stringify(file, null, 2), 'application/json');
             });
             const readScn = (input, cb) => input.addEventListener('change', () => {
                 const f = input.files[0]; if (!f) return;
                 const fr = new FileReader();
-                fr.onload = () => { try { cb(parseScenarioFile(fr.result)); } catch (e) { alert('Could not read that file: ' + e.message); } input.value = ''; };
+                fr.onload = () => { try { cb(parseScenarioFile(fr.result)); } catch (e) { notify('Could not read that file: ' + e.message); } input.value = ''; };
                 fr.readAsText(f);
             });
             readScn(document.getElementById('scn-file'), obj => { document.getElementById('scn-name').value = obj.name || 'scenario'; setFormState(obj.inputs); });
