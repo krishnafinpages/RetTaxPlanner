@@ -7,7 +7,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <!-- SheetJS (xlsx) CDN for Excel Export -->
     <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -306,10 +306,7 @@
                         </div>
                     </summary>
                     <div class="p-3.5 space-y-3 border-t border-slate-800 bg-slate-900/50">
-                        <div title="Used only to size Roth conversions during working years" class="pair-grid pg-sal">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Salary Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        </div>
+                        
                         <div>
                             <label class="block font-semibold text-slate-300 mb-1">Roth Conversion Target</label>
                             <select id="inp-roth-strategy" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -331,15 +328,12 @@
                             <input type="checkbox" id="inp-allow-work-conversions" class="rounded-lg border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500 h-4 w-4" checked>
                             <label for="inp-allow-work-conversions" class="font-semibold text-slate-300 text-xs">Convert while working (tax paid from cash)</label>
                         </div>
-                        
-                        
-
-                        
-
-                        
-                        
-
-                        
+                        <div id="salary-fields" class="hidden">
+                            <div title="Used only to size Roth conversions during working years" class="pair-grid pg-sal">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]">Salary ($/yr)</label><input type="number" id="inp-current-salary" value="105000" step="5000" class="w-full bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <label class="text-slate-300 font-semibold whitespace-nowrap text-[11px]" title="Annual salary growth">Salary Growth (%)</label><input type="number" id="inp-salary-growth" value="0.0" step="0.1" class="w-20 flex-none bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        </div>
                     </div>
                 </details>
 
@@ -940,6 +934,7 @@
             const _adds = _g('inp-contrib-cash') + _g('inp-contrib-brokerage') + _g('inp-contrib-trad') + _g('inp-contrib-roth');
             document.getElementById('badge-balances').textContent = `${fmtCurr(totalBal)}` + (_working && _adds > 0 ? ` • +${fmtCurr(_adds)}/yr` : '');
             syncFilingStatusUI();
+            document.getElementById('salary-fields').classList.toggle('hidden', document.getElementById('inp-roth-strategy').value === 'none');
             document.getElementById('fixed-roth-container').classList.toggle('hidden', document.getElementById('inp-roth-strategy').value !== 'fixed_amount');
             document.getElementById('pension-fields').classList.toggle('hidden', !document.getElementById('inp-has-pension').checked);
             document.getElementById('badge-legacy').textContent = `Heirs ${document.getElementById('inp-heir-tax-rate').value || 0}% \u2022 RMD: ${({ cash: 'cash', brokerage: 'brokerage', spend: 'spend' })[document.getElementById('inp-rmd-save-to').value]}`;
@@ -1434,7 +1429,7 @@
             const p2Age = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-age').value) || 0) : 0;
             const p2RetireAge = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-retire-age').value) || 0) : 0;
             const p2TargetAge = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-horizon').value) || 90) : 0;
-            const currentSalary = parseFloat(document.getElementById('inp-current-salary').value) || 0;
+            const currentSalary = document.getElementById('inp-roth-strategy').value === 'none' ? 0 : (parseFloat(document.getElementById('inp-current-salary').value) || 0);
             const salaryGrowth = (parseFloat(document.getElementById('inp-salary-growth').value) || 0) / 100;
             const contribCash = parseFloat(document.getElementById('inp-contrib-cash').value) || 0;
             const contribBrokerage = parseFloat(document.getElementById('inp-contrib-brokerage').value) || 0;
