@@ -484,6 +484,34 @@
             </section>
             </section>
 
+            <!-- Roth Conversion Analysis (recommendation + reasons) -->
+            <section id="roth-analysis" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        <h2 class="text-base font-bold text-slate-900 tracking-tight">Roth Conversion Analysis</h2>
+                    </div>
+                    <span id="roth-badge" class="text-[11px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold"></span>
+                </div>
+                <div id="roth-rec" class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3"></div>
+                <details id="roth-details" class="group">
+                    <summary class="cursor-pointer select-none text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 list-none">
+                        <span class="group-open:hidden">Show reasons &amp; comparison</span><span class="hidden group-open:inline">Hide reasons &amp; comparison</span>
+                        <svg class="w-3.5 h-3.5 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="space-y-3 pt-3">
+                        <ul id="roth-reasons" class="list-disc pl-5 space-y-1 text-xs text-slate-700"></ul>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-right border-collapse">
+                            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"><tr><th class="py-2 px-2 text-left">Strategy</th><th class="py-2 px-2">Converted</th><th class="py-2 px-2">Lifetime tax</th><th class="py-2 px-2">IRMAA</th><th class="py-2 px-2">Leftover IRA</th><th class="py-2 px-2 bg-emerald-50 text-emerald-900">After-tax ending</th><th class="py-2 px-2">vs. no conversions</th></tr></thead>
+                            <tbody id="roth-tbody" class="text-slate-700"></tbody>
+                        </table>
+                    </div>
+                    <p class="text-[11px] text-slate-400">Each strategy is run on your current inputs and ranked by After-Tax Ending Wealth (leftover IRA taxed at the heirs' rate; brokerage stepped-up). Strategies that leave spending unfunded are not recommended. Educational estimate, not tax advice.</p>
+                    </div>
+                </details>
+            </section>
+
             <!-- Chart Section -->
             <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
@@ -1166,6 +1194,22 @@
             return { ws, first, last };
         }
 
+        function xlSheetRoth(wb, c) {
+            const ws = wb.addWorksheet('Roth Analysis', { properties: { tabColor: { argb: 'FF10B981' } }, views: [{ showGridLines: false }] });
+            ws.columns = [{ width: 38 }, { width: 16 }, { width: 16 }, { width: 14 }, { width: 16 }, { width: 18 }, { width: 18 }];
+            const a = c.roth, none = a.rows[0], cur = a.rows.find(r => r.current) || none;
+            xlTitle(ws, 'Roth Conversion Analysis', 'Each strategy is run on the same inputs and ranked by After-Tax Ending Wealth. Strategies that leave spending unfunded are not recommended.', 7);
+            let r = 3; xlBand(ws, r, `Recommendation: ${a.noDeferred ? 'No Roth conversions apply' : (a.rec.key === 'none' ? 'No conversions needed' : a.rec.label)}  |  Current selection: ${cur.label}`, 7, 'FFD1FAE5', 'FF065F46'); r++;
+            a.reasons.forEach(t => { ws.mergeCells(r, 1, r, 7); const x = ws.getCell(r, 1); x.value = '\u2022 ' + t; x.alignment = { wrapText: true, vertical: 'top', indent: 1 }; ws.getRow(r).height = t.length > 120 ? 30 : 16; r++; });
+            r++; ['Strategy', 'Converted', 'Lifetime tax', 'IRMAA', 'Leftover IRA', 'After-tax ending', 'vs. no conversions'].forEach((h, k) => { const x = ws.getCell(r, k + 1); x.value = h; xlHead(x); }); r++;
+            a.rows.forEach((row, n) => {
+                const vals = [row.label + (row === a.rec ? ' (recommended)' : '') + (row.current ? ' (current)' : '') + (row.funded ? '' : ' (not funded)'), Math.round(row.conv), Math.round(row.m.tax), Math.round(row.m.irmaa), Math.round(row.m.endTrad), Math.round(row.m.afterTax), row === none ? null : Math.round(row.m.afterTax - none.m.afterTax)];
+                vals.forEach((v, k) => { const cell = ws.getCell(r, k + 1); cell.value = v; xlBody(cell, k === 6 ? '+$#,##0;-$#,##0;"-"' : (k > 0 ? XL_USD : null), n % 2); if (row === a.rec) { cell.fill = xlFill('FFD1FAE5'); cell.font = { bold: true }; } if (k === 6 && v) cell.font = { bold: true, color: { argb: v > 0 ? XL.green : XL.red } }; });
+                r++;
+            });
+            return ws;
+        }
+
         function xlSheetSensitivity(wb, c) {
             const ws = wb.addWorksheet('Sensitivity', { properties: { tabColor: { argb: 'FFF59E0B' } }, views: [{ showGridLines: false }] });
             ws.columns = [{ width: 46 }, { width: 16 }, { width: 14 }, { width: 16 }, { width: 14 }, { width: 14 }, { width: 24 }, { width: 3 }, { width: 46 }, { width: 16 }];
@@ -1252,7 +1296,7 @@
 
         async function buildExcelWorkbook(ExcelJSLib, JSZipLib, c) {
             const wb = new ExcelJSLib.Workbook(); wb.creator = BRAND.legal; wb.company = BRAND.legal; wb.title = 'Retirement Cash Flow & Tax Projection'; wb.keywords = `v${APP_VERSION}`; wb.subject = BRAND.tagline; wb.description = `\u00A9 ${new Date().getFullYear()} ${BRAND.legal}. ${BRAND.disclaimer}`; wb.created = new Date();
-            xlSheetInputs(wb, c); xlSheetSummary(wb, c);
+            xlSheetInputs(wb, c); xlSheetSummary(wb, c); xlSheetRoth(wb, c);
             const chartsWs = wb.addWorksheet('Charts', { properties: { tabColor: { argb: 'FF8B5CF6' } }, views: [{ showGridLines: false }] });
             xlTitle(chartsWs, 'Charts', 'Charts are native Excel charts linked to the Ledger tab and update if you edit the ledger values.', 20);
             if (c.results.some(r => r.isWorking)) xlSheetPreRetirement(wb, c);
@@ -1304,7 +1348,7 @@
         function collectExportContext() {
             const inp = readInputs(), out = lastRunOut || runProjection(inp), m = scenarioMetrics(out);
             return {
-                inp, results: simulationResults, ledgerRows: simulationResults.filter(r => !r.isWorking), pre: preRetirementTotals(simulationResults), m, milestones: computeMilestones(simulationResults, m), sens: sensitivityData(), tax: activeTaxParams, asOf: TAX_LAW_AS_OF,
+                inp, results: simulationResults, ledgerRows: simulationResults.filter(r => !r.isWorking), pre: preRetirementTotals(simulationResults), m, milestones: computeMilestones(simulationResults, m), sens: sensitivityData(), tax: activeTaxParams, roth: rothAnalysis(), asOf: TAX_LAW_AS_OF,
                 name: (document.getElementById('scn-name') || {}).value || 'Scenario', today: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
                 strategyLabel: document.querySelector('#inp-roth-strategy option:checked').textContent.trim(),
                 texts: { solv: document.getElementById('summary-solvency-desc').textContent, tax: document.getElementById('summary-tax-desc').textContent, rec: document.getElementById('summary-rec-desc').textContent }
@@ -1429,7 +1473,7 @@
             const p2Age = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-age').value) || 0) : 0;
             const p2RetireAge = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-retire-age').value) || 0) : 0;
             const p2TargetAge = filingStatus === 'MFJ' ? (parseInt(document.getElementById('inp-p2-horizon').value) || 90) : 0;
-            const currentSalary = document.getElementById('inp-roth-strategy').value === 'none' ? 0 : (parseFloat(document.getElementById('inp-current-salary').value) || 0);
+            const currentSalary = parseFloat(document.getElementById('inp-current-salary').value) || 0;
             const salaryGrowth = (parseFloat(document.getElementById('inp-salary-growth').value) || 0) / 100;
             const contribCash = parseFloat(document.getElementById('inp-contrib-cash').value) || 0;
             const contribBrokerage = parseFloat(document.getElementById('inp-contrib-brokerage').value) || 0;
@@ -1479,7 +1523,7 @@
             const p2Age = inp.p2Age;
             const p2RetireAge = inp.p2RetireAge;
             const p2TargetAge = inp.p2TargetAge;
-            const currentSalary = inp.currentSalary;
+            const currentSalary = inp.rothStrategy === 'none' ? 0 : inp.currentSalary; // salary only matters when conversions are modeled
             const salaryGrowth = inp.salaryGrowth;
             const contribCash = inp.contribCash;
             const contribBrokerage = inp.contribBrokerage;
@@ -1996,7 +2040,7 @@
         const PALETTE = { cash: '#94a3b8', brokerage: '#0ea5e9', trad: '#8b5cf6', roth: '#10b981', total: '#0f172a', tax: '#f43f5e', cumTax: '#be123c', irmaa: '#f59e0b', salary: '#6366f1', ss: '#14b8a6', pension: '#f97316', withdrawals: '#ec4899' };
         const paletteAlpha = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
         const BRAND = { name: 'Second Inning Financial', legal: 'Second Inning Financial LLC', tagline: 'Plan your second act', contact: 'krishna.fincoach@gmail.com', disclaimer: 'Educational projection, not tax, legal or investment advice.' };
-        const APP_VERSION = '1.0';
+        const APP_VERSION = '1.1';
         // Non-blocking message (alerts can be blocked inside a framed page)
         function notify(msg) {
             let t = document.getElementById('toast');
@@ -2112,10 +2156,13 @@ ${kv([['Excess RMD / surplus goes to', (v => v === 'cash' ? 'Cash' : v === 'spen
 ${imgA ? `<img src="${imgA}" alt="Balances by account">` : '<p class="note">Charts are not available in this view.</p>'}
 ${imgT ? `<img src="${imgT}" alt="Annual tax and IRMAA">` : ''}
 
-<h2>5. Sensitivity analysis</h2>
+<h2>5. Roth conversion analysis</h2>
+${rothReportHTML()}
+
+<h2>6. Sensitivity analysis</h2>
 ${sensReportHTML()}
 
-<h2>6. Tax law used (2026 tax year)</h2>
+<h2>7. Tax law used (2026 tax year)</h2>
 <div class="two"><div>
 ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${fmtCurr(P.stdDeduction.Single)}`], ['Age 65+ add-on: MFJ (each) / Single', `${fmtCurr(P.stdDeduction.add65MFJ)} / ${fmtCurr(P.stdDeduction.add65Single)}`], ['Senior deduction (through ' + P.seniorDed.endYear + ')', `${fmtCurr(P.seniorDed.amount)} per person, phases out above ${fmtCurr(P.seniorDed.phaseStart.MFJ)} / ${fmtCurr(P.seniorDed.phaseStart.Single)} MAGI`], ['0% capital gains up to: MFJ / Single', `${fmtCurr(P.cgThresholds.MFJ.z)} / ${fmtCurr(P.cgThresholds.Single.z)}`]])}
 </div><div>
@@ -2123,7 +2170,7 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 </div></div>
 <table style="margin-top:8px"><thead><tr><th>IRMAA tier</th><th>MFJ MAGI</th><th>Single MAGI</th><th>Annual surcharge per person</th></tr></thead><tbody>${irmaaRows}</tbody></table>
 
-<h2>7. Notes and limitations</h2>
+<h2>8. Notes and limitations</h2>
 <ul class="note">
 <li>This report covers federal income tax only. Lifetime tax counts retirement withdrawals and Roth conversions; tax on pre-retirement earnings and state income taxes are not included and may add to total taxes depending on where you live.</li>
 <li>After-tax ending wealth taxes only the leftover IRA at the heirs' rate; brokerage receives a stepped-up basis at death, and Roth and cash are tax-free.</li>
@@ -2136,13 +2183,13 @@ ${kv([['Standard deduction: MFJ / Single', `${fmtCurr(P.stdDeduction.MFJ)} / ${f
 <div class="rpt-closing"><b>Prepared by ${BRAND.legal}</b> &middot; ${BRAND.contact}<br>Retirement Cash Flow &amp; Tax Engine v${APP_VERSION} &middot; &copy; ${new Date().getFullYear()} ${BRAND.legal}. All rights reserved. Educational projection, not tax, legal or investment advice; consult a qualified professional before acting.</div>
 
 ${preRows.length ? `<div class="rpt-wide rpt-break">
-<h2>8. Appendix A: pre-retirement years (whole dollars)</h2>
+<h2>9. Appendix A: pre-retirement years (whole dollars)</h2>
 <table class="grid-year" style="--rowh:${rowHp}px;--fs:${fszp}px"><thead><tr><th colspan="${mfj ? 3 : 2}">Timeline</th><th colspan="3">Pre-retirement activity</th><th colspan="4">Conversion tax paid from</th><th colspan="5">Year-end balances</th></tr><tr><th>Yr</th><th>${mfj ? 'You' : 'Age'}</th>${mfj ? '<th>Spouse</th>' : ''}<th>Contributions</th><th>Roth conv</th><th>Conv tax</th><th>Cash</th><th>Brokerage</th><th>IRA</th><th>Roth</th><th>End cash</th><th>End brokerage</th><th>End tax-deferred</th><th>End Roth</th><th>Total assets</th></tr></thead><tbody>${preRowsHtml}</tbody><tfoot><tr><td colspan="${mfj ? 3 : 2}"><b>Total</b></td><td><b>${rD(pre.contrib)}</b></td><td><b>${rD(pre.conv)}</b></td><td><b>${rD(pre.convTax)}</b></td><td><b>${rD(pre.paidCash)}</b></td><td><b>${rD(pre.paidBrokerage)}</b></td><td><b>${rD(pre.paidIra)}</b></td><td><b>${rD(pre.paidRoth)}</b></td><td colspan="5"></td></tr></tfoot></table>
 <p class="note">Contributions, taxes and withdrawals roll into each account before retirement. Tax on pre-retirement earnings is not modeled; only tax caused by Roth conversions is counted, and it is paid from the accounts shown (cash first, then brokerage; IRA and Roth only if needed).</p>
 </div>` : ''}
 
 <div class="rpt-wide rpt-break">
-<h2>${preRows.length ? '9. Appendix B' : '8. Appendix'}: Retirement Cash Flow & Tax Ledger (Year-by-Year, whole dollars)</h2>
+<h2>${preRows.length ? '10. Appendix B' : '9. Appendix'}: Retirement Cash Flow & Tax Ledger (Year-by-Year, whole dollars)</h2>
 <table class="grid-year" style="--rowh:${rowH}px;--fs:${fsz}px"><thead><tr><th>Yr</th><th>${mfj ? 'You' : 'Age'}</th>${mfj ? '<th>Spouse</th>' : ''}<th>Income</th><th>RMD</th><th>Roth conv</th><th>Withdrawals</th><th>AGI</th><th>Fed tax</th><th>IRMAA</th><th>Eff. rate</th><th>Cash</th><th>Brokerage</th><th>Tax-deferred</th><th>Roth</th><th>Total assets</th></tr></thead><tbody>${yrRows}</tbody></table>
 <p class="note">Year 1 is the first retirement year. Income = Social Security + pension. Withdrawals = cash + brokerage + tax-deferred + Roth withdrawals (including required distributions and Roth conversions moved out of the IRA). Balances are year-end.</p>
 </div>
@@ -2224,6 +2271,15 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                 const url = cv.toDataURL('image/png'); ch.destroy(); return url || '';
             } catch (e) { return ''; }
         }
+        function rothReportHTML() {
+            const a = rothAnalysis(), none = a.rows[0], cur = a.rows.find(r => r.current) || none;
+            const head = a.noDeferred ? 'No Roth conversions apply' : (a.rec.key === 'none' ? 'No conversions needed' : a.rec.label);
+            const d = v => Math.abs(v) < 0.5 ? '-' : `<span style="color:${v > 0 ? '#059669' : '#e11d48'}">${v > 0 ? '+' : '-'}${fmtCurr(Math.abs(v))}</span>`;
+            const rows = a.rows.map(r => `<tr${r === a.rec ? ' style="background:#ecfdf5;font-weight:700"' : ''}><td>${r.label}${r === a.rec ? ' (recommended)' : ''}${r.current ? ' (current)' : ''}${r.funded ? '' : ' (not funded)'}</td><td>${r.conv > 0.5 ? fmtCurr(r.conv) : '-'}</td><td>${fmtCurr(r.m.tax)}</td><td>${fmtCurr(r.m.irmaa)}</td><td>${fmtCurr(r.m.endTrad)}</td><td>${fmtCurr(r.m.afterTax)}</td><td>${r === none ? '-' : d(r.m.afterTax - none.m.afterTax)}</td></tr>`).join('');
+            return `<p><b>Recommendation: ${head}</b> &middot; current selection: ${cur.label}</p><ul class="narr">${a.reasons.map(t => `<li>${rEsc(t)}</li>`).join('')}</ul>
+<table><thead><tr><th>Strategy</th><th>Converted</th><th>Lifetime tax</th><th>IRMAA</th><th>Leftover IRA</th><th>After-tax ending</th><th>vs. no conversions</th></tr></thead><tbody>${rows}</tbody></table>
+<p class="note">Each strategy is run on the same inputs and ranked by After-Tax Ending Wealth; strategies that leave spending unfunded are not recommended.</p>`;
+        }
         function sensReportHTML() {
             const { b, cases } = sensitivityData();
             const col = (d, g) => Math.abs(d) < 0.5 ? '#94a3b8' : (d * g > 0 ? '#059669' : '#e11d48');
@@ -2261,6 +2317,75 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             }
         }
 
+
+        // ================= Roth conversion analysis: runs every strategy, recommends one, explains why =================
+        const ROTH_CANDIDATES = [['none', 'No conversions'], ['fill_12', 'Fill 12% bracket'], ['fill_22', 'Fill 22% bracket'], ['fill_24', 'Fill 24% bracket'], ['optimal', 'Optimal (22% cap, IRMAA-aware)']];
+        const ROTH_CAP = { fill_12: 0.12, fill_22: 0.22, fill_24: 0.24, optimal: 0.22 };
+        function rothAnalysis() {
+            const base = readInputs(), heir = base.heirTaxRate, pc = v => `${Math.round(v * 100)}%`, rows = [];
+            const cands = ROTH_CANDIDATES.slice();
+            if (base.rothStrategy === 'fixed_amount' && base.rothFixedAmt > 0) cands.push(['fixed_amount', `Fixed ${fmtCurr(base.rothFixedAmt)}/yr`]);
+            cands.forEach(([key, label]) => {
+                const out = runProjection(Object.assign({}, base, { rothStrategy: key })), rs = out.results, m = scenarioMetrics(out);
+                const conv = rs.filter(r => r.rothConvAmount > 0), taxed = rs.filter(r => !r.isWorking && r.taxableIncome > 0 && r.marginalRate > 0);
+                const rmd = rs.find(r => r.rmdAmount > 0), dep = rs.find(r => r.endTotalAssets < 1 && r.spendGoal > 0);
+                rows.push({ key, label, m, funded: out.totalDeficitYears === 0 && !dep, conv: m.conv, convYears: conv.length, convAges: conv.length ? [conv[0].p1Age, conv[conv.length - 1].p1Age] : null,
+                    topRate: taxed.reduce((a, r) => Math.max(a, r.marginalRate), 0), firstRmd: rmd ? rmd.rmdAmount : 0, current: key === base.rothStrategy });
+            });
+            const none = rows[0], pool = rows.filter(r => r.funded), ranked = (pool.length ? pool : rows).slice().sort((a, b) => (b.m.afterTax - a.m.afterTax) || (a.m.taxIrmaa - b.m.taxIrmaa));
+            const best = ranked[0], gain = best.m.afterTax - none.m.afterTax, threshold = Math.max(10000, 0.005 * none.m.afterTax);
+            const rec = (best.key === 'none' || gain <= threshold) ? none : best, reasons = [];
+            const noDeferred = none.m.peakTrad < 1;
+            if (noDeferred) {
+                reasons.push('There is no tax-deferred (IRA/401k) balance in this plan, so Roth conversions do not apply.');
+            } else if (rec.key === 'none') {
+                reasons.push(best.key === 'none' ? 'No conversion strategy improves After-Tax Ending Wealth in this plan.' : `No strategy improves After-Tax Ending Wealth by more than ${fmtCurr(threshold)}; the best alternative (${best.label}) adds only ${fmtCurr(gain)} (${(gain / none.m.afterTax * 100).toFixed(1)}%).`);
+                if (none.topRate <= 0.12) reasons.push(`Required distributions already fall in the ${pc(none.topRate)} bracket or lower, so converting would pay the same or a higher rate now than later.`);
+                if (heir <= 0.15) reasons.push(`A low heirs' tax rate (${pc(heir)}) reduces the value of paying tax now to avoid tax later.`);
+                reasons.push('Revisit this if the heirs\' tax rate, tax law, spending or account balances change.');
+            } else {
+                const cap = ROTH_CAP[rec.key], saved = (none.m.endTrad - rec.m.endTrad) * heir, ages = rec.convAges ? `, ages ${rec.convAges[0]}-${rec.convAges[1]}` : '';
+                reasons.push(`${rec.label} gives the highest After-Tax Ending Wealth, ${fmtCurr(rec.m.afterTax)}: ${fmtCurr(gain)} (${(gain / none.m.afterTax * 100).toFixed(1)}%) more than doing no conversions.`);
+                reasons.push(cap && cap < heir
+                    ? `It converts ${fmtCurr(rec.conv)} to Roth over ${rec.convYears} year${rec.convYears === 1 ? '' : 's'}${ages}, taxed at up to about ${pc(cap)} now instead of the ${pc(heir)} assumed for heirs on leftover IRA money.`
+                    : `It converts ${fmtCurr(rec.conv)} to Roth over ${rec.convYears} year${rec.convYears === 1 ? '' : 's'}${ages}, taxed at up to about ${pc(cap || heir)}, close to the ${pc(heir)} heirs' rate, so the gain comes mainly from smaller RMDs and tax-free Roth growth.`);
+                reasons.push(`The leftover IRA falls from ${fmtCurr(none.m.endTrad)} to ${fmtCurr(rec.m.endTrad)}, avoiding about ${fmtCurr(saved)} of heirs' tax, while Roth grows to ${fmtCurr(rec.m.endRoth)}.`);
+                if (none.firstRmd > 0) {
+                    const rmdTxt = rec.firstRmd < 1 ? `Required minimum distributions disappear (the first one would have been ${fmtCurr(none.firstRmd)})` : `The first RMD drops from ${fmtCurr(none.firstRmd)} to ${fmtCurr(rec.firstRmd)}`;
+                    const brTxt = Math.abs(none.topRate - rec.topRate) < 0.005 ? `the highest retirement bracket stays at ${pc(rec.topRate)}` : `the highest retirement bracket goes from ${pc(none.topRate)} to ${pc(rec.topRate)}`;
+                    reasons.push(`${rmdTxt}, and ${brTxt}.`);
+                }
+                if (rec.m.irmaa > none.m.irmaa + 500) reasons.push(`Watch the trade-off: IRMAA surcharges rise from ${fmtCurr(none.m.irmaa)} to ${fmtCurr(rec.m.irmaa)} because conversion income raises Medicare premiums.`);
+                const dTax = rec.m.tax - none.m.tax;
+                reasons.push(`Lifetime tax is ${dTax > 0 ? 'higher' : 'lower'} by ${fmtCurr(Math.abs(dTax))}${dTax > 0 ? ': conversions pull tax forward into lower brackets, which is why lifetime tax alone is not the measure used.' : '.'}`);
+                const dTrad = none.m.endTrad - rec.m.endTrad, be = dTrad > 0 ? (none.m.endAssets - rec.m.endAssets) / dTrad : null;
+                if (be !== null) reasons.push(be <= 0 ? 'This recommendation holds at any heirs\' tax rate.' : `This recommendation holds as long as the heirs' tax rate is above about ${(be * 100).toFixed(0)}% (you assumed ${pc(heir)}).`);
+                const second = ranked.find(r => r !== rec && r.funded !== false);
+                if (second && second.key !== 'none') reasons.push(`Runner-up: ${second.label}, ${fmtCurr(rec.m.afterTax - second.m.afterTax)} behind.`);
+            }
+            if (!rec.funded) reasons.push('Caution: spending is not fully funded under this strategy; address funding first because conversion tax is paid from the portfolio.');
+            return { rows, rec, best, reasons: reasons.map(t => sgl(t)), heir, noDeferred, threshold };
+        }
+
+        function renderRothAnalysis() {
+            const el = document.getElementById('roth-analysis');
+            if (!el || !simulationResults.length) return;
+            const a = rothAnalysis(), none = a.rows[0], cur = a.rows.find(r => r.current) || none;
+            document.getElementById('roth-badge').textContent = a.noDeferred ? 'Not applicable' : (a.rec.key === 'none' ? 'Recommended: no conversions' : `Recommended: ${a.rec.label}`);
+            const sameAsCurrent = a.rec.key === cur.key;
+            document.getElementById('roth-rec').innerHTML = `<div class="flex items-start justify-between gap-3 flex-wrap">
+                <div><div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Recommendation</div>
+                <div class="text-base font-bold text-emerald-900">${a.noDeferred ? 'No Roth conversions' : (a.rec.key === 'none' ? 'No conversions needed' : a.rec.label)}</div>
+                <div class="text-xs text-emerald-800 mt-0.5">Your current selection: <b>${cur.label}</b>${sameAsCurrent ? ' (matches the recommendation)' : ` &middot; recommended adds <b>${fmtCurr(a.rec.m.afterTax - cur.m.afterTax)}</b> of After-Tax Ending Wealth`}</div></div>
+                ${(!sameAsCurrent && !a.noDeferred) ? `<button type="button" id="btn-apply-roth-rec" data-key="${a.rec.key}" class="ui-btn ui-btn-primary">Apply recommendation</button>` : ''}</div>`;
+            document.getElementById('roth-reasons').innerHTML = a.reasons.map(t => `<li>${t}</li>`).join('');
+            const dCell = v => Math.abs(v) < 0.5 ? '<td class="py-1.5 px-2 text-slate-400">-</td>' : `<td class="py-1.5 px-2 font-semibold ${v > 0 ? 'text-emerald-600' : 'text-rose-600'}">${v > 0 ? '+' : '-'}${fmtCurr(Math.abs(v))}</td>`;
+            document.getElementById('roth-tbody').innerHTML = a.rows.map(r => `<tr class="${r === a.rec ? 'bg-emerald-50 font-semibold' : ''} border-b border-slate-100">
+                <td class="py-1.5 px-2 text-left">${r.label}${r === a.rec ? ' <span class="ml-1 text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded-full">Recommended</span>' : ''}${r.current ? ' <span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full">Current</span>' : ''}${r.funded ? '' : ' <span class="ml-1 text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full">Not funded</span>'}</td>
+                <td class="py-1.5 px-2">${r.conv > 0.5 ? fmtCurr(r.conv) : '-'}</td><td class="py-1.5 px-2">${fmtCurr(r.m.tax)}</td><td class="py-1.5 px-2">${fmtCurr(r.m.irmaa)}</td>
+                <td class="py-1.5 px-2">${fmtCurr(r.m.endTrad)}</td><td class="py-1.5 px-2 text-slate-900">${fmtCurr(r.m.afterTax)}</td>${r === none ? '<td class="py-1.5 px-2 text-slate-400">-</td>' : dCell(r.m.afterTax - none.m.afterTax)}</tr>`).join('');
+        }
+
         function runSimulation() {
             updateSectionBadges();
             const out = runProjection(readInputs());
@@ -2273,6 +2398,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             updateSummaryReportText(out.totalDeficitYears, out.totalLifetimeTax);
             refreshComparison();
             renderSensitivity();
+            renderRothAnalysis();
         }
 
         // Narrative only adds insight; the dollar figures live in the KPI cards / report KPI boxes (no repeated numbers)
@@ -2647,6 +2773,10 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('tax-law-asof').textContent = TAX_LAW_AS_OF;
             document.getElementById('copyright-year').textContent = new Date().getFullYear();
             document.getElementById('app-version').textContent = APP_VERSION;
+            document.getElementById('roth-rec').addEventListener('click', (e) => {
+                const b = e.target.closest('#btn-apply-roth-rec');
+                if (b) { const sel = document.getElementById('inp-roth-strategy'); sel.value = b.dataset.key; sel.dispatchEvent(new Event('change')); }
+            });
             document.getElementById('btn-open-report').addEventListener('click', openReport);
             document.getElementById('btn-close-report').addEventListener('click', () => document.getElementById('modal-report').classList.add('hidden'));
             document.getElementById('btn-report-print').addEventListener('click', printReport);
