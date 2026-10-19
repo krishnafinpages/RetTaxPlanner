@@ -28,7 +28,6 @@
 
         /* ---- Detailed report ---- */
         #print-root { display: none; }
-        body:not(.show-pre) .pre-col { display: none; }
         /* label + box pairs, two per line, columns aligned and left-aligned */
         .pair-grid { display: grid; grid-template-columns: max-content 3.5rem max-content 3.5rem; column-gap: 6px; row-gap: 8px; align-items: center; justify-content: start; }
         .pair-grid > :nth-child(4n+3) { margin-left: 18px; }
@@ -127,15 +126,14 @@
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button id="btn-open-report" type="button" class="ui-btn ui-btn-primary-dark">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <span>Detailed Report</span>
-                </button>
-                <button id="btn-export-excel" type="button" class="ui-btn ui-btn-primary-dark">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <button id="btn-export-excel" class="ui-btn ui-btn-primary-dark">
+                    <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                     <span>Export Excel</span>
                 </button>
-                
+                <button id="btn-export-pdf" type="button" class="ui-btn ui-btn-primary-dark">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span>Export PDF</span>
+                </button>
                 <button id="btn-edit-tax-params" class="ui-btn ui-btn-outline-dark">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Tax Parameters</span>
@@ -159,7 +157,7 @@
                     </h2>
                     <div class="flex items-center space-x-2">
                         <button type="button" id="btn-open-scenarios" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Scenarios</button>
-                        <button type="button" id="btn-reset-inputs" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark" title="Restore defaults and forget the inputs remembered in this browser">Reset</button>
+                        <button type="button" id="btn-reset-inputs" class="panel-content-text ui-btn ui-btn-sm ui-btn-outline-dark">Reset</button>
                         <button id="btn-toggle-panel" title="Toggle Panel" class="ui-btn ui-btn-sm bg-indigo-400 hover:bg-indigo-300 text-slate-950 shadow-sm justify-center" style="padding: 0 7px;">
                             <svg id="icon-collapse" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
@@ -384,48 +382,26 @@
         </aside>
 
         <!-- RIGHT PANEL: Dashboard Metrics, Chart & Ledger -->
-        <main class="flex-1 bg-slate-50 overflow-y-auto custom-scrollbar min-w-0">
-                <!-- Status strip -->
-                <div id="status-strip" class="px-4 md:px-6 pt-4 md:pt-6 relative z-30">
-                <section id="projection-overview" class="bg-white rounded-2xl shadow-sm border border-slate-200 px-4 py-3">
+        <main class="flex-1 bg-slate-50 p-4 md:p-6 overflow-y-auto custom-scrollbar space-y-6">
+
+            <!-- Comprehensive Retirement Cash Flow & Tax Projection: header, KPIs, then Executive Summary -->
+            <section id="projection-overview" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
                 <div class="flex items-center justify-between flex-wrap gap-3">
                 <div class="space-y-0.5">
                     <div class="flex items-center space-x-2">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wide">Client Review</span>
                         <span class="text-xs text-slate-400 font-medium">| Baseline Scenario</span>
                     </div>
-                    <div class="flex items-center gap-3 flex-wrap"><h2 class="text-base font-bold text-slate-900 tracking-tight">Retirement Projection</h2>
-                        <button type="button" id="btn-assumptions" class="ui-btn ui-btn-sm ui-btn-outline" aria-haspopup="dialog" title="Assumptions and notes">
-                            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span>Assumptions</span>
-                        </button></div>
+                    <h2 class="text-base font-bold text-slate-900 tracking-tight">Comprehensive Retirement Cash Flow & Tax Projection</h2>
                 </div>
-                <div id="solvency-chip" class="flex items-center gap-3 px-4 py-2 rounded-xl border-2 border-emerald-300 bg-emerald-50 shadow-sm">
-                    <span id="solvency-label" class="text-xs font-bold text-emerald-800 uppercase tracking-wide">Plan Solvency Status:</span>
+                <div class="flex items-center space-x-3 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-300 shadow-sm">
+                    <span class="text-sm font-bold text-slate-700 uppercase tracking-wide">Plan Solvency Status:</span>
                     <span id="header-solvency-pill" class="px-3.5 py-1 rounded-lg text-base font-bold bg-emerald-100 text-emerald-800">Fully Funded</span>
                 </div>
-                
             </div>
 
                 <!-- KPI Dashboard Summary -->
-                <!-- Executive Summary -->
-                
-            </section>
-                </div>
-                <!-- Tabs -->
-                <div id="tab-bar" class="px-4 md:px-6 pt-4 flex items-end gap-3 border-b border-slate-200 bg-slate-50">
-                    <div class="flex gap-1" role="tablist">
-                        <button type="button" role="tab" data-tab="overview" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-indigo-600 text-indigo-700" aria-selected="true">Overview</button>
-                        <button type="button" role="tab" data-tab="cashflow" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800" aria-selected="false">Cash Flow</button>
-                        <button type="button" role="tab" data-tab="roth" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800" aria-selected="false">Roth</button>
-                        <button type="button" role="tab" data-tab="ss" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800" aria-selected="false">Social Security</button>
-                        <button type="button" role="tab" data-tab="whatif" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800" aria-selected="false">What-if</button>
-                        <button type="button" role="tab" data-tab="scenarios" class="tab-btn px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800" aria-selected="false">Scenarios</button>
-                    </div>
-                    
-                </div>
-                <div id="tab-panels" class="px-4 md:px-6 py-4 md:py-6">
-                    <div id="tab-overview" class="space-y-6">
-                <section id="kpi-row" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-indigo-600">
                     <div class="p-2.5 bg-indigo-50 border border-indigo-100 rounded-xl text-indigo-600 flex-none">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -446,6 +422,8 @@
                         <p id="kpi-after-tax-sub" class="text-[11px] text-slate-400"></p>
                     </div>
                 </div>
+
+                
 
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex items-center space-x-3.5 border-l-4 border-l-rose-600">
                     <div class="p-2.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 flex-none">
@@ -469,7 +447,8 @@
                 </div>
             </section>
 
-                <section id="exec-summary" class="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl shadow-sm border border-slate-800 p-5 space-y-3">
+                <!-- Executive Summary -->
+                <section class="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-2xl shadow-sm border border-slate-800 p-5 space-y-3">
                 <div class="flex items-center justify-between border-b border-indigo-800/80 pb-2.5">
                     <div class="flex items-center space-x-2">
                         <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -477,7 +456,10 @@
                         </svg>
                         <h3 class="text-sm font-bold tracking-wide uppercase text-indigo-100">Executive Summary</h3>
                     </div>
-                    
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="btn-open-sensitivity" class="ui-btn ui-btn-sm ui-btn-outline-dark">Sensitivity</button>
+                        <button type="button" id="btn-open-report" class="ui-btn ui-btn-sm ui-btn-outline-dark">Detailed Report</button>
+                    </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
                     <div class="bg-indigo-950/60 p-3 rounded-xl border border-indigo-800/60 space-y-1">
@@ -493,30 +475,17 @@
                         <p id="summary-rec-desc" class="font-medium text-indigo-100">Maintain current accumulation discipline and review Roth conversion brackets annually.</p>
                     </div>
                 </div>
-                
-            </section>
-                <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
-                    <div>
-                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Portfolio & Tax Projection Visualizer</h2>
-                        <label class="flex items-center gap-1.5 text-[11px] text-slate-600 cursor-pointer mt-1" title="Applies to the cash flow table and the chart"><input type="checkbox" id="chk-chart-pre-chart" class="rounded border-slate-300 text-indigo-600 h-3.5 w-3.5"> Include pre-retirement years</label>
-                        
-                    </div>
-                    <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 space-x-1">
-                        <button id="btn-chart-assets" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition">Assets Trajectory</button>
-                        <button id="btn-chart-tax" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Tax Exposure</button>
-                        <button id="btn-chart-cashflow" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Cash Flow Sources</button>
-                    </div>
-                </div>
-                <div id="milestone-strip" class="hidden px-5 py-3 border-b border-slate-100 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-slate-600"></div>
-                
-                <div class="relative h-72 w-full">
-                    <canvas id="mainChart"></canvas>
+                <div id="summary-notes" class="border-t border-indigo-800/80 pt-2.5 space-y-1 text-[11px] leading-snug text-indigo-200">
+                    <div id="summary-law-note"><span class="font-bold text-indigo-100">Tax law as of <span id="tax-law-asof"></span>:</span> 2026 tax year. The $6,000 senior deduction ends after 2028. RMDs follow SECURE 2.0 (age 73, or 75 if born 1960 or later).</div>
+                    <div id="summary-infl-note"><span class="font-bold text-indigo-100">Inflation/COLA (<span id="notes-infl"></span>) is applied to:</span> spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 pt faster). Not inflated: Social Security tax thresholds, NIIT thresholds and the senior deduction.</div>
+                    <div id="summary-invest-note"><span class="font-bold text-indigo-100">Investment income is taxed:</span> cash interest at ordinary rates; qualified dividends (2% brokerage yield) and brokerage gains at 0/15/20% (0% when taxable income is low) plus the 3.8% NIIT.</div>
+                    <div id="summary-state-tax-note"><span class="font-bold text-indigo-100">Federal tax only:</span> state income tax is not included and varies by state. See the <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">Tax Foundation</a> or a <a href="https://incomelaboratory.com/state-retirement-taxes-guide/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-100 hover:text-white">state-by-state retirement tax guide</a>.</div>
                 </div>
             </section>
-                    </div>
-                    <div id="tab-roth" class="space-y-6 hidden">
-                <section id="roth-analysis" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
+            </section>
+
+            <!-- Roth Conversion Analysis (recommendation + reasons) -->
+            <section id="roth-analysis" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
                 <div class="flex items-center justify-between flex-wrap gap-2">
                     <div class="flex items-center space-x-2">
                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
@@ -525,7 +494,7 @@
                     <span id="roth-badge" class="text-[11px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold"></span>
                 </div>
                 <div id="roth-rec" class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3"></div>
-                <details id="roth-details" class="group" open>
+                <details id="roth-details" class="group">
                     <summary class="cursor-pointer select-none text-xs font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 list-none">
                         <span class="group-open:hidden">Show reasons &amp; comparison</span><span class="hidden group-open:inline">Hide reasons &amp; comparison</span>
                         <svg class="w-3.5 h-3.5 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -542,9 +511,76 @@
                     </div>
                 </details>
             </section>
+
+            <!-- Chart Section -->
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 pb-3 gap-2">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Portfolio & Tax Projection Visualizer</h2>
+                        <label class="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1 cursor-pointer"><input type="checkbox" id="chk-chart-pre" class="rounded border-slate-300 text-indigo-600 h-3.5 w-3.5"> Include pre-retirement years</label>
                     </div>
-                    <div id="tab-cashflow" class="space-y-6 hidden">
-                <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 space-x-1">
+                        <button id="btn-chart-assets" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white text-slate-900 shadow-sm transition">Assets Trajectory</button>
+                        <button id="btn-chart-tax" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Tax Exposure</button>
+                        <button id="btn-chart-cashflow" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:text-slate-900 transition">Cash Flow Sources</button>
+                    </div>
+                </div>
+                <div id="milestone-strip" class="hidden px-5 py-3 border-b border-slate-100 flex flex-wrap items-center gap-x-1.5 gap-y-2 text-xs text-slate-600"></div>
+                
+                <div class="relative h-72 w-full">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Table with Sticky Super-Headers -->
+            <!-- Pre-Retirement Years (accumulation phase) -->
+            <section id="pre-ret-card" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <details id="pre-ret-details" open class="group">
+                    <summary class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5 flex justify-between items-center cursor-pointer select-none">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                            <h2 class="text-sm font-bold text-slate-900 tracking-tight">Pre-Retirement Years (Accumulation Phase)</h2>
+                            <span id="pre-ret-badge" class="text-[11px] bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full font-semibold"></span>
+                        </div>
+                        <svg class="w-4 h-4 text-slate-400 transform group-open:rotate-180 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <p class="px-5 py-2 text-xs text-slate-500 border-b border-slate-100">Contributions, Taxes and Withdrawals roll into each account; the ledger below starts in the first retirement year.</p>
+                    <div class="overflow-x-auto custom-scrollbar w-full">
+                        <div class="min-w-max">
+                            <table class="w-full text-right text-xs border-collapse">
+                                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                    <tr class="border-b border-slate-300 text-xs">
+                                        <th colspan="2" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-slate-200 text-slate-900 border-r border-slate-300">Timeline</th>
+                                        <th colspan="3" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-indigo-100 text-indigo-950 border-r border-slate-300">Pre-Retirement Activity</th>
+                                        <th colspan="4" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-rose-100 text-rose-950 border-r border-slate-300">Conversion Tax Paid From</th>
+                                        <th colspan="5" class="py-2.5 px-3 text-center font-bold tracking-wider uppercase bg-amber-100 text-amber-950">Ending Balances</th>
+                                    </tr>
+                                    <tr class="text-[11px]">
+                                        <th class="py-2.5 px-3 text-left min-w-[50px]">Yr</th>
+                                        <th class="ages-th py-2.5 px-3 text-left border-r border-slate-200 min-w-[70px]">Ages</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">Contributions</th>
+                                        <th class="py-2.5 px-3 min-w-[90px]">Roth Conv</th>
+                                        <th class="py-2.5 px-3 min-w-[90px] border-r border-slate-200">Conv Tax</th>
+                                        <th class="py-2.5 px-3 min-w-[85px]">Cash</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">Brokerage</th>
+                                        <th class="py-2.5 px-3 min-w-[80px]">IRA</th>
+                                        <th class="py-2.5 px-3 min-w-[80px] border-r border-slate-200">Roth</th>
+                                        <th class="py-2.5 px-3 min-w-[95px]">End Cash</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Brokerage</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Trad IRA</th>
+                                        <th class="py-2.5 px-3 min-w-[100px]">End Roth</th>
+                                        <th class="py-2.5 px-3 min-w-[100px] bg-indigo-50 text-indigo-900">Total Assets</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pre-ret-tbody" class="divide-y divide-slate-100 text-slate-700"></tbody>
+                                                            </table>
+                        </div>
+                    </div>
+                </details>
+                <div id="pre-ret-summary" class="px-5 py-2.5 bg-indigo-50/60 border-t-2 border-indigo-200 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-700"></div>
+            </section>
+
+            <section class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5 flex justify-between items-center">
                     <div class="flex items-center space-x-2">
                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -552,10 +588,15 @@
                         </svg>
                         <h2 class="text-sm font-bold text-slate-900 tracking-tight">Retirement Cash Flow & Tax Ledger (Year-by-Year)</h2>
                     </div>
-                    <label class="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer" title="Applies to the cash flow table and the chart"><input type="checkbox" id="chk-chart-pre" class="rounded border-slate-300 text-indigo-600 h-3.5 w-3.5"> Include pre-retirement years</label>
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 text-[11px] text-slate-500 font-medium">
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-100 border border-indigo-200 inline-block"></span><span>Retire</span></span>
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-100 border border-emerald-200 inline-block"></span><span>SS Start</span></span>
+                            <span class="flex items-center space-x-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-100 border border-amber-200 inline-block"></span><span>RMD Onset</span></span>
+                        </div>
+                    </div>
                 </div>
 
-                <div id="pre-ret-summary" class="px-5 py-2.5 bg-indigo-50/60 border-b border-indigo-200 flex flex-wrap items-center gap-x-5 gap-y-1 text-xs text-slate-700"></div>
                 <div id="ledger-legend" class="px-5 py-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-600 border-b border-slate-100">
                     <span class="font-semibold text-slate-400 uppercase tracking-wider">Key years</span>
                     <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-indigo-100 border border-indigo-200"></span>Retirement starts</span>
@@ -579,7 +620,6 @@
                                 <tr class="text-[11px]">
                                     <th class="py-2.5 px-3 text-left bg-slate-100 min-w-[50px]">Yr</th>
                                     <th class="ages-th py-2.5 px-3 text-left bg-slate-100 min-w-[70px] border-r border-slate-300">Ages</th>
-                                    <th class="pre-col py-2.5 px-3 min-w-[90px]">Contrib.</th>
                                     <th class="py-2.5 px-3 min-w-[90px]">Spend Goal</th>
                                     <th class="py-2.5 px-3 min-w-[85px] sp-col">Your SS</th>
                                     <th class="py-2.5 px-3 min-w-[85px] sp-col">Spouse SS</th>
@@ -613,81 +653,8 @@
                     </div>
                 </div>
             </section>
-                    </div>
-                                        <div id="tab-ss" class="space-y-6 hidden">
-                <section id="ss-analysis" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
-                    <div class="flex items-center justify-between flex-wrap gap-2">
-                        <div class="flex items-center space-x-2">
-                            <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <h2 class="text-base font-bold text-slate-900 tracking-tight">Social Security Claiming Analysis</h2>
-                        </div>
-                        <span id="ss-badge" class="text-[11px] bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold"></span>
-                    </div>
-                    <div id="ss-rec" class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3"></div>
-                    <ul id="ss-reasons" class="list-disc pl-5 space-y-1 text-xs text-slate-700"></ul>
-                    <div id="ss-matrix" class="overflow-x-auto"></div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-right border-collapse">
-                            <thead id="ss-thead" class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200"></thead>
-                            <tbody id="ss-tbody" class="text-slate-700"></tbody>
-                        </table>
-                    </div>
-                    <p class="text-[11px] text-slate-400">Each claiming age is run on your current inputs and ranked by After-Tax Ending Wealth. Benefits scale from the amount you entered: about 70% of the age-67 amount at 62 up to 124% at 70 (full retirement age assumed to be 67), plus the COLA earned while waiting. Strategies that leave spending unfunded are not recommended. Educational estimate, not tax advice.</p>
-                </section>
-            </div>
-                    <div id="tab-whatif" class="space-y-6 hidden">
-                <section id="sens-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5"><h2 class="text-sm font-bold text-slate-900 tracking-tight">Sensitivity Analysis</h2></div>
-                    <div class="px-5 py-2 text-[11px] text-slate-500 border-b border-slate-100">Each row changes one assumption from your current inputs and leaves everything else as is. It updates live as you edit inputs. Ending assets are in future (nominal) dollars.</div>
-                    <div class="p-5 text-slate-700">
-                        <div class="h-72 mb-4"><canvas id="sens-chart"></canvas></div>
-                <div id="sens-body"></div>
-                    </div>
-                </section>
-                    </div>
-                    <div id="tab-scenarios" class="space-y-6 hidden">
-                <section id="scn-card" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="border-b border-slate-200 bg-slate-50/70 px-5 py-3.5"><h2 class="text-sm font-bold text-slate-900 tracking-tight">Scenarios: compare two versions of your plan</h2></div>
-                    <div class="p-5 space-y-5 text-sm text-slate-700">
-                        <ol id="scn-steps" class="grid sm:grid-cols-3 gap-4 text-xs">
-                            <li class="flex items-start gap-2.5"><span class="flex-none w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center mt-0.5">1</span><span><b class="text-slate-900">Pin a baseline (A)</b><br><span class="text-slate-500">Freeze your current inputs, or load a saved file, as the version to compare against.</span></span></li>
-                            <li class="flex items-start gap-2.5"><span class="flex-none w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center mt-0.5">2</span><span><b class="text-slate-900">Change inputs</b><br><span class="text-slate-500">Edit anything in the left panel. This tab stays open and updates live.</span></span></li>
-                            <li class="flex items-start gap-2.5"><span class="flex-none w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center mt-0.5">3</span><span><b class="text-slate-900">Read the comparison</b><br><span class="text-slate-500">Your current inputs (B) are compared with the baseline (A) below.</span></span></li>
-                        </ol>
-                        <div class="grid md:grid-cols-2 gap-4">
-                            <div id="scn-a" class="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-3">
-                                <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-slate-500 text-white text-xs font-bold flex items-center justify-center">A</span><b class="text-slate-900">Baseline</b><span class="text-xs text-slate-500">the version you compare against</span></div>
-                                <div id="scn-a-status" class="text-xs text-slate-600"></div>
-                                <div id="scn-a-metrics" class="hidden grid grid-cols-3 gap-2 text-xs"></div>
-                                <div class="flex flex-wrap gap-2">
-                                    <button type="button" id="btn-scn-pin" class="ui-btn ui-btn-primary">Pin current inputs as A</button>
-                                    <label class="ui-btn ui-btn-outline">Load a file as A<input type="file" id="scn-base-file" accept=".json,application/json" class="hidden"></label>
-                                    <button type="button" id="btn-scn-restore" class="ui-btn ui-btn-outline hidden" title="Put the baseline's inputs back into the left panel">Restore A's inputs</button>
-                                    <button type="button" id="btn-scn-clear" class="ui-btn ui-btn-outline hidden">Clear</button>
-                                </div>
-                            </div>
-                            <div id="scn-b" class="rounded-xl border border-indigo-200 bg-indigo-50/40 p-4 space-y-3">
-                                <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-md bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">B</span><b class="text-slate-900">Current inputs</b><span class="text-xs text-slate-500">what is in the left panel now</span></div>
-                                <div class="flex items-center gap-2"><label for="scn-name" class="text-xs font-semibold text-slate-700">Scenario name</label><input type="text" id="scn-name" value="My scenario" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs w-44 bg-white" aria-label="Scenario name"></div>
-                                <div class="flex flex-wrap gap-2">
-                                    <button type="button" id="btn-scn-save" class="ui-btn ui-btn-outline">Save inputs to file</button>
-                                    <label class="ui-btn ui-btn-outline">Load file into inputs<input type="file" id="scn-file" accept=".json,application/json" class="hidden"></label>
-                                </div>
-                                <p class="text-[11px] text-slate-500">Saving downloads a small .json file of your inputs. Loading a file replaces the inputs in the left panel. Your inputs are also remembered automatically in this browser (Reset clears them).</p>
-                            </div>
-                        </div>
-                        <div id="scn-empty" class="text-xs text-slate-500 bg-slate-50 border border-dashed border-slate-300 rounded-lg p-4">No comparison yet. Pin a baseline (A) above, then change an input.</div>
-                        <div id="scn-compare" class="hidden space-y-3">
-                            <div id="scn-verdict" class="rounded-xl border px-4 py-3 text-sm font-semibold"></div>
-                            <div id="scn-changes" class="text-xs text-slate-600"></div>
-                            <table class="w-full text-xs"><thead><tr class="text-left text-slate-500 border-b border-slate-200"><th class="py-1.5 font-semibold">Metric</th><th id="scn-base-title" class="py-1.5 font-semibold text-right">A</th><th id="scn-cur-title" class="py-1.5 font-semibold text-right">B</th><th class="py-1.5 font-semibold text-right">B minus A</th></tr></thead><tbody id="scn-rows"></tbody></table>
-                            <div class="h-56"><canvas id="scn-chart"></canvas></div>
-                        </div>
-                    </div>
-                </section>
-                    </div>
-                </div>
-            </main>
+
+        </main>
     </div>
 
     <footer class="flex-none bg-indigo-950 border-t border-indigo-900 text-slate-400 text-[11px] px-4 sm:px-6 py-1.5 flex items-center justify-between gap-4">
@@ -759,6 +726,36 @@
     </div>
 
     <!-- Complete 2026 Tax Parameters Popup -->
+    <div id="modal-scenarios" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-3xl w-full mx-4 overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center border-b border-indigo-900 flex-none">
+                <h3 class="text-base font-bold">Save, Load &amp; Compare Scenarios</h3>
+                <button id="btn-close-scenarios" class="text-slate-400 hover:text-white transition"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto text-sm text-slate-700">
+                <div class="flex flex-wrap items-center gap-2">
+                    <input type="text" id="scn-name" value="My scenario" class="border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs w-44" aria-label="Scenario name">
+                    <button type="button" id="btn-scn-save" class="ui-btn ui-btn-outline">Save inputs to file</button>
+                    <label class="ui-btn ui-btn-outline">Load file into inputs<input type="file" id="scn-file" accept=".json,application/json" class="hidden"></label>
+                </div>
+                <div class="border-t border-slate-200 pt-3 space-y-2">
+                    <div class="text-xs font-semibold text-slate-800">Compare</div>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button type="button" id="btn-scn-pin" class="ui-btn ui-btn-primary">Pin current inputs as baseline</button>
+                        <label class="ui-btn ui-btn-outline">Use a saved file as baseline<input type="file" id="scn-base-file" accept=".json,application/json" class="hidden"></label>
+                    </div>
+                    <p class="text-xs text-slate-500">Pin a baseline, then change any input in the panel. The comparison below updates live.</p>
+                </div>
+                <div id="scn-empty" class="text-xs text-slate-500 bg-slate-50 border border-dashed border-slate-300 rounded-lg p-4">No baseline yet. Pin the current inputs (or load a saved file) to start comparing.</div>
+                <div id="scn-compare" class="hidden space-y-3">
+                    <div id="scn-changes" class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg p-3"></div>
+                    <table class="w-full text-xs"><thead><tr class="text-left text-slate-500 border-b border-slate-200"><th class="py-1.5 font-semibold">Metric</th><th id="scn-base-title" class="py-1.5 font-semibold text-right">Baseline</th><th class="py-1.5 font-semibold text-right">Current</th><th class="py-1.5 font-semibold text-right">Difference</th></tr></thead><tbody id="scn-rows"></tbody></table>
+                    <div class="h-56"><canvas id="scn-chart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-report" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-5xl w-full mx-4 overflow-hidden max-h-[92vh] flex flex-col">
             <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center border-b border-indigo-900 flex-none">
@@ -774,22 +771,16 @@
     </div>
     <div id="print-root"></div>
 
-    <div id="modal-assumptions" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-xl w-full mx-4 overflow-hidden max-h-[90vh] flex flex-col">
+    <div id="modal-sensitivity" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-4xl w-full mx-4 overflow-hidden max-h-[92vh] flex flex-col">
             <div class="bg-indigo-950 text-white px-6 py-4 flex justify-between items-center border-b border-indigo-900 flex-none">
-                <h3 class="text-base font-bold flex items-center space-x-2">
-                    <svg class="w-5 h-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <span>Assumptions &amp; Notes</span>
-                </h3>
-                <button id="btn-close-assumptions" class="text-slate-400 hover:text-white transition" aria-label="Close"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <h3 class="text-base font-bold">Sensitivity Analysis</h3>
+                <button id="btn-close-sensitivity" class="text-slate-400 hover:text-white transition" aria-label="Close"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
-            <div class="p-6 overflow-y-auto">
-                <div id="summary-notes" class="space-y-3 text-xs leading-relaxed text-slate-600">
-                    <div id="summary-law-note"><span class="font-bold text-slate-900">Tax law as of <span id="tax-law-asof"></span>:</span> 2026 tax year. The $6,000 senior deduction ends after 2028. RMDs follow SECURE 2.0 (age 73, or 75 if born 1960 or later).</div>
-                    <div id="summary-infl-note"><span class="font-bold text-slate-900">Inflation/COLA (<span id="notes-infl"></span>) is applied to:</span> spending goal, Social Security and pension COLA, tax brackets, standard deductions, capital gains and IRMAA thresholds (IRMAA surcharges grow 1 pt faster). Not inflated: Social Security tax thresholds, NIIT thresholds and the senior deduction.</div>
-                    <div id="summary-invest-note"><span class="font-bold text-slate-900">Investment income is taxed:</span> cash interest at ordinary rates; qualified dividends (2% brokerage yield) and brokerage gains at 0/15/20% (0% when taxable income is low) plus the 3.8% NIIT.</div>
-                    <div id="summary-state-tax-note"><span class="font-bold text-slate-900">Federal tax only:</span> state income tax is not included and varies by state. See the <a href="https://taxfoundation.org/research/all/state/2026-state-tax-changes/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-600 hover:text-indigo-800">Tax Foundation</a> or a <a href="https://incomelaboratory.com/state-retirement-taxes-guide/" target="_blank" rel="noopener noreferrer" class="underline text-indigo-600 hover:text-indigo-800">state-by-state retirement tax guide</a>.</div>
-                </div>
+            <div class="px-6 py-2 text-[11px] text-slate-500 bg-slate-50 border-b border-slate-200 flex-none">Each row changes one assumption from your current inputs and leaves everything else as is. It updates live as you edit inputs. Ending assets are in future (nominal) dollars.</div>
+            <div class="p-6 overflow-y-auto text-slate-700">
+                <div class="h-72 mb-4"><canvas id="sens-chart"></canvas></div>
+                <div id="sens-body"></div>
             </div>
         </div>
     </div>
@@ -874,7 +865,10 @@
                 </div>
             </div>
 
+            <div class="bg-slate-100 px-6 py-3 border-t flex justify-end space-x-3 flex-none">
+                <button id="btn-save-tax-params" class="ui-btn ui-btn-primary">Close</button>
             </div>
+        </div>
     </div>
 
     <!-- Application Engine Logic -->
@@ -1052,7 +1046,7 @@
         function syncFilingStatusUI() {
             document.body.classList.toggle('is-single', document.getElementById('inp-filing-status').value === 'Single');
             const g = document.getElementById('ledger-grp-income');
-            if (g) g.colSpan = (document.body.classList.contains('is-single') ? 4 : 6) + (document.body.classList.contains('show-pre') ? 1 : 0);
+            if (g) g.colSpan = document.body.classList.contains('is-single') ? 4 : 6;
             const one = isSingleUI();
             document.querySelectorAll('.ages-th').forEach(el => { el.textContent = one ? 'Age' : 'Ages'; });
             document.querySelectorAll('.totalss-th').forEach(el => { el.textContent = one ? 'Social Security' : 'Total SS'; });
@@ -1390,6 +1384,7 @@
                 p.irmaaTiersSingle[i].threshold = num(`tax-irmaa-single-t${i + 1}`, d.irmaaTiersSingle[i].threshold);
                 p.irmaaTiersSingle[i].surchargePerPerson = num(`tax-irmaa-single-t${i + 1}-cost`, d.irmaaTiersSingle[i].surchargePerPerson);
             }
+            document.getElementById('modal-tax-params').classList.add('hidden');
             runSimulation();
         }
 
@@ -1991,37 +1986,7 @@
             };
         }
         function makeBaseline(name, state, inp) {
-            return { name, state, inp, at: new Date(), m: scenarioMetrics(runProjection(inp)) };
-        }
-        // ---- Scenarios: A (baseline) vs B (current inputs) ----
-        const SCN_LABELS = { 'inp-filing-status': 'Filing status', 'inp-p1-age': 'Your age', 'inp-p2-age': 'Spouse age', 'inp-p1-retire-age': 'Your retirement age', 'inp-p2-retire-age': 'Spouse retirement age', 'inp-p1-horizon': 'Your plan-to age', 'inp-p2-horizon': 'Spouse plan-to age',
-            'inp-bal-cash': 'Cash balance', 'inp-contrib-cash': 'Cash savings per year', 'inp-bal-brokerage': 'Brokerage balance', 'inp-contrib-brokerage': 'Brokerage savings per year', 'inp-bal-trad': 'Tax-deferred balance', 'inp-contrib-trad': 'Tax-deferred savings per year', 'inp-bal-roth': 'Roth balance', 'inp-contrib-roth': 'Roth savings per year', 'inp-brokerage-basis-pct': 'Brokerage cost basis',
-            'inp-spending-goal': 'Spending goal', 'inp-rmd-save-to': 'Excess RMD goes to', 'inp-p1-ss-amt': 'Your Social Security', 'inp-p2-ss-amt': 'Spouse Social Security', 'inp-p1-ss-age': 'Your SS claim age', 'inp-p2-ss-age': 'Spouse SS claim age', 'inp-has-pension': 'Pension / annuity', 'inp-pension-amt': 'Your pension', 'inp-p2-pension-amt': 'Spouse pension', 'inp-pension-start-age': 'Your pension start age', 'inp-p2-pension-start-age': 'Spouse pension start age', 'inp-pension-survivor': 'Your pension spousal share', 'inp-p2-pension-survivor': 'Spouse pension spousal share',
-            'inp-roth-strategy': 'Roth strategy', 'inp-roth-fixed-amt': 'Fixed Roth conversion', 'inp-allow-work-conversions': 'Convert while working', 'inp-current-salary': 'Salary', 'inp-salary-growth': 'Salary growth',
-            'inp-return-cash': 'Cash growth', 'inp-return-preret': 'Pre-retirement growth', 'inp-return-postret': 'Post-retirement growth', 'inp-inflation-rate': 'Inflation/COLA', 'inp-shock-year': 'Stress test year', 'inp-shock-pct': 'Stress test drop', 'inp-heir-tax-rate': "Heirs' tax rate" };
-        function scnDisplay(id, v) {
-            const el = document.getElementById(id); if (!el) return String(v);
-            if (el.type === 'checkbox') return v ? 'Yes' : 'No';
-            if (el.tagName === 'SELECT') { const o = [...el.options].find(x => x.value === String(v)); return o ? o.textContent.trim() : String(v); }
-            const n = parseFloat(v); if (isNaN(n)) return String(v);
-            if (/(bal-|contrib-|spending-goal|ss-amt|pension-amt|fixed-amt|current-salary)/.test(id)) return fmtCurr(n);
-            if (/(return-|inflation|growth|basis-pct|tax-rate|survivor)/.test(id)) return n + '%';
-            return String(v);
-        }
-        // Which input differences are worth listing (hide settings that are switched off in both versions)
-        function scnDiffs(aState, bState) {
-            const single = bState['inp-filing-status'] === 'Single' && aState['inp-filing-status'] === 'Single', out = [];
-            Object.keys(SCN_LABELS).forEach(id => {
-                if (!(id in aState) || !(id in bState) || String(aState[id]) === String(bState[id])) return;
-                const na = parseFloat(aState[id]), nb = parseFloat(bState[id]);
-                if (typeof aState[id] === 'string' && typeof bState[id] === 'string' && !isNaN(na) && !isNaN(nb) && na === nb && document.getElementById(id) && document.getElementById(id).tagName !== 'SELECT') return;   // "6.0" vs "6" is not a change
-                if (single && /^inp-p2-/.test(id)) return;
-                if (/salary/.test(id) && aState['inp-roth-strategy'] === 'none' && bState['inp-roth-strategy'] === 'none') return;
-                if (id === 'inp-roth-fixed-amt' && aState['inp-roth-strategy'] !== 'fixed_amount' && bState['inp-roth-strategy'] !== 'fixed_amount') return;
-                if (/pension/.test(id) && id !== 'inp-has-pension' && !aState['inp-has-pension'] && !bState['inp-has-pension']) return;
-                out.push(`${SCN_LABELS[id]}: ${scnDisplay(id, aState[id])} \u2192 ${scnDisplay(id, bState[id])}`);
-            });
-            return out;
+            return { name, state, inp, m: scenarioMetrics(runProjection(inp)) };
         }
         function pinBaseline() {
             scnBaseline = makeBaseline(document.getElementById('scn-name').value || 'Baseline', getFormState(), readInputs());
@@ -2035,69 +2000,38 @@
             scnBaseline = makeBaseline(obj.name || 'Saved file', Object.assign({}, cur, obj.inputs), inp);
             refreshComparison();
         }
-        function restoreBaseline() {
-            if (!scnBaseline) return;
-            document.getElementById('scn-name').value = scnBaseline.name;
-            setFormState(scnBaseline.state);
-            refreshComparison();
-        }
-        function clearBaseline() { scnBaseline = null; refreshComparison(); }
-        function renderScenarioCards() {
-            const a = scnBaseline, has = !!a, f = v => fmtCurr(v);
-            document.getElementById('scn-a-status').innerHTML = has ? `<b class="text-slate-900">${a.name.replace(/[<>&]/g, '')}</b> &middot; pinned ${a.at.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}` : 'No baseline yet. Pin your current inputs, or load a saved file, to start comparing.';
-            const mx = document.getElementById('scn-a-metrics'); mx.classList.toggle('hidden', !has);
-            if (has) mx.innerHTML = [['After-tax ending', f(a.m.afterTax)], ['Lifetime tax', f(a.m.tax)], ['Plan status', a.m.deficit === 0 ? 'Funded' : `${a.m.deficit} shortfall yr${a.m.deficit === 1 ? '' : 's'}`]].map(([k, v]) => `<div class="rounded-lg bg-white border border-slate-200 px-2.5 py-1.5"><div class="text-[10px] uppercase tracking-wide text-slate-400">${k}</div><div class="font-semibold text-slate-900">${v}</div></div>`).join('');
-            document.getElementById('btn-scn-pin').textContent = has ? 'Re-pin A with current inputs' : 'Pin current inputs as A';
-            document.getElementById('btn-scn-restore').classList.toggle('hidden', !has);
-            document.getElementById('btn-scn-clear').classList.toggle('hidden', !has);
-        }
         function refreshComparison() {
-            if (currentTab !== 'scenarios') return;
-            renderScenarioCards();
+            const modal = document.getElementById('modal-scenarios');
+            if (!modal || modal.classList.contains('hidden')) return;
             const has = !!scnBaseline;
             document.getElementById('scn-empty').classList.toggle('hidden', has);
             document.getElementById('scn-compare').classList.toggle('hidden', !has);
             if (!has) return;
             const cur = scenarioMetrics(runProjection(readInputs())), base = scnBaseline.m;
-            const curName = (document.getElementById('scn-name').value || 'Current inputs'), same = curName === scnBaseline.name;
-            const nameA = `A: ${scnBaseline.name}`, nameB = same ? 'B: Current inputs' : `B: ${curName}`;
-            document.getElementById('scn-base-title').textContent = nameA;
-            document.getElementById('scn-cur-title').textContent = nameB;
+            document.getElementById('scn-base-title').textContent = scnBaseline.name;
             const rows = [
-                ['After-tax ending wealth', 'afterTax', 'money', 1], ['Ending total assets', 'endAssets', 'money', 1], ['Lifetime tax (retirement + Roth conv.)', 'tax', 'money', -1], ['Lifetime IRMAA surcharges', 'irmaa', 'money', -1], ['Tax + IRMAA', 'taxIrmaa', 'money', -1],
+                ['Lifetime tax (retirement + Roth conv.)', 'tax', 'money', -1], ['Lifetime IRMAA surcharges', 'irmaa', 'money', -1], ['Tax + IRMAA', 'taxIrmaa', 'money', -1],
                 ['Total Roth conversions', 'conv', 'money', 0], ['Years with a spending shortfall', 'deficit', 'int', -1],
-                ['Ending tax-deferred (IRA/401k)', 'endTrad', 'money', 0], ['Ending Roth', 'endRoth', 'money', 0], ['Peak tax-deferred balance', 'peakTrad', 'money', 0]
+                ['Ending total assets', 'endAssets', 'money', 1], ['After-tax ending wealth', 'afterTax', 'money', 1], ['Ending tax-deferred (IRA/401k)', 'endTrad', 'money', 0], ['Ending Roth', 'endRoth', 'money', 0], ['Peak tax-deferred balance', 'peakTrad', 'money', 0]
             ];
             const f = (v, t) => t === 'int' ? String(Math.round(v)) : fmtCurr(v);
             document.getElementById('scn-rows').innerHTML = rows.map(([label, k, t, good]) => {
                 const d = cur[k] - base[k], neutral = Math.abs(d) < 0.5;
                 const color = neutral || good === 0 ? 'text-slate-500' : ((d * good > 0) ? 'text-emerald-600' : 'text-rose-600');
                 const sign = d > 0 ? '+' : d < 0 ? '-' : '';
-                return `<tr class="border-b border-slate-100${k === 'afterTax' ? ' bg-indigo-50/40 font-semibold' : ''}"><td class="py-1.5">${label}</td><td class="py-1.5 text-right">${f(base[k], t)}</td><td class="py-1.5 text-right">${f(cur[k], t)}</td><td class="py-1.5 text-right font-semibold ${color}">${neutral ? '-' : sign + f(Math.abs(d), t)}</td></tr>`;
+                return `<tr class="border-b border-slate-100"><td class="py-1.5">${label}</td><td class="py-1.5 text-right">${f(base[k], t)}</td><td class="py-1.5 text-right">${f(cur[k], t)}</td><td class="py-1.5 text-right font-semibold ${color}">${neutral ? '-' : sign + f(Math.abs(d), t)}</td></tr>`;
             }).join('');
-            const diffs = scnDiffs(scnBaseline.state, getFormState());
-            document.getElementById('scn-changes').innerHTML = diffs.length
-                ? `<div class="font-semibold text-slate-800 mb-1">What changed (A \u2192 B)</div><div class="flex flex-wrap gap-1.5">${diffs.slice(0, 12).map(x => `<span class="bg-white border border-slate-200 rounded-md px-2 py-0.5">${sgl(x)}</span>`).join('')}${diffs.length > 12 ? `<span class="text-slate-500">+${diffs.length - 12} more</span>` : ''}</div>`
-                : 'B is identical to A. Change an input in the left panel to see the effect.';
-            // plain-English verdict
-            const dA = cur.afterTax - base.afterTax, dT = cur.tax - base.tax, pct = base.afterTax ? Math.abs(dA / base.afterTax * 100).toFixed(1) : '0.0', v = document.getElementById('scn-verdict');
-            let msg, tone;
-            if (!diffs.length && Math.abs(dA) < 1) { msg = 'No difference yet: B matches A.'; tone = 'slate'; }
-            else {
-                const lost = base.deficit === 0 && cur.deficit > 0, fixed = base.deficit > 0 && cur.deficit === 0;
-                msg = `${nameB.replace(/^B: /, '')} ends with ${fmtCurr(Math.abs(dA))} ${dA >= 0 ? 'more' : 'less'} After-Tax Ending Wealth than ${scnBaseline.name} (${dA >= 0 ? '+' : '-'}${pct}%), with ${fmtCurr(Math.abs(dT))} ${dT <= 0 ? 'less' : 'more'} lifetime tax.`;
-                if (lost) msg += ` It also leaves spending unfunded in ${cur.deficit} year${cur.deficit === 1 ? '' : 's'}.`; else if (fixed) msg += ' It also fully funds spending, which A did not.';
-                tone = lost || dA < -1 ? 'rose' : (dA > 1 ? 'emerald' : 'slate');
-            }
-            v.textContent = msg; v.className = `rounded-xl border px-4 py-3 text-sm font-semibold ${tone === 'emerald' ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : tone === 'rose' ? 'bg-rose-50 border-rose-200 text-rose-900' : 'bg-slate-50 border-slate-200 text-slate-700'}`;
+            const now = getFormState(), diffs = [];
+            Object.keys(now).forEach(k => { if (k in scnBaseline.state && String(now[k]) !== String(scnBaseline.state[k])) diffs.push(`${k.replace(/^inp-|^radio:/, '').replace(/-/g, ' ')}: ${scnBaseline.state[k]} → ${now[k]}`); });
+            document.getElementById('scn-changes').innerHTML = diffs.length ? `<span class="font-semibold text-slate-800">Inputs changed from baseline:</span> ` + diffs.slice(0, 10).join(' · ') + (diffs.length > 10 ? ` · +${diffs.length - 10} more` : '') : 'Current inputs match the baseline. Change an input to see the effect.';
             if (typeof Chart !== 'undefined') {
                 const n = Math.max(base.series.length, cur.series.length), labels = Array.from({ length: n }, (_, i) => `Yr ${i + 1}`);
-                const pad = arr => Array.from({ length: n }, (_, i) => i < arr.length ? arr[i] : null);
+                const pad = a => Array.from({ length: n }, (_, i) => i < a.length ? a[i] : null);
                 if (scnChart) scnChart.destroy();
                 scnChart = new Chart(document.getElementById('scn-chart'), { type: 'line', data: { labels, datasets: [
-                    { label: nameA, data: pad(base.series), borderColor: '#94a3b8', borderDash: [6, 4], pointRadius: 0, tension: 0.2 },
-                    { label: nameB, data: pad(cur.series), borderColor: '#4f46e5', pointRadius: 0, tension: 0.2 }] },
-                    options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Total assets over time' } }, scales: { y: { ticks: { callback: v2 => '$' + (v2 / 1e6).toFixed(1) + 'M' } } } } });
+                    { label: scnBaseline.name, data: pad(base.series), borderColor: '#94a3b8', borderDash: [6, 4], pointRadius: 0, tension: 0.2 },
+                    { label: 'Current', data: pad(cur.series), borderColor: '#4f46e5', pointRadius: 0, tension: 0.2 }] },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { title: { display: true, text: 'Total assets over time' } }, scales: { y: { ticks: { callback: v => '$' + (v / 1e6).toFixed(1) + 'M' } } } } });
             }
         }
 
@@ -2107,21 +2041,6 @@
         const paletteAlpha = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
         const BRAND = { name: 'Second Inning Financial', legal: 'Second Inning Financial LLC', tagline: 'Plan your second act', contact: 'krishna.fincoach@gmail.com', disclaimer: 'Educational projection, not tax, legal or investment advice.' };
         const APP_VERSION = '1.1';
-        let currentTab = 'overview';
-        const TAB_ON = 'px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-indigo-600 text-indigo-700', TAB_OFF = 'px-4 py-2 text-sm font-semibold border-b-2 -mb-px transition border-transparent text-slate-500 hover:text-slate-800';
-        function showTab(name) {
-            currentTab = name;
-            ['overview', 'cashflow', 'roth', 'ss', 'whatif', 'scenarios'].forEach(n => {
-                document.getElementById('tab-' + n).classList.toggle('hidden', n !== name);
-                const b = document.querySelector(`[data-tab="${n}"]`); b.className = 'tab-btn ' + (n === name ? TAB_ON : TAB_OFF); b.setAttribute('aria-selected', n === name ? 'true' : 'false');
-            });
-            const mainEl = document.querySelector('main'), bar = document.getElementById('tab-bar');
-            if (mainEl.scrollTop > bar.offsetTop) mainEl.scrollTop = bar.offsetTop;   // keep the tab bar in view after switching
-            if (name === 'ss') renderSSAnalysis();
-            if (name === 'whatif') renderSensitivity();
-            if (name === 'scenarios') refreshComparison();
-            window.dispatchEvent(new Event('resize'));
-        }
         // Non-blocking message (alerts can be blocked inside a framed page)
         function notify(msg) {
             let t = document.getElementById('toast');
@@ -2324,7 +2243,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             [-0.10, 0.10, 0.20].forEach(d => add('Retirement spending', `${d > 0 ? '+' : ''}${(d * 100).toFixed(0)}% (${fmtCurr(base.baseSpendingGoal * (1 + d))}/yr)`, { baseSpendingGoal: base.baseSpendingGoal * (1 + d) }));
             const f0 = SS_CLAIM_FACTOR[base.p1SSAge], f2 = SS_CLAIM_FACTOR[base.p2SSAge];
             if (f0) [62, 65, 67, 70].filter(a => a !== base.p1SSAge).forEach(a => add(`Social Security claim age (${base.filingStatus === 'MFJ' ? 'both spouses; ' : ''}benefit scaled from full retirement age 67)`, `Claim at ${a}`,
-                { p1SSAge: a, p1SSAmt: ssAmountAt(base.p1SSAmt, base.p1SSAge, a, base.inflation), p2SSAge: a, p2SSAmt: ssAmountAt(base.p2SSAmt, base.p2SSAge || base.p1SSAge, a, base.inflation) }));
+                { p1SSAge: a, p1SSAmt: base.p1SSAmt * SS_CLAIM_FACTOR[a] / f0, p2SSAge: a, p2SSAmt: base.p2SSAmt * SS_CLAIM_FACTOR[a] / (f2 || f0) }));
             [-2, 2, 5].forEach(d => { const a = base.p1RetireAge + d; if (a >= base.p1Age && a < base.p1TargetAge) add('Your retirement age', `Retire at ${a} (${d > 0 ? '+' : ''}${d} yrs)`, { p1RetireAge: a }); });
             const retYear = Math.max(1, base.p1RetireAge - base.p1Age + 1);
             [0.20, 0.30, 0.40].forEach(p => add('Market drop in first retirement year', `-${(p * 100).toFixed(0)}% in retirement yr 1`, { shockYear: retYear, shockPct: p }));
@@ -2376,7 +2295,8 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
         }
 
         function renderSensitivity() {
-            if (currentTab !== 'whatif') return;
+            const modal = document.getElementById('modal-sensitivity');
+            if (!modal || modal.classList.contains('hidden')) return;
             const { b, cases } = sensitivityData();
             const dCell = (d, goodSign) => { const z = Math.abs(d) < 0.5; const col = z ? 'text-slate-400' : (d * goodSign > 0 ? 'text-emerald-600' : 'text-rose-600'); return `<td class="py-1 text-right ${col}">${z ? '-' : (d > 0 ? '+' : '-') + fmtCurr(Math.abs(d))}</td>`; };
             const groups = [...new Set(cases.map(c => c.group))];
@@ -2397,131 +2317,6 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             }
         }
 
-
-
-        // ================= Social Security claiming analysis: every claiming age, recommend one, explain why =================
-        const SS_AGES = [62, 63, 64, 65, 66, 67, 68, 69, 70];
-        // A benefit entered for claim age A, restated for claim age B: reduction / delayed credits vs age 67, plus the COLA earned while waiting (or removed when claiming earlier)
-        function ssAmountAt(amt, fromAge, toAge, infl) {
-            const f0 = SS_CLAIM_FACTOR[fromAge], f1 = SS_CLAIM_FACTOR[toAge];
-            if (!f0 || !f1) return amt;
-            return Math.round(amt * (f1 / f0) * Math.pow(1 + infl, toAge - fromAge));
-        }
-        function ssBreakEven(early, late, infl) {
-            const cum = (c, upto) => { let t = 0; for (let a = c.age; a <= upto; a++) t += c.amt * Math.pow(1 + infl, a - c.age); return t; };
-            for (let a = late.age; a <= 110; a++) if (cum(late, a) >= cum(early, a)) return a;
-            return null;
-        }
-        function ssAnalysis() {
-            const base = readInputs(), mfj = base.filingStatus === 'MFJ';
-            const has1 = base.p1SSAmt > 0 && !!SS_CLAIM_FACTOR[base.p1SSAge], has2 = mfj && base.p2SSAmt > 0 && !!SS_CLAIM_FACTOR[base.p2SSAge];
-            if (!has1 && !has2) return { none: true };
-            const ages1 = has1 ? SS_AGES : [base.p1SSAge], ages2 = has2 ? SS_AGES : [base.p2SSAge];
-            const run = (a1, a2, over) => {
-                const inp = Object.assign({}, base, over || {}, { p1SSAge: a1, p1SSAmt: has1 ? ssAmountAt(base.p1SSAmt, base.p1SSAge, a1, base.inflation) : base.p1SSAmt, p2SSAge: a2, p2SSAmt: has2 ? ssAmountAt(base.p2SSAmt, base.p2SSAge, a2, base.inflation) : base.p2SSAmt });
-                const out = runProjection(inp), m = scenarioMetrics(out), dep = out.results.find(r => r.endTotalAssets < 1 && r.spendGoal > 0);
-                return { a1, a2, inp, m, funded: out.totalDeficitYears === 0 && !dep };
-            };
-            const combos = []; ages1.forEach(a1 => ages2.forEach(a2 => combos.push(run(a1, a2))));
-            const cur = combos.find(c => c.a1 === base.p1SSAge && c.a2 === base.p2SSAge);
-            const pool = combos.filter(c => c.funded), ranked = (pool.length ? pool : combos).slice().sort((x, y) => (y.m.afterTax - x.m.afterTax) || (x.m.taxIrmaa - y.m.taxIrmaa));
-            const best = ranked[0], gain = best.m.afterTax - cur.m.afterTax, thr = Math.max(10000, 0.005 * cur.m.afterTax), rec = (best === cur || gain <= thr) ? cur : best;
-            const txt = c => mfj ? (has2 ? `you at ${c.a1}, spouse at ${c.a2}` : `you at ${c.a1}`) : `age ${c.a1}`, reasons = [];
-            const money = v => fmtCurr(v), horizon = base.p1TargetAge;
-            if (rec === cur) {
-                reasons.push(`Your current claiming ages (${txt(cur)}) already give the highest After-Tax Ending Wealth, or within ${money(thr)} of it${best !== cur ? `; the best alternative (${txt(best)}) adds only ${money(gain)} (${(gain / cur.m.afterTax * 100).toFixed(1)}%)` : ''}.`);
-            } else {
-                reasons.push(`Claiming ${txt(rec)} gives the highest After-Tax Ending Wealth, ${money(rec.m.afterTax)}: ${money(rec.m.afterTax - cur.m.afterTax)} (${((rec.m.afterTax - cur.m.afterTax) / cur.m.afterTax * 100).toFixed(1)}%) more than your current ${txt(cur)}.`);
-                const who = [];
-                if (has1 && rec.a1 !== cur.a1) who.push({ nm: 'your', from: cur.a1, to: rec.a1, a0: ssAmountAt(base.p1SSAmt, base.p1SSAge, cur.a1, base.inflation), a1: ssAmountAt(base.p1SSAmt, base.p1SSAge, rec.a1, base.inflation) });
-                if (has2 && rec.a2 !== cur.a2) who.push({ nm: "your spouse's", from: cur.a2, to: rec.a2, a0: ssAmountAt(base.p2SSAmt, base.p2SSAge, cur.a2, base.inflation), a1: ssAmountAt(base.p2SSAmt, base.p2SSAge, rec.a2, base.inflation) });
-                who.forEach(w => reasons.push(`Moving ${w.nm} claim from ${w.from} to ${w.to} changes that annual benefit from ${money(w.a0)} to ${money(w.a1)} (${w.a1 >= w.a0 ? '+' : ''}${((w.a1 / w.a0 - 1) * 100).toFixed(0)}%), in the dollars of the year it starts.`));
-                const m0 = who[0];
-                if (m0) {
-                    const early = m0.from < m0.to ? { age: m0.from, amt: m0.a0 } : { age: m0.to, amt: m0.a1 }, late = m0.from < m0.to ? { age: m0.to, amt: m0.a1 } : { age: m0.from, amt: m0.a0 };
-                    const be = ssBreakEven(early, late, base.inflation);
-                    if (be) reasons.push(`Claiming at ${late.age} pays more in total than claiming at ${early.age} only if you live past about age ${be} (break-even, with COLA, no discounting). Your plan runs to age ${horizon}.`);
-                }
-                if (mfj && has1 && has2) {
-                    const hi1 = base.p1SSAmt / SS_CLAIM_FACTOR[base.p1SSAge] >= base.p2SSAmt / SS_CLAIM_FACTOR[base.p2SSAge];
-                    if ((hi1 && rec.a1 > cur.a1) || (!hi1 && rec.a2 > cur.a2)) reasons.push("Delaying the higher earner's benefit also raises the benefit the surviving spouse keeps, because a survivor receives the larger of the two.");
-                }
-                const dTax = rec.m.taxIrmaa - cur.m.taxIrmaa;
-                reasons.push(`Taxes and Medicare surcharges are included: lifetime tax plus IRMAA is ${dTax > 0 ? 'higher' : 'lower'} by ${money(Math.abs(dTax))} under the recommendation.`);
-                if (rec.a1 > cur.a1 && base.rothStrategy === 'none' && cur.m.peakTrad > 1) reasons.push('The years before benefits start are lower-income years, a good window for Roth conversions (see the Roth tab).');
-                if (horizon > 86) {
-                    const alt = (o) => runProjection(Object.assign({}, o.inp, { p1TargetAge: Math.max(base.p1RetireAge + 1, 85), p2TargetAge: Math.max(base.p2RetireAge + 1, 85) }));
-                    const aR = scenarioMetrics(alt(rec)).afterTax, aC = scenarioMetrics(alt(cur)).afterTax;
-                    reasons.push(`If the plan ended at 85 instead of ${horizon}, the recommended ages would leave ${money(Math.abs(aR - aC))} ${aR >= aC ? 'more' : 'less'} than your current ages.`);
-                }
-            }
-            if (!rec.funded) reasons.push('Caution: spending is not fully funded with these claiming ages; address funding first.');
-            return { combos, cur, best, rec, mfj, has1, has2, reasons: reasons.map(t => sgl(t)), base, thr, ranked };
-        }
-
-        function renderSSAnalysis() {
-            const badge = document.getElementById('ss-badge'), recEl = document.getElementById('ss-rec'), list = document.getElementById('ss-reasons'), mat = document.getElementById('ss-matrix'), tb = document.getElementById('ss-tbody'), th = document.getElementById('ss-thead');
-            const a = ssAnalysis();
-            if (a.none) {
-                badge.textContent = 'Not applicable'; recEl.innerHTML = '<div class="text-sm font-semibold text-emerald-900">Enter a Social Security benefit to analyze claiming ages.</div><div class="text-xs text-emerald-800 mt-0.5">Add your estimated annual benefit in section 3 (Retirement Spending &amp; Income).</div>';
-                list.innerHTML = ''; mat.innerHTML = ''; tb.innerHTML = ''; th.innerHTML = ''; return;
-            }
-            const txt = c => a.mfj ? (a.has2 ? `You at ${c.a1} \u00B7 Spouse at ${c.a2}` : `You at ${c.a1}`) : `Age ${c.a1}`, same = a.rec === a.cur;
-            badge.textContent = same ? 'Current ages are fine' : `Recommended: ${sgl(txt(a.rec))}`;
-            recEl.innerHTML = `<div class="flex items-start justify-between gap-3 flex-wrap"><div><div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Recommendation</div>
-                <div class="text-base font-bold text-emerald-900">${sgl(txt(a.rec))}</div>
-                <div class="text-xs text-emerald-800 mt-0.5">Your current selection: <b>${sgl(txt(a.cur))}</b>${same ? ' (matches the recommendation)' : ` &middot; recommended adds <b>${fmtCurr(a.rec.m.afterTax - a.cur.m.afterTax)}</b> of After-Tax Ending Wealth`}</div></div>
-                ${same ? '' : `<button type="button" id="btn-apply-ss-rec" data-a1="${a.rec.a1}" data-a2="${a.rec.a2}" class="ui-btn ui-btn-primary">Apply recommendation</button>`}</div>`;
-            list.innerHTML = a.reasons.map(t => `<li>${t}</li>`).join('');
-            const money = v => fmtCurr(v), dCell = v => Math.abs(v) < 0.5 ? '<td class="py-1.5 px-2 text-slate-400">-</td>' : `<td class="py-1.5 px-2 font-semibold ${v > 0 ? 'text-emerald-600' : 'text-rose-600'}">${v > 0 ? '+' : '-'}${money(Math.abs(v))}</td>`;
-            const tag = c => `${c === a.rec ? ' <span class="ml-1 text-[10px] bg-emerald-600 text-white px-1.5 py-0.5 rounded-full">Recommended</span>' : ''}${c === a.cur ? ' <span class="ml-1 text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded-full">Current</span>' : ''}${c.funded ? '' : ' <span class="ml-1 text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full">Not funded</span>'}`;
-            if (a.mfj && a.has1 && a.has2) {
-                const vals = a.combos.map(c => c.m.afterTax), lo = Math.min(...vals), hi = Math.max(...vals);
-                mat.innerHTML = `<div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1">After-tax ending wealth by claiming ages (rows: you, columns: spouse)</div>
-                    <table id="ss-heat" class="text-[11px] text-center border-separate" style="border-spacing:2px"><thead><tr><th></th>${SS_AGES.map(x => `<th class="px-2 py-1 text-slate-500 font-semibold">${x}</th>`).join('')}</tr></thead><tbody>${SS_AGES.map(r => `<tr><th class="pr-2 text-slate-500 font-semibold">${r}</th>${SS_AGES.map(cg => { const c = a.combos.find(x => x.a1 === r && x.a2 === cg), ratio = hi > lo ? (c.m.afterTax - lo) / (hi - lo) : 1; return `<td class="px-2 py-1.5 rounded ${c === a.rec ? 'ring-2 ring-emerald-600 font-bold' : ''} ${c === a.cur ? 'ring-2 ring-indigo-500' : ''} ${c.funded ? '' : 'line-through text-slate-400'}" style="background:rgba(16,185,129,${(0.06 + 0.5 * ratio).toFixed(2)})" data-a1="${r}" data-a2="${cg}" title="You ${r}, spouse ${cg}: ${money(c.m.afterTax)}">${(c.m.afterTax / 1e6).toFixed(2)}M</td>`; }).join('')}</tr>`).join('')}</tbody></table>
-                    <div class="text-[11px] text-slate-500 mt-1">Green ring = recommended, blue ring = your current ages. Darker = more after-tax wealth.</div>`;
-                th.innerHTML = '<tr><th class="py-2 px-2 text-left">Top combinations</th><th class="py-2 px-2">Your benefit</th><th class="py-2 px-2">Spouse benefit</th><th class="py-2 px-2">Lifetime tax</th><th class="py-2 px-2 bg-emerald-50 text-emerald-900">After-tax ending</th><th class="py-2 px-2">vs. current</th></tr>';
-                const top = a.ranked.slice(0, 6); if (!top.includes(a.cur)) top.push(a.cur);
-                tb.innerHTML = top.map(c => `<tr class="${c === a.rec ? 'bg-emerald-50 font-semibold' : ''} border-b border-slate-100"><td class="py-1.5 px-2 text-left">${txt(c)}${tag(c)}</td><td class="py-1.5 px-2">${money(c.inp.p1SSAmt)}</td><td class="py-1.5 px-2">${money(c.inp.p2SSAmt)}</td><td class="py-1.5 px-2">${money(c.m.tax)}</td><td class="py-1.5 px-2 text-slate-900">${money(c.m.afterTax)}</td>${c === a.cur ? '<td class="py-1.5 px-2 text-slate-400">-</td>' : dCell(c.m.afterTax - a.cur.m.afterTax)}</tr>`).join('');
-            } else {
-                mat.innerHTML = '';
-                th.innerHTML = '<tr><th class="py-2 px-2 text-left">Claim at</th><th class="py-2 px-2">First-year benefit</th><th class="py-2 px-2">Lifetime tax</th><th class="py-2 px-2">IRMAA</th><th class="py-2 px-2 bg-emerald-50 text-emerald-900">After-tax ending</th><th class="py-2 px-2">vs. current</th></tr>';
-                const pers = a.has1 ? 'a1' : 'a2';
-                tb.innerHTML = a.combos.map(c => `<tr class="${c === a.rec ? 'bg-emerald-50 font-semibold' : ''} border-b border-slate-100"><td class="py-1.5 px-2 text-left">Age ${c[pers]}${tag(c)}</td><td class="py-1.5 px-2">${money(a.has1 ? c.inp.p1SSAmt : c.inp.p2SSAmt)}</td><td class="py-1.5 px-2">${money(c.m.tax)}</td><td class="py-1.5 px-2">${money(c.m.irmaa)}</td><td class="py-1.5 px-2 text-slate-900">${money(c.m.afterTax)}</td>${c === a.cur ? '<td class="py-1.5 px-2 text-slate-400">-</td>' : dCell(c.m.afterTax - a.cur.m.afterTax)}</tr>`).join('');
-            }
-        }
-
-        // ================= remember inputs between visits (this browser only) =================
-        const STORE_KEY = 'rpe.inputs.v1';
-        const store = {
-            get() { try { return window.localStorage.getItem(STORE_KEY); } catch (e) { return null; } },
-            set(v) { try { window.localStorage.setItem(STORE_KEY, v); } catch (e) { /* storage unavailable: skip */ } },
-            remove() { try { window.localStorage.removeItem(STORE_KEY); } catch (e) { /* skip */ } }
-        };
-        let saveTimer = null;
-        function saveInputsNow() {
-            store.set(JSON.stringify({ v: 1, saved: new Date().toISOString(), inputs: getFormState(), name: document.getElementById('scn-name').value, includePre: document.getElementById('chk-chart-pre').checked }));
-        }
-        function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveInputsNow, 400); }
-        function restoreSavedInputs() {
-            const raw = store.get(); if (!raw) return false;
-            try {
-                const o = JSON.parse(raw); if (!o || o.v !== 1 || !o.inputs || typeof o.inputs !== 'object') return false;
-                const clean = {};
-                document.querySelectorAll('#panel-content-body input, #panel-content-body select').forEach(el => {
-                    if (!el.id || !(el.id in o.inputs)) return; const v = o.inputs[el.id];
-                    if (el.type === 'checkbox') { if (typeof v === 'boolean') clean[el.id] = v; }
-                    else if (el.tagName === 'SELECT') { if ([...el.options].some(x => x.value === String(v))) clean[el.id] = String(v); }
-                    else if (typeof v === 'string' || typeof v === 'number') clean[el.id] = String(v).slice(0, 20);
-                });
-                if (!Object.keys(clean).length) return false;
-                applyFormState(clean);
-                if (typeof o.name === 'string' && o.name) document.getElementById('scn-name').value = o.name.slice(0, 60);
-                document.getElementById('chk-chart-pre').checked = o.includePre === true; document.getElementById('chk-chart-pre-chart').checked = o.includePre === true;
-                handleFilingStatusChange();
-                return true;
-            } catch (e) { return false; }
-        }
 
         // ================= Roth conversion analysis: runs every strategy, recommends one, explains why =================
         const ROTH_CANDIDATES = [['none', 'No conversions'], ['fill_12', 'Fill 12% bracket'], ['fill_22', 'Fill 22% bracket'], ['fill_24', 'Fill 24% bracket'], ['optimal', 'Optimal (22% cap, IRMAA-aware)']];
@@ -2655,28 +2450,30 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             if (deficitYears === 0) {
                 headerPill.textContent = "Fully Funded";
                 headerPill.className = "px-3.5 py-1 rounded-lg text-base font-bold bg-emerald-100 text-emerald-800";
-                document.getElementById('solvency-chip').className = "flex items-center gap-3 px-4 py-2 rounded-xl border-2 border-emerald-300 bg-emerald-50 shadow-sm";
-                document.getElementById('solvency-label').className = "text-xs font-bold text-emerald-800 uppercase tracking-wide";
             } else {
                 headerPill.textContent = `Deficit Risk (${deficitYears} yrs)`;
                 headerPill.className = "px-3.5 py-1 rounded-lg text-base font-bold bg-rose-100 text-rose-800";
-                document.getElementById('solvency-chip').className = "flex items-center gap-3 px-4 py-2 rounded-xl border-2 border-rose-300 bg-rose-50 shadow-sm";
-                document.getElementById('solvency-label').className = "text-xs font-bold text-rose-800 uppercase tracking-wide";
             }
         }
 
-        // Pre-retirement totals bar above the cash flow table (rows themselves appear when "Include pre-retirement years" is on)
-        function renderPreRetirementSummary() {
-            const rows = simulationResults.filter(r => r.isWorking), el = document.getElementById('pre-ret-summary');
-            el.classList.toggle('hidden', rows.length === 0);
-            if (!rows.length) return;
+        function renderPreRetirementTable() {
+            const rows = simulationResults.filter(r => r.isWorking), card = document.getElementById('pre-ret-card');
+            card.classList.toggle('hidden', rows.length === 0);
+            if (rows.length === 0) return;
+            document.getElementById('pre-ret-badge').textContent = `${rows.length} yr${rows.length === 1 ? '' : 's'}`;
+            const c = (v, cls = '') => `<td class="py-2 px-3 ${cls}">${v > 0.5 ? fmtCurr(v) : '-'}</td>`;
+            document.getElementById('pre-ret-tbody').innerHTML = rows.map(r => `<tr class="hover:bg-slate-50 transition text-xs">
+                <td class="py-2 px-3 text-left font-bold text-slate-900">${r.year}</td>
+                <td class="py-2 px-3 text-left border-r border-slate-200 text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
+                ${c(r.totalSavingsAdd)}${c(r.rothConvAmount, 'font-semibold text-indigo-700')}${c(r.convTax, 'font-semibold text-rose-700 border-r border-slate-200')}
+                ${c(r.convTaxCash)}${c(r.convTaxBrokerage)}${c(r.convTaxIra)}${c(r.convTaxRoth, 'border-r border-slate-200')}
+                ${c(r.balCash)}${c(r.balBrokerage)}${c(r.balTrad)}${c(r.balRoth)}${c(r.endTotalAssets, 'font-bold bg-indigo-50/40')}</tr>`).join('');
             const t = preRetirementTotals(simulationResults), src = preTaxSources(t);
-            el.innerHTML = `<span class="font-bold text-indigo-900">Pre-retirement (${rows.length} yr${rows.length === 1 ? '' : 's'})</span>
+            document.getElementById('pre-ret-summary').innerHTML = `<span class="font-bold text-indigo-900">Total (${rows.length} yr${rows.length === 1 ? '' : 's'})</span>
                 <span>Contributions <b class="text-slate-900">${fmtCurr(t.contrib)}</b></span>
                 <span>Roth conversions <b class="text-indigo-700">${fmtCurr(t.conv)}</b></span>
                 <span>Conversion tax <b class="text-rose-700">${fmtCurr(t.convTax)}</b></span>
-                <span>Tax paid from <b class="text-slate-900">${t.convTax > 0.5 ? src.map(([k, v]) => `${k} ${fmtCurr(v)}`).join(' &middot; ') : 'n/a'}</b></span>
-                <span class="text-slate-500">${document.getElementById('chk-chart-pre').checked ? 'Pre-retirement rows are shown below.' : 'Tick "Include pre-retirement years" to see them year by year.'}</span>`;
+                <span>Tax paid from <b class="text-slate-900">${t.convTax > 0.5 ? src.map(([k, v]) => `${k} ${fmtCurr(v)}`).join(' &middot; ') : 'n/a'}</b></span>`;
         }
 
         // Milestone timeline (ordered by your age) shown above the chart
@@ -2719,13 +2516,11 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             const p1BirthYear = currentCalYear - p1StartAge;
             const rmdStartAge = getRMDStartAge(p1BirthYear);
 
-            document.body.classList.toggle('show-pre', document.getElementById('chk-chart-pre').checked);
             syncFilingStatusUI();
-            renderPreRetirementSummary();
+            renderPreRetirementTable();
             renderBracketStrip();
             const keyRows = { retire: simulationResults.find(r => !r.isWorking), ss: simulationResults.find(r => r.ssIncome > 0), rmd: simulationResults.find(r => r.rmdAmount > 0) };
-            const showRows = document.getElementById('chk-chart-pre').checked ? simulationResults : simulationResults.filter(r => !r.isWorking);
-            showRows.forEach(r => {
+            simulationResults.filter(r => !r.isWorking).forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition text-xs";
 
@@ -2734,12 +2529,10 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                 if (r === keyRows.ss) rowHighlightClass = "bg-emerald-50/50";
                 if (r === keyRows.rmd) rowHighlightClass = "bg-amber-50/50";
                 if (rowHighlightClass) tr.className += ` ${rowHighlightClass}`;
-                if (r.isWorking) tr.className += ' bg-slate-50/80 text-slate-500';
 
                 tr.innerHTML = `
-                    <td class="py-2 px-3 text-left font-bold ${r.isWorking ? 'text-slate-500' : 'text-slate-900'}">${r.isWorking ? 'Pre ' + r.year : r.retYear}${r.rothConvAmount > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-violet-500 align-middle" title="Roth conversion year"></span>' : ''}${r.irmaaCost > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-rose-500 align-middle" title="IRMAA surcharge year"></span>' : ''}</td>
+                    <td class="py-2 px-3 text-left font-bold text-slate-900">${r.retYear}${r.rothConvAmount > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-violet-500 align-middle" title="Roth conversion year"></span>' : ''}${r.irmaaCost > 0 ? ' <span class="inline-block w-2 h-2 rounded-full bg-rose-500 align-middle" title="IRMAA surcharge year"></span>' : ''}</td>
                     <td class="py-2 px-3 text-left border-r border-slate-200 text-slate-600">${r.p1Age}${r.p2Age ? '/' + r.p2Age : ''}</td>
-                    <td class="py-2 px-3 pre-col">${r.isWorking && r.totalSavingsAdd > 0 ? fmtCurr(r.totalSavingsAdd) : '-'}</td>
                     <td class="py-2 px-3">${r.spendGoal > 0 ? fmtCurr(r.spendGoal) : '-'}</td>
                     <td class="py-2 px-3 sp-col">${r.p1SSIncome > 0 ? fmtCurr(r.p1SSIncome) : '-'}</td>
                     <td class="py-2 px-3 sp-col">${r.p2SSIncome > 0 ? fmtCurr(r.p2SSIncome) : '-'}</td>
@@ -2968,7 +2761,6 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                 else if (el.id) snapshot[el.id] = el.type === 'checkbox' ? el.checked : el.value;
             });
             document.getElementById('btn-reset-inputs').addEventListener('click', () => {
-                store.remove();   // defaults restored; remembered inputs forgotten
                 document.querySelectorAll('#panel-content-body input, #panel-content-body select').forEach(el => {
                     if (el.type === 'radio') el.checked = snapshot['radio:' + el.name + ':' + el.value];
                     else if (el.id in snapshot) { if (el.type === 'checkbox') el.checked = snapshot[el.id]; else el.value = snapshot[el.id]; }
@@ -2976,18 +2768,11 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                 handleFilingStatusChange();
                 document.getElementById('inp-roth-strategy').dispatchEvent(new Event('change'));
             });
+            document.getElementById('btn-open-sensitivity').addEventListener('click', () => { document.getElementById('modal-sensitivity').classList.remove('hidden'); renderSensitivity(); });
+            document.getElementById('btn-close-sensitivity').addEventListener('click', () => document.getElementById('modal-sensitivity').classList.add('hidden'));
             document.getElementById('tax-law-asof').textContent = TAX_LAW_AS_OF;
             document.getElementById('copyright-year').textContent = new Date().getFullYear();
             document.getElementById('app-version').textContent = APP_VERSION;
-            ['input', 'change'].forEach(ev => document.getElementById('panel-content-body').addEventListener(ev, scheduleSave, true));
-            ['chk-chart-pre', 'chk-chart-pre-chart', 'scn-name'].forEach(id => ['input', 'change'].forEach(ev => document.getElementById(id).addEventListener(ev, scheduleSave)));
-            document.getElementById('ss-rec').addEventListener('click', (e) => {
-                const b = e.target.closest('#btn-apply-ss-rec'); if (!b) return;
-                const base = readInputs(), put = (id, v) => { const el = document.getElementById(id); el.value = String(v); el.dispatchEvent(new Event('change')); };
-                const a1 = +b.dataset.a1, a2 = +b.dataset.a2;
-                if (base.p1SSAmt > 0) { put('inp-p1-ss-amt', ssAmountAt(base.p1SSAmt, base.p1SSAge, a1, base.inflation)); put('inp-p1-ss-age', a1); }
-                if (base.filingStatus === 'MFJ' && base.p2SSAmt > 0) { put('inp-p2-ss-amt', ssAmountAt(base.p2SSAmt, base.p2SSAge, a2, base.inflation)); put('inp-p2-ss-age', a2); }
-            });
             document.getElementById('roth-rec').addEventListener('click', (e) => {
                 const b = e.target.closest('#btn-apply-roth-rec');
                 if (b) { const sel = document.getElementById('inp-roth-strategy'); sel.value = b.dataset.key; sel.dispatchEvent(new Event('change')); }
@@ -2995,23 +2780,10 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('btn-open-report').addEventListener('click', openReport);
             document.getElementById('btn-close-report').addEventListener('click', () => document.getElementById('modal-report').classList.add('hidden'));
             document.getElementById('btn-report-print').addEventListener('click', printReport);
-            document.getElementById('btn-open-scenarios').addEventListener('click', () => { showTab('scenarios'); const sc = document.getElementById('scn-card'); if (sc.scrollIntoView) sc.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-            document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
-            // editing any input returns to Overview, where the key figures and funding status react
-            ['input', 'change'].forEach(ev => document.getElementById('panel-content-body').addEventListener(ev, () => { if (currentTab !== 'overview' && !(currentTab === 'scenarios' && scnBaseline)) showTab('overview'); }, true));   // while comparing scenarios, edits stay on that tab
-            // windows: Assumptions, Tax parameters, Report, Spend calculator close with Esc or a click on the backdrop
-            const modalIds = ['modal-assumptions', 'modal-tax-params', 'modal-report', 'modal-spend-calc'];
-            document.getElementById('btn-assumptions').addEventListener('click', () => document.getElementById('modal-assumptions').classList.remove('hidden'));
-            document.getElementById('btn-close-assumptions').addEventListener('click', () => document.getElementById('modal-assumptions').classList.add('hidden'));
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') modalIds.forEach(id => document.getElementById(id).classList.add('hidden')); });
-            modalIds.forEach(id => { const m = document.getElementById(id); m.addEventListener('click', (e) => { if (e.target === m) m.classList.add('hidden'); }); });
-            // the "Include pre-retirement years" switch exists on the ledger and on the chart; keep them in step
-            const preLedger = document.getElementById('chk-chart-pre'), preChart = document.getElementById('chk-chart-pre-chart');
-            preLedger.addEventListener('change', () => { preChart.checked = preLedger.checked; });
-            preChart.addEventListener('change', () => { preLedger.checked = preChart.checked; runSimulation(); });
+            document.getElementById('btn-export-pdf').addEventListener('click', printReport);
+            document.getElementById('btn-open-scenarios').addEventListener('click', () => { document.getElementById('modal-scenarios').classList.remove('hidden'); refreshComparison(); });
+            document.getElementById('btn-close-scenarios').addEventListener('click', () => document.getElementById('modal-scenarios').classList.add('hidden'));
             document.getElementById('btn-scn-pin').addEventListener('click', pinBaseline);
-            document.getElementById('btn-scn-restore').addEventListener('click', restoreBaseline);
-            document.getElementById('btn-scn-clear').addEventListener('click', clearBaseline);
             document.getElementById('btn-scn-save').addEventListener('click', () => {
                 const file = buildScenarioFile();
                 saveGeneratedFile('scenario-' + file.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '-' + file.saved.slice(0, 10) + '.json', JSON.stringify(file, null, 2), 'application/json');
@@ -3036,7 +2808,7 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
             document.getElementById('btn-close-modal').addEventListener('click', () => {
                 document.getElementById('modal-tax-params').classList.add('hidden');
             });
-            document.getElementById('modal-tax-params').addEventListener('input', saveTaxParamsFromModal);   // tax edits apply as you type
+            document.getElementById('btn-save-tax-params').addEventListener('click', saveTaxParamsFromModal);
 
             document.getElementById('btn-open-spend-calc').addEventListener('click', () => {
                 document.getElementById('modal-spend-calc').classList.remove('hidden');
@@ -3102,11 +2874,9 @@ ${preRows.length ? `<div class="rpt-wide rpt-break">
                 document.querySelectorAll('#panel-content-body details').forEach(d => d.open = false);
             });
 
-            // Initial Run (after restoring any inputs remembered in this browser)
-            const restored = restoreSavedInputs();
+            // Initial Run
             handleFilingStatusChange();
             runSimulation();
-            if (restored) notify('Restored your saved inputs from this browser.');
         });
     </script>
 </body>
